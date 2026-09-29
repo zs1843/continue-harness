@@ -67,6 +67,8 @@ Core 不包含产品页面、业务状态、API 端点、品牌值或设计 Toke
 
 可部署的 VitePress 文档站点位于 `site/continue-harness-docs/`，介绍项目背景、SOP、模块设计、Agent 工作流、验证策略和静态部署方式。
 
+在线文档：[https://ai.zs1843.cn](https://ai.zs1843.cn)
+
 具体行为和当前限制请参阅[项目案例](site/continue-harness-docs/docs/showcase/case-study.md)和[可复现 CLI 示例](site/continue-harness-docs/docs/showcase/workflow-example.md)。
 
 ```bash

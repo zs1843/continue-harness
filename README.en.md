@@ -78,6 +78,8 @@ project-owned semantic tokens to a selected library; see `docs/UI_SYSTEMS.md`.
 A deployable VitePress documentation site lives under `site/continue-harness-docs/`. It explains the
 background, SOP, module design, Agent workflow, verification strategy, and static deployment path.
 
+Online documentation: [https://ai.zs1843.cn](https://ai.zs1843.cn)
+
 For concrete behavior and current limits, see the [project case study](site/continue-harness-docs/docs/showcase/case-study.md)
 and [reproducible CLI example](site/continue-harness-docs/docs/showcase/workflow-example.md).
 
