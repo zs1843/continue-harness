@@ -1,16 +1,16 @@
 # continue-harness
 
-`continue-harness` is a business-agnostic project collaboration and quality harness. It provides
-traceable project constraints, resumable AI handoffs, configuration-driven verification, diagnostics,
-reports, initialization templates, and CI entry points.
+中文为默认入口。English version: [README.en.md](README.en.md)
 
-The first profile targets:
+`continue-harness` 是一个与业务无关的项目协作与质量保障工具。它提供可追踪的项目约束、可恢复的 AI 交接、基于配置的验证、诊断、报告、初始化模板和 CI 入口。
 
-- Product profile: `consumer-h5`
-- Platform adapter: `web-mobile`
-- Stack adapter: `uni-app`
+当前首个支持的组合是：
 
-## Commands
+- 产品形态：`consumer-h5`
+- 平台适配器：`web-mobile`
+- 技术栈适配器：`uni-app`
+
+## 命令
 
 ```bash
 continue-harness create my-h5 --dry-run
@@ -39,17 +39,11 @@ continue-harness -v
 continue-harness --version
 ```
 
-`create` generates a real consumer-H5 project with uni-app, Vue 3, Vite, Playwright, project facts,
-automatic Agent instructions, and the default aggregate Consumer H5 workflow Skill. It installs
-project dependencies by default; use `--skip-install` for offline scaffolding. `init` connects an
-existing project without overwriting project-owned files. AI agents should use `inspect` and `plan`
-before mutation, then invoke the appropriate verification mode automatically.
+`create` 会生成一个真实的 Consumer H5 项目，包含 uni-app、Vue 3、Vite、Playwright、项目事实、Agent 自动化说明和默认的 Consumer H5 聚合 Skill。默认会安装项目依赖；离线脚手架可以使用 `--skip-install`。`init` 会接入已有项目，不覆盖项目自有文件。AI Agent 应先使用 `inspect` 和 `plan`，再执行变更，并根据变更类型自动选择验证模式。
 
-Command-specific Skills remain available through explicit installation when a task needs them.
+如果任务需要，仍可通过显式安装使用命令级 Skill。
 
-`AGENTS.md` is the only project constraint body. Generated `CLAUDE.md` imports it, Cursor receives a
-thin always-applied rule pointing to it, and Codex/Cursor use `.agents/skills` while Claude Code uses
-`.claude/skills`. Install workflows for supported providers with:
+`AGENTS.md` 是唯一的项目约束正文。生成的 `CLAUDE.md` 会导入它，Cursor 会获得指向它的薄规则；Codex/Cursor 使用 `.agents/skills`，Claude Code 使用 `.claude/skills`。支持的 Provider 可以这样安装工作流：
 
 ```bash
 continue-harness skills install --project --provider all --name consumer-h5-harness
@@ -57,7 +51,7 @@ continue-harness skills install --global --provider claude
 continue-harness skills install --global --provider cursor
 ```
 
-## Architecture
+## 架构
 
 ```text
 Core
@@ -67,17 +61,13 @@ Core
   + Project-owned configuration
 ```
 
-Core does not contain product pages, domain states, API endpoints, brand values, or design tokens.
-It also does not import a concrete UI library. Optional UI System Adapters map semantic components and
-project-owned semantic tokens to a selected library; see `docs/UI_SYSTEMS.md`.
+Core 不包含产品页面、业务状态、API 端点、品牌值或设计 Token，也不导入具体 UI 组件库。可选的 UI System Adapter 负责将语义组件和项目自有语义 Token 映射到选定的组件库，详见 [`docs/UI_SYSTEMS.md`](docs/UI_SYSTEMS.md)。
 
-## Documentation site
+## 文档站点
 
-A deployable VitePress documentation site lives under `site/continue-harness-docs/`. It explains the
-background, SOP, module design, Agent workflow, verification strategy, and static deployment path.
+可部署的 VitePress 文档站点位于 `site/continue-harness-docs/`，介绍项目背景、SOP、模块设计、Agent 工作流、验证策略和静态部署方式。
 
-For concrete behavior and current limits, see the [project case study](site/continue-harness-docs/docs/showcase/case-study.md)
-and [reproducible CLI example](site/continue-harness-docs/docs/showcase/workflow-example.md).
+具体行为和当前限制请参阅[项目案例](site/continue-harness-docs/docs/showcase/case-study.md)和[可复现 CLI 示例](site/continue-harness-docs/docs/showcase/workflow-example.md)。
 
 ```bash
 cd site/continue-harness-docs
@@ -85,9 +75,6 @@ pnpm install
 pnpm docs:build
 ```
 
-## Status
+## 状态
 
-This repository is an initial `0.1.0` implementation. Core and CLI packages can be packed for
-registry verification, but the placeholder `@company` scope must be replaced or configured before
-publishing. Publishing, upgrades, API contract adapters, and additional project profiles remain
-explicit release decisions.
+本仓库目前是初始的 `0.1.0` 实现。Core 和 CLI 包已经可以进行 registry 打包验证，但发布前仍需替换或配置占位的 `@company` scope。发布、升级、API 合约适配器以及更多项目 Profile 仍需单独做出发布决策。
