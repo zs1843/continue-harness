@@ -1,6 +1,6 @@
 # continue-harness
 
-English version. 中文入口：[README.md](README.md)
+[中文](README.md) ｜ [English](README.en.md)
 
 `continue-harness` is a business-agnostic project collaboration and quality harness. It provides
 traceable project constraints, resumable AI handoffs, configuration-driven verification, diagnostics,

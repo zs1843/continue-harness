@@ -1,6 +1,6 @@
 # continue-harness
 
-中文为默认入口。English version: [README.en.md](README.en.md)
+[中文](README.md) ｜ [English](README.en.md)
 
 `continue-harness` 是一个与业务无关的项目协作与质量保障工具。它提供可追踪的项目约束、可恢复的 AI 交接、基于配置的验证、诊断、报告、初始化模板和 CI 入口。
 
