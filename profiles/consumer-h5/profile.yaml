@@ -1,0 +1,12 @@
+id: consumer-h5
+version: "0.1.0"
+checks:
+  - mobile_first_viewport
+  - loading_empty_error_disabled_states
+  - authentication_and_anonymous_access
+  - keyboard_and_form_behavior
+  - fixed_action_safe_area
+  - navigation_stack
+  - weak_network_recovery
+  - runtime_error_detection
+  - asset_size

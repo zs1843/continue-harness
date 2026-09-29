@@ -1,0 +1,15 @@
+id: uni-app
+version: "0.1.0"
+detection:
+  files:
+    - src/pages.json
+  dependencies:
+    - "@dcloudio/uni-app"
+defaults:
+  source_dir: src
+  page_registry: src/pages.json
+checks:
+  - page_registry_integrity
+  - h5_build_command
+  - vitest_playwright_isolation
+  - uni_request_mocking

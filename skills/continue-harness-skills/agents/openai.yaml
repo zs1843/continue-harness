@@ -1,0 +1,4 @@
+interface:
+  display_name: "安装 Harness Skills"
+  short_description: "列出并安全安装 continue-harness 命令 Skills 到项目或全局目录"
+  default_prompt: "使用 $continue-harness-skills 列出或安装 continue-harness 命令 Skills。"

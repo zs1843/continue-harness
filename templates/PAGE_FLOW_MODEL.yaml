@@ -1,0 +1,8 @@
+schema: page-flow-model/v1
+source_inputs: []
+nodes:
+  - id: home
+    type: page
+    route: /pages/index/index
+    states: [loading, empty, error, ready]
+    transitions: []

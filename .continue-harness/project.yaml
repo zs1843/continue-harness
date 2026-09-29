@@ -1,0 +1,42 @@
+harness:
+  package: "@company/continue-harness"
+  version: "0.1.0"
+
+project:
+  name: continue-harness
+  product_type: developer_tooling
+  platforms:
+    - node
+
+stack:
+  adapter: node-esm
+  language: javascript
+  package_manager: pnpm
+
+facts:
+  agent_entry: AGENTS.md
+  project_map: docs/PROJECT_MAP.md
+  architecture: docs/ARCHITECTURE.md
+  current_status: docs/CURRENT_STATUS.md
+  roadmap: docs/ROADMAP.md
+
+commands:
+  unit_test: pnpm test
+  version_check: node packages/cli/bin/continue-harness.mjs version
+
+verify:
+  quick:
+    fail_fast: true
+    commands:
+      - unit_test
+      - version_check
+  feature:
+    fail_fast: true
+    commands:
+      - unit_test
+      - version_check
+  audit:
+    fail_fast: false
+    commands:
+      - unit_test
+      - version_check

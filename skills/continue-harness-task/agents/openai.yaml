@@ -1,0 +1,4 @@
+interface:
+  display_name: "管理 Harness 任务"
+  short_description: "创建稳定任务编号、查询任务历史并生成默认不可变的任务快照"
+  default_prompt: "使用 $continue-harness-task 创建或维护当前任务及其历史快照。"

@@ -1,0 +1,11 @@
+schema: layout-spec/v1
+source_inputs: []
+pages:
+  - id: home
+    route: /pages/index/index
+    layout: { shell: mobile-page, header: none, content: scroll, bottom_action: none }
+    sections:
+      - id: content
+        semantic_component: content-region
+        tokens: [space.page.horizontal]
+    visual_references: []

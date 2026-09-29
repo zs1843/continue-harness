@@ -1,0 +1,11 @@
+---
+description: 加载 continue-harness 项目的唯一 Agent 约束本体
+globs:
+alwaysApply: true
+---
+
+# continue-harness Cursor 适配
+
+根目录 `AGENTS.md` 是本项目唯一的 Agent 约束本体。开始任务前必须读取并遵守它；本规则只负责 Cursor 适配，不得复制或改写其中约束。
+
+可调用工作流位于 `.agents/skills/`。

@@ -1,0 +1,4 @@
+interface:
+  display_name: "诊断 Harness 项目"
+  short_description: "只读诊断工程配置、输入历史、Token 与分层验证能力"
+  default_prompt: "使用 $continue-harness-doctor 诊断当前项目并给出修复建议。"

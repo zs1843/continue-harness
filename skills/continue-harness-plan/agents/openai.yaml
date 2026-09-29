@@ -1,0 +1,4 @@
+interface:
+  display_name: "规划 Harness 变更"
+  short_description: "在写入前生成 create 或 init 的结构化计划"
+  default_prompt: "使用 $continue-harness-plan 生成变更计划并解释风险。"

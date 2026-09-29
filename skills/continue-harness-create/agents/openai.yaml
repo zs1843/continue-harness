@@ -1,0 +1,4 @@
+interface:
+  display_name: "创建 Consumer H5 项目"
+  short_description: "从问答、环境检查到安装依赖和首次验证的一体化创建流程"
+  default_prompt: "使用 $continue-harness-create 从零创建并初始化一个 Consumer H5 项目。"

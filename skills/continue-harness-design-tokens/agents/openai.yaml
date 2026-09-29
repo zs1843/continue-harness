@@ -1,0 +1,4 @@
+interface:
+  display_name: "管理 Design Token"
+  short_description: "检查项目唯一 Token 真值文件、来源优先级和变更追踪状态"
+  default_prompt: "使用 $continue-harness-design-tokens 检查并维护项目 Design Token。"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "检查 Harness 版本"
+  short_description: "检查 continue-harness CLI 可用性、实际版本和项目所需版本是否一致"
+  default_prompt: "使用 $continue-harness-version 检查 continue-harness CLI 版本。"

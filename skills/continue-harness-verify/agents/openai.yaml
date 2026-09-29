@@ -1,0 +1,4 @@
+interface:
+  display_name: "执行 Harness 验证"
+  short_description: "根据当前代码变更风险选择并执行对应的分层质量验证模式"
+  default_prompt: "使用 $continue-harness-verify 为当前变更选择并执行验证。"

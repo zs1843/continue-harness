@@ -1,0 +1,32 @@
+{
+  "name": "@company/continue-harness",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "continue-harness": "./bin/continue-harness.mjs",
+    "fe-harness": "./bin/fe-harness.mjs"
+  },
+  "files": [
+    "bin/continue-harness.mjs",
+    "bin/fe-harness.mjs",
+    "presets",
+    "skills",
+    "ui-systems",
+    "templates",
+    "VERSION"
+  ],
+  "scripts": {
+    "prepack": "node scripts/prepare-package.mjs"
+  },
+  "dependencies": {
+    "@company/continue-harness-core": "workspace:*",
+    "yaml": "^2.8.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

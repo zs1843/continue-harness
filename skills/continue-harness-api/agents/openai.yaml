@@ -1,0 +1,4 @@
+interface:
+  display_name: "FE Harness API"
+  short_description: "按 PRD 从 Apifox OpenAPI 生成类型与接口封装"
+  default_prompt: "使用 $continue-harness-api 检查任务的 PRD 与 Apifox OpenAPI 输入并安全生成接口代码。"

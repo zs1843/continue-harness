@@ -1,0 +1,35 @@
+harness:
+  package: "@company/continue-harness"
+  version: "0.1.0"
+project:
+  name: minimal-h5-example
+  product_type: consumer_h5
+  platforms:
+    - web_mobile
+stack:
+  adapter: uni-app
+  framework: vue
+  language: typescript
+  bundler: vite
+  package_manager: pnpm
+facts:
+  agent_entry: AGENTS.md
+  project_map: docs/PROJECT_MAP.md
+  design_guide: docs/DESIGN.md
+commands:
+  unit_test: pnpm test
+  build: pnpm build:h5
+  runtime: pnpm test:runtime
+verify:
+  quick:
+    fail_fast: true
+    commands: [unit_test]
+  feature:
+    fail_fast: true
+    commands: [unit_test, build]
+  visual:
+    fail_fast: true
+    commands: [runtime]
+  audit:
+    fail_fast: false
+    commands: [unit_test, build, runtime]

@@ -1,0 +1,16 @@
+{
+  "name": "@company/continue-harness-core",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "exports": "./src/index.mjs",
+  "files": [
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

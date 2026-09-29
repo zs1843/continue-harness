@@ -1,0 +1,29 @@
+{
+  "name": "continue-harness-uni-app-h5-example",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.12.1",
+  "scripts": {
+    "build:h5": "uni build -p h5",
+    "preview:h5": "vite preview --outDir dist/build/h5 --host 127.0.0.1 --port 4173",
+    "test": "node --test tests/*.test.mjs",
+    "test:runtime": "playwright test"
+  },
+  "dependencies": {
+    "@dcloudio/uni-app": "3.0.0-5000720260410001",
+    "@dcloudio/uni-components": "3.0.0-5000720260410001",
+    "@dcloudio/uni-h5": "3.0.0-5000720260410001",
+    "vue": "3.4.21",
+    "vue-i18n": "9.1.10"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "@dcloudio/types": "3.4.28",
+    "@dcloudio/uni-cli-shared": "3.0.0-5000720260410001",
+    "@dcloudio/uni-stacktracey": "3.0.0-5000720260410001",
+    "@dcloudio/vite-plugin-uni": "3.0.0-5000720260410001",
+    "@vue/runtime-core": "3.4.21",
+    "vite": "5.2.8"
+  }
+}

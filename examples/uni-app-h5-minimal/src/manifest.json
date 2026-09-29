@@ -1,0 +1,11 @@
+{
+  "name": "Consumer H5 Fixture",
+  "appid": "__UNI__FEHARNESS",
+  "description": "Business-neutral continue-harness consumer H5 fixture",
+  "versionName": "0.0.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "h5": {
+    "title": "Consumer H5 Fixture"
+  }
+}

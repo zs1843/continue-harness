@@ -1,0 +1,105 @@
+import { ssrRenderAttrs, ssrRenderStyle } from "vue/server-renderer";
+import { useSSRContext } from "vue";
+import { _ as _export_sfc } from "./plugin-vue_export-helper.1tPrXgE0.js";
+const __pageData = JSON.parse('{"title":"新建项目后的项目结构","description":"","frontmatter":{},"headers":[],"relativePath":"sop/project-structure.md","filePath":"sop/project-structure.md","lastUpdated":null}');
+const _sfc_main = { name: "sop/project-structure.md" };
+function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
+  _push(`<div${ssrRenderAttrs(_attrs)}><h1 id="新建项目后的项目结构" tabindex="-1">新建项目后的项目结构 <a class="header-anchor" href="#新建项目后的项目结构" aria-label="Permalink to &quot;新建项目后的项目结构&quot;">​</a></h1><p>运行：</p><div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-dark github-dark vp-code" tabindex="0"><code><span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#F97583", "--shiki-dark": "#F97583" })}">continue</span><span style="${ssrRenderStyle({ "--shiki-light": "#9ECBFF", "--shiki-dark": "#9ECBFF" })}">-harness</span><span style="${ssrRenderStyle({ "--shiki-light": "#9ECBFF", "--shiki-dark": "#9ECBFF" })}"> create</span><span style="${ssrRenderStyle({ "--shiki-light": "#9ECBFF", "--shiki-dark": "#9ECBFF" })}"> my-h5</span></span></code></pre></div><p>会得到一个业务中立的 Consumer H5 项目。它提供可运行的技术容器、Harness 事实目录、Agent 入口和验证骨架，但不会生成真实业务页面。</p><h2 id="标记说明" tabindex="-1">标记说明 <a class="header-anchor" href="#标记说明" aria-label="Permalink to &quot;标记说明&quot;">​</a></h2><table tabindex="0"><thead><tr><th>标记</th><th>含义</th></tr></thead><tbody><tr><td>必需</td><td>默认工作流依赖，除非明确迁移，否则不要删除</td></tr><tr><td>可选</td><td>只有对应任务或团队需要时才启用</td></tr><tr><td>按需</td><td>默认生成目录或 README，但实际文件在任务发生时产生</td></tr><tr><td>项目维护</td><td>由项目团队维护，Harness 不应擅自覆盖</td></tr><tr><td>Harness 管理</td><td>由 Harness 模板或 CLI 管理，更新前要看计划</td></tr></tbody></table><h2 id="完整目录树" tabindex="-1">完整目录树 <a class="header-anchor" href="#完整目录树" aria-label="Permalink to &quot;完整目录树&quot;">​</a></h2><div class="language-text vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">text</span><pre class="shiki shiki-themes github-dark github-dark vp-code" tabindex="0"><code><span class="line"><span>my-h5/</span></span>
+<span class="line"><span>├── .continue-harness/                         # Harness 项目事实和任务数据</span></span>
+<span class="line"><span>│   ├── api/</span></span>
+<span class="line"><span>│   │   └── selection.yaml                # 按任务选择 operationId</span></span>
+<span class="line"><span>│   ├── inputs/</span></span>
+<span class="line"><span>│   │   ├── api/README.md                 # API 输入放置说明</span></span>
+<span class="line"><span>│   │   ├── assets/README.md              # 资产输入放置说明</span></span>
+<span class="line"><span>│   │   ├── prd/README.md                 # PRD 输入放置说明</span></span>
+<span class="line"><span>│   │   ├── rp/README.md                  # RP 输入放置说明</span></span>
+<span class="line"><span>│   │   ├── ui/README.md                  # UI 输入放置说明</span></span>
+<span class="line"><span>│   │   └── manifest.yaml                 # 输入登记清单</span></span>
+<span class="line"><span>│   ├── models/</span></span>
+<span class="line"><span>│   │   ├── layout-specs.yaml             # 页面布局规格</span></span>
+<span class="line"><span>│   │   └── page-flow.yaml                # 页面流和交互模型</span></span>
+<span class="line"><span>│   ├── snapshots/README.md                # API 或任务快照说明</span></span>
+<span class="line"><span>│   ├── ui/</span></span>
+<span class="line"><span>│   │   └── adjustments.yaml               # 视觉调整记录</span></span>
+<span class="line"><span>│   └── project.yaml                       # 项目唯一 Harness 配置入口</span></span>
+<span class="line"><span>├── .cursor/</span></span>
+<span class="line"><span>│   └── rules/continue-harness.mdc               # Cursor 薄适配规则</span></span>
+<span class="line"><span>├── docs/</span></span>
+<span class="line"><span>│   ├── design/</span></span>
+<span class="line"><span>│   │   ├── COMPONENTS.md                 # 组件语义和使用边界</span></span>
+<span class="line"><span>│   │   ├── TOKENS.md                     # Token 解释，不复制数值</span></span>
+<span class="line"><span>│   │   └── tokens.json                   # 唯一机器可读 Design Token 真值</span></span>
+<span class="line"><span>│   ├── history/</span></span>
+<span class="line"><span>│   │   ├── CHANGE_HISTORY.md             # 实现变更历史</span></span>
+<span class="line"><span>│   │   └── PRD_HISTORY.md                # PRD 输入和需求历史</span></span>
+<span class="line"><span>│   ├── CHANGELOG.md                      # 面向项目的变更日志</span></span>
+<span class="line"><span>│   ├── CURRENT_STATUS.md                 # 当前状态、限制和下一步</span></span>
+<span class="line"><span>│   ├── DECISIONS.md                      # 长期架构和重要决策</span></span>
+<span class="line"><span>│   ├── DESIGN.md                         # 项目设计事实和视觉原则</span></span>
+<span class="line"><span>│   ├── IMPLEMENTATION_COVERAGE.md        # PRD/RP 需求覆盖矩阵</span></span>
+<span class="line"><span>│   ├── PRODUCT.md                        # 项目产品事实</span></span>
+<span class="line"><span>│   └── PROJECT_MAP.md                    # 项目模块地图</span></span>
+<span class="line"><span>├── src/</span></span>
+<span class="line"><span>│   ├── components/</span></span>
+<span class="line"><span>│   │   ├── BaseButton.vue                # 最小基础组件示例</span></span>
+<span class="line"><span>│   │   └── README.md                     # 组件边界说明</span></span>
+<span class="line"><span>│   ├── composables/README.md             # 可复用 Vue composables 说明</span></span>
+<span class="line"><span>│   ├── fixtures/README.md                # 测试和开发 fixture 说明</span></span>
+<span class="line"><span>│   ├── pages/</span></span>
+<span class="line"><span>│   │   ├── index/</span></span>
+<span class="line"><span>│   │   │   └── index.vue                 # 默认占位首页</span></span>
+<span class="line"><span>│   │   └── pages.json                    # uni-app 页面注册</span></span>
+<span class="line"><span>│   ├── repositories/README.md            # 业务数据映射层说明</span></span>
+<span class="line"><span>│   ├── services/</span></span>
+<span class="line"><span>│   │   ├── http.ts                       # 通用 HTTP 请求封装</span></span>
+<span class="line"><span>│   │   └── README.md                     # 服务层边界说明</span></span>
+<span class="line"><span>│   ├── stores/README.md                  # 跨页面状态说明</span></span>
+<span class="line"><span>│   ├── styles/</span></span>
+<span class="line"><span>│   │   ├── reset.scss                    # 全局样式重置</span></span>
+<span class="line"><span>│   │   └── tokens.scss                   # 编译期样式 Token 映射</span></span>
+<span class="line"><span>│   ├── types/README.md                   # 类型定义边界说明</span></span>
+<span class="line"><span>│   ├── utils/</span></span>
+<span class="line"><span>│   │   ├── format.ts                     # 通用格式化函数示例</span></span>
+<span class="line"><span>│   │   └── README.md                     # 纯函数和工具边界说明</span></span>
+<span class="line"><span>│   ├── App.vue                           # uni-app 根组件</span></span>
+<span class="line"><span>│   ├── main.ts                           # 应用入口</span></span>
+<span class="line"><span>│   ├── manifest.json                     # uni-app 应用元信息</span></span>
+<span class="line"><span>│   └── pages.json                        # 项目页面注册</span></span>
+<span class="line"><span>├── tests/</span></span>
+<span class="line"><span>│   ├── e2e/</span></span>
+<span class="line"><span>│   │   ├── dev-ready.mjs                # 开发服务就绪检查</span></span>
+<span class="line"><span>│   │   ├── runtime.spec.mjs              # 浏览器运行时检查</span></span>
+<span class="line"><span>│   │   └── visual.spec.mjs               # 截图视觉检查</span></span>
+<span class="line"><span>│   ├── unit/README.md                    # 单元测试约定</span></span>
+<span class="line"><span>│   ├── visual/</span></span>
+<span class="line"><span>│   │   ├── baselines/README.md           # 视觉基线目录</span></span>
+<span class="line"><span>│   │   ├── diffs/README.md               # 视觉差异目录</span></span>
+<span class="line"><span>│   │   └── README.md                     # 视觉测试说明</span></span>
+<span class="line"><span>│   ├── coverage-closure.mjs              # 需求闭环检查</span></span>
+<span class="line"><span>│   └── structure.test.mjs                # 项目结构检查</span></span>
+<span class="line"><span>├── .editorconfig                         # 编辑器基础格式</span></span>
+<span class="line"><span>├── .env.example                          # 环境变量示例，不含真实凭据</span></span>
+<span class="line"><span>├── .eslintrc.cjs                         # ESLint 配置</span></span>
+<span class="line"><span>├── .gitignore                            # Git 忽略规则</span></span>
+<span class="line"><span>├── .prettierignore                       # Prettier 忽略规则</span></span>
+<span class="line"><span>├── .prettierrc                           # Prettier 配置</span></span>
+<span class="line"><span>├── AGENTS.md                             # 唯一项目约束本体</span></span>
+<span class="line"><span>├── CLAUDE.md                             # Claude Code 薄适配</span></span>
+<span class="line"><span>├── env.d.ts                              # TypeScript 环境声明</span></span>
+<span class="line"><span>├── index.html                            # Vite HTML 入口</span></span>
+<span class="line"><span>├── package.json                          # 项目依赖和脚本</span></span>
+<span class="line"><span>├── playwright.config.mjs                 # Playwright 配置</span></span>
+<span class="line"><span>├── tsconfig.json                         # TypeScript 配置</span></span>
+<span class="line"><span>└── vite.config.mjs                       # Vite / uni-app 构建配置</span></span></code></pre></div><h2 id="continue-harness" tabindex="-1"><code>.continue-harness/</code> <a class="header-anchor" href="#continue-harness" aria-label="Permalink to &quot;\`.continue-harness/\`&quot;">​</a></h2><p>这是 Harness 的项目事实区，不是业务源码区。</p><table tabindex="0"><thead><tr><th>路径</th><th>状态</th><th>用途</th></tr></thead><tbody><tr><td><code>.continue-harness/project.yaml</code></td><td>必需 / 项目维护</td><td>选择 profile、platform、stack、命令和验证模式</td></tr><tr><td><code>.continue-harness/inputs/manifest.yaml</code></td><td>必需</td><td>记录 PRD/RP/UI/API/assets 的登记状态</td></tr><tr><td><code>.continue-harness/inputs/*/</code></td><td>必需目录 / 按需填充</td><td>保存原始输入，原始证据默认只读</td></tr><tr><td><code>.continue-harness/api/selection.yaml</code></td><td>必需文件 / API 按需使用</td><td>为任务选择 operationId</td></tr><tr><td><code>.continue-harness/models/page-flow.yaml</code></td><td>按需</td><td>记录页面、状态、动作和转场</td></tr><tr><td><code>.continue-harness/models/layout-specs.yaml</code></td><td>按需</td><td>记录页面组合和布局规格</td></tr><tr><td><code>.continue-harness/ui/adjustments.yaml</code></td><td>UI 按需使用</td><td>记录视觉调整、前后值和影响范围</td></tr><tr><td><code>.continue-harness/snapshots/</code></td><td>按需</td><td>保存快照说明和相关输入</td></tr></tbody></table><p>为什么单独建立这一层：Harness 的配置、输入和任务记录需要和 <code>src/</code> 解耦。这样业务代码可以变化，但任务证据和工程协议仍然可追踪。</p><h2 id="docs" tabindex="-1"><code>docs/</code> <a class="header-anchor" href="#docs" aria-label="Permalink to &quot;\`docs/\`&quot;">​</a></h2><p>这是项目的可读知识层。机器读取 <code>tokens.json</code>、<code>project.yaml</code> 和 YAML 模型，人和 Agent 读取 Markdown 解释。</p><table tabindex="0"><thead><tr><th>路径</th><th>状态</th><th>用途</th></tr></thead><tbody><tr><td><code>docs/PROJECT_MAP.md</code></td><td>必需</td><td>说明项目模块和边界</td></tr><tr><td><code>docs/CURRENT_STATUS.md</code></td><td>必需</td><td>记录当前完成度、限制和下一步</td></tr><tr><td><code>docs/PRODUCT.md</code></td><td>业务任务必需</td><td>记录产品事实</td></tr><tr><td><code>docs/DESIGN.md</code></td><td>UI 任务必需</td><td>记录视觉原则和权威来源</td></tr><tr><td><code>docs/design/tokens.json</code></td><td>UI 项目必需</td><td>唯一机器可读 Token 真值</td></tr><tr><td><code>docs/design/TOKENS.md</code></td><td>UI 项目必需</td><td>解释 Token，不复制第二套值</td></tr><tr><td><code>docs/IMPLEMENTATION_COVERAGE.md</code></td><td>功能任务必需</td><td>记录需求节点是否验证、延期或阻塞</td></tr><tr><td><code>docs/DECISIONS.md</code></td><td>架构决策可选</td><td>只记录长期约束和重要取舍</td></tr><tr><td><code>docs/history/</code></td><td>任务后使用</td><td>记录 PRD 和实现变化</td></tr><tr><td><code>docs/CHANGELOG.md</code></td><td>推荐</td><td>面向项目成员的变化摘要</td></tr></tbody></table><h2 id="src" tabindex="-1"><code>src/</code> <a class="header-anchor" href="#src" aria-label="Permalink to &quot;\`src/\`&quot;">​</a></h2><p>这是业务实现区。Harness 只提供边界和少量中性示例，不替项目生成具体业务模块。</p><table tabindex="0"><thead><tr><th>路径</th><th>状态</th><th>用途</th></tr></thead><tbody><tr><td><code>src/pages/</code></td><td>必需</td><td>页面级入口；不同页面默认拆成不同目录</td></tr><tr><td><code>src/components/</code></td><td>必需</td><td>可复用 UI 组件</td></tr><tr><td><code>src/services/</code></td><td>必需</td><td>HTTP、请求 wrapper 和外部服务调用</td></tr><tr><td><code>src/repositories/</code></td><td>可选</td><td>API 返回值到页面业务模型的映射</td></tr><tr><td><code>src/stores/</code></td><td>可选</td><td>跨页面共享状态</td></tr><tr><td><code>src/composables/</code></td><td>可选</td><td>可复用 Vue 组合逻辑</td></tr><tr><td><code>src/utils/</code></td><td>推荐</td><td>跨页面纯函数和轻量工具</td></tr><tr><td><code>src/types/</code></td><td>推荐</td><td>业务和公共类型</td></tr><tr><td><code>src/fixtures/</code></td><td>测试/开发可选</td><td>本地 fixture 和测试数据</td></tr><tr><td><code>src/styles/</code></td><td>必需</td><td>reset 和样式 Token 映射</td></tr><tr><td><code>src/App.vue</code></td><td>必需</td><td>uni-app 根组件</td></tr><tr><td><code>src/main.ts</code></td><td>必需</td><td>应用入口</td></tr><tr><td><code>src/manifest.json</code></td><td>必需</td><td>uni-app 应用元信息</td></tr><tr><td><code>src/pages.json</code></td><td>必需</td><td>uni-app 页面注册</td></tr></tbody></table><p><code>src/pages/</code>、<code>src/components/</code>、<code>src/services/</code> 和 <code>src/utils/</code> 的边界应该保持清晰。不要把多个独立页面塞进一个 Vue 文件，也不要把所有 API 业务映射直接写进页面。</p><h2 id="tests" tabindex="-1"><code>tests/</code> <a class="header-anchor" href="#tests" aria-label="Permalink to &quot;\`tests/\`&quot;">​</a></h2><table tabindex="0"><thead><tr><th>路径</th><th>状态</th><th>用途</th></tr></thead><tbody><tr><td><code>tests/structure.test.mjs</code></td><td>必需</td><td>验证目录、页面注册和基础结构</td></tr><tr><td><code>tests/coverage-closure.mjs</code></td><td>Consumer H5 功能必需</td><td>验证需求覆盖矩阵是否收口</td></tr><tr><td><code>tests/e2e/dev-ready.mjs</code></td><td>推荐</td><td>检查开发服务是否就绪</td></tr><tr><td><code>tests/e2e/runtime.spec.mjs</code></td><td>推荐</td><td>检查页面响应、console error 和 uncaught error</td></tr><tr><td><code>tests/e2e/visual.spec.mjs</code></td><td>UI 任务可选</td><td>执行截图回归</td></tr><tr><td><code>tests/visual/baselines/</code></td><td>视觉任务可选</td><td>保存已确认的视觉基线</td></tr><tr><td><code>tests/visual/diffs/</code></td><td>视觉任务可选</td><td>保存截图差异</td></tr><tr><td><code>tests/unit/</code></td><td>业务需要时</td><td>放单元测试</td></tr></tbody></table><p>视觉目录默认只提供 README，不代表已经配置视觉基线。没有 baseline 时只能报告 visual <code>not_configured</code>。</p><h2 id="根目录工程文件" tabindex="-1">根目录工程文件 <a class="header-anchor" href="#根目录工程文件" aria-label="Permalink to &quot;根目录工程文件&quot;">​</a></h2><table tabindex="0"><thead><tr><th>文件</th><th>状态</th><th>用途</th></tr></thead><tbody><tr><td><code>package.json</code></td><td>必需</td><td>依赖、脚本和项目名称</td></tr><tr><td><code>vite.config.mjs</code></td><td>必需</td><td>Vite 和 uni-app 构建配置</td></tr><tr><td><code>playwright.config.mjs</code></td><td>推荐</td><td>浏览器测试和移动视口配置</td></tr><tr><td><code>tsconfig.json</code></td><td>推荐</td><td>TypeScript 类型检查</td></tr><tr><td><code>.eslintrc.cjs</code></td><td>推荐</td><td>ESLint 规则</td></tr><tr><td><code>.prettierrc</code></td><td>推荐</td><td>格式化规则</td></tr><tr><td><code>.editorconfig</code></td><td>推荐</td><td>编辑器换行、缩进和编码</td></tr><tr><td><code>.env.example</code></td><td>推荐</td><td>环境变量键名示例，不放秘密</td></tr><tr><td><code>.gitignore</code></td><td>必需</td><td>忽略依赖、报告、环境文件和本地产物</td></tr><tr><td><code>AGENTS.md</code></td><td>必需</td><td>所有 Agent 的唯一约束来源</td></tr><tr><td><code>CLAUDE.md</code></td><td>Claude Code 可选</td><td>导入 <code>AGENTS.md</code> 的供应商适配</td></tr><tr><td><code>.cursor/rules/continue-harness.mdc</code></td><td>Cursor 可选</td><td>指向 <code>AGENTS.md</code> 的供应商适配</td></tr><tr><td><code>index.html</code></td><td>必需</td><td>Vite HTML 入口</td></tr><tr><td><code>env.d.ts</code></td><td>TypeScript 可选</td><td>环境类型声明</td></tr></tbody></table><h2 id="哪些内容可以删除" tabindex="-1">哪些内容可以删除 <a class="header-anchor" href="#哪些内容可以删除" aria-label="Permalink to &quot;哪些内容可以删除&quot;">​</a></h2><p>可以在项目确认不需要后删除或调整：</p><ul><li><code>src/components/BaseButton.vue</code>：只是最小基础组件示例。</li><li><code>src/utils/format.ts</code>：只是格式化函数示例。</li><li>各目录下的 <code>README.md</code>：如果团队已经在模块地图中维护等价边界说明，可以合并后删除。</li><li><code>tests/e2e/visual.spec.mjs</code> 和视觉目录：项目明确不做视觉回归时可以关闭，但必须同步 project config 和文档。</li><li><code>src/repositories/</code>、<code>src/stores/</code>、<code>src/composables/</code>、<code>src/fixtures/</code>：项目不需要对应边界时可以保留空目录说明，也可以在团队确认后移除。</li></ul><p>不建议直接删除：</p><ul><li><code>AGENTS.md</code>。</li><li><code>.continue-harness/project.yaml</code>。</li><li><code>docs/PROJECT_MAP.md</code> 和 <code>docs/CURRENT_STATUS.md</code>。</li><li><code>src/pages.json</code>、<code>src/main.ts</code>、<code>src/App.vue</code>。</li><li><code>tests/coverage-closure.mjs</code>，除非产品明确不采用需求闭环门禁并同步修改验证配置。</li></ul></div>`);
+}
+const _sfc_setup = _sfc_main.setup;
+_sfc_main.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("sop/project-structure.md");
+  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
+};
+const projectStructure = /* @__PURE__ */ _export_sfc(_sfc_main, [["ssrRender", _sfc_ssrRender]]);
+export {
+  __pageData,
+  projectStructure as default
+};

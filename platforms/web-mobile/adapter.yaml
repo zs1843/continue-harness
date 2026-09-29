@@ -1,0 +1,16 @@
+id: web-mobile
+version: "0.1.0"
+defaults:
+  viewport:
+    width: 390
+    height: 844
+  touch: true
+artifacts:
+  - screenshots
+  - traces
+  - runtime_logs
+checks:
+  - viewport
+  - touch_targets
+  - safe_area
+  - browser_navigation
