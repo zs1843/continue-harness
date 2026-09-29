@@ -26,14 +26,14 @@ features:
 
 `continue-harness` 是一个业务无关的项目协作与质量 Harness。它不替项目决定业务、页面、接口或设计，而是提供一套稳定机制：项目事实如何登记，约束如何读取，任务如何编号，协作如何恢复，验证如何执行，完成如何留下证据。
 
-## 当前支持边界
+## 当前已实现边界
 
 | 层级 | 当前实现 | 作用 |
 | --- | --- | --- |
 | Core | 配置、诊断、输入分析、任务、恢复、验证、报告 | 与产品类型和框架无关 |
-| Product Profile | `consumer-h5` | 当前唯一公开的产品形态规则 |
-| Platform Adapter | `web-mobile` | 当前公开的移动 Web 验收规则 |
-| Stack Adapter | `uni-app` | 当前公开的 uni-app、Vue 3、Vite 工具链规则 |
+| Product Profile | `consumer-h5` | 当前仓库已内置的产品形态规则 |
+| Platform Adapter | `web-mobile` | 当前仓库已内置的移动 Web 验收规则 |
+| Stack Adapter | `uni-app` | 当前仓库已内置的 uni-app、Vue 3、Vite 工具链规则 |
 | 可选能力 | OpenAPI、Design Token、UI Contract、UI System | 按任务证据显式启用 |
 
 ## 默认工作流
@@ -49,7 +49,7 @@ continue-harness resume --json
 continue-harness verify feature
 ```
 
-新项目默认只安装 `consumer-h5-harness` 聚合 Skill。OpenAPI、UI System、Design Token、视觉基线和命令级 Skills 都在任务需要时再启用。现阶段非 Consumer H5 项目可以通过 `init` 接入通用 Core，但产品、平台和技术栈适配器仍需要项目配置或后续扩展。
+新项目默认只安装 `consumer-h5-harness` 聚合 Skill。OpenAPI、UI System、Design Token、视觉基线和命令级 Skills 都在任务需要时再启用。现阶段非 Consumer H5 项目可以通过 `init` 接入通用 Core；其他产品、平台和技术栈组合可通过项目配置或后续 Adapter 扩展。
 
 ## 先读哪一页
 

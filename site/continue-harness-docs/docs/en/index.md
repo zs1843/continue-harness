@@ -26,14 +26,14 @@ features:
 
 `continue-harness` is a project-neutral collaboration and quality harness. It does not choose a project's business, pages, APIs, or design. It provides a stable protocol for registering facts, loading constraints, numbering tasks, resuming work, running verification, and leaving evidence.
 
-## Current support boundary
+## Current implementation boundary
 
 | Layer | Current implementation | Boundary |
 | --- | --- | --- |
 | Core | Configuration, diagnostics, input analysis, tasks, resume, verification, reports | Independent of product and framework |
-| Product Profile | `consumer-h5` | The first public product-shape profile |
-| Platform Adapter | `web-mobile` | The first public mobile Web acceptance adapter |
-| Stack Adapter | `uni-app` | The first public uni-app, Vue 3, and Vite adapter |
+| Product Profile | `consumer-h5` | The product-shape profile currently included in the repository |
+| Platform Adapter | `web-mobile` | The mobile Web acceptance adapter currently included in the repository |
+| Stack Adapter | `uni-app` | The uni-app, Vue 3, and Vite adapter currently included in the repository |
 | Optional capabilities | OpenAPI, Design Token, UI Contract, UI System | Enabled when task evidence requires them |
 
 ## Default workflow

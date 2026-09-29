@@ -26,24 +26,26 @@ Core owns:
 
 Core does not understand UI pages, business domains, product copy, brands, or API payloads.
 
+Profiles, Platform Adapters, and Stack Adapters are independent extension points. The entries below
+are the initial public implementations, not a limitation imposed by Core; other combinations can be
+supported when their corresponding descriptors are available.
+
 Core 只理解 UI System Adapter 的通用描述协议，不导入 TDesign、Vant 或其他组件库。项目拥有
 语义 Design Token；Adapter 负责将其映射到具体框架变量。Page Flow Model 承接 RP 的页面与
 交互事实，Layout Spec 承接页面组合和视觉参考元数据，UI Reference 只用于校准和验收。
 
 ### Product Profile
 
-A Product Profile describes verification priorities caused by the shape of a product. The first
+A Product Profile describes verification priorities caused by the shape of a product. The initial
 public profile is `consumer-h5`.
 
 ### Platform Adapter
 
-A Platform Adapter describes runtime acceptance behavior. The first public adapter is
-`web-mobile`.
+A Platform Adapter describes runtime acceptance behavior. The initial public adapter is `web-mobile`.
 
 ### Stack Adapter
 
-A Stack Adapter describes framework and toolchain integration. The first public adapter is
-`uni-app`.
+A Stack Adapter describes framework and toolchain integration. The initial public adapter is `uni-app`.
 
 ## Configuration ownership
 

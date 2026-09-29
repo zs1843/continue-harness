@@ -4,7 +4,7 @@
 
 ## 一句话介绍
 
-`continue-harness` 是一套业务无关的项目协作与质量工具。它把项目输入、配置、Agent 工作流、任务历史、恢复状态和验证报告连接到同一个 CLI 协议，首个公开支持组合是 `consumer-h5 + web-mobile + uni-app`。
+`continue-harness` 是一套业务无关的项目协作与质量工具。它把项目输入、配置、Agent 工作流、任务历史、恢复状态和验证报告连接到同一个 CLI 协议，当前仓库已内置并验证的组合是 `consumer-h5 + web-mobile + uni-app`；这不是 Core 对技术栈的限制。
 
 ## 为什么做
 

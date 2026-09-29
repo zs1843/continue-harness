@@ -9,7 +9,9 @@ Adapters keep changes isolated:
 | Stack Adapter | Framework directories, scripts, and page registration | Product rules |
 | UI System Adapter | Component catalog, semantic mapping, and Token mapping | Production dependency installation |
 
-The current public combination is `consumer-h5 + web-mobile + uni-app`. Other combinations are planned only after evidence from unrelated projects.
+The repository currently includes and validates `consumer-h5 + web-mobile + uni-app`. This is the
+initial implementation, not a Core limitation; other combinations can be added through independent
+Profile, Platform, and Stack Adapters.
 
 ## Configuration ownership
 

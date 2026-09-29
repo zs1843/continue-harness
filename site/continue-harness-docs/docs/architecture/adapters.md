@@ -4,7 +4,7 @@ Adapters 把不同变化维度拆开。
 
 ## Product Profile
 
-Product Profile 描述产品形态。当前第一个 profile 是 `consumer-h5`。
+Product Profile 描述产品形态。当前仓库已内置并验证的 profile 是 `consumer-h5`。
 
 它关注：
 
@@ -17,7 +17,7 @@ Product Profile 描述产品形态。当前第一个 profile 是 `consumer-h5`�
 
 ## Platform Adapter
 
-Platform Adapter 描述运行平台。当前第一个 adapter 是 `web-mobile`。
+Platform Adapter 描述运行平台。当前仓库已内置并验证的 adapter 是 `web-mobile`。
 
 它关注：
 
@@ -30,7 +30,7 @@ Platform Adapter 描述运行平台。当前第一个 adapter 是 `web-mobile`�
 
 ## Stack Adapter
 
-Stack Adapter 描述框架和工具链。当前第一个 stack 是 `uni-app`。
+Stack Adapter 描述框架和工具链。当前仓库已内置并验证的 stack 是 `uni-app`。
 
 它关注：
 
@@ -43,6 +43,8 @@ Stack Adapter 描述框架和工具链。当前第一个 stack 是 `uni-app`。
 ## 为什么拆成三层
 
 `consumer-h5` 是产品形态，`web-mobile` 是运行平台，`uni-app` 是实现技术栈。三者经常一起出现，但不等价。
+
+以上是当前仓库已内置的实现，不是 Core 对技术栈的限制。其他组合可以通过对应的 Profile、Platform 和 Stack Adapter 扩展。
 
 拆开后可以支持这样的组合演进：
 

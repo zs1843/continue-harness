@@ -6,7 +6,7 @@
 traceable project constraints, resumable AI handoffs, configuration-driven verification, diagnostics,
 reports, initialization templates, and CI entry points.
 
-The first profile targets:
+The repository currently includes and validates this combination:
 
 - Product profile: `consumer-h5`
 - Platform adapter: `web-mobile`
