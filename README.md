@@ -10,6 +10,53 @@
 - 平台适配器：`web-mobile`
 - 技术栈适配器：`uni-app`
 
+## 安装
+
+当前 `0.1.0` 版本尚未发布到 npm，`@company` 仍是待配置的占位 scope。请先从源码安装依赖：
+
+```bash
+git clone https://github.com/zs1843/continue-harness.git
+cd continue-harness
+pnpm install
+node packages/cli/bin/continue-harness.mjs version
+```
+
+环境要求：Node.js 20 或更高版本、pnpm 10.12.1 或兼容版本。本文后续命令使用已加入 PATH 的 `continue-harness` 写法；在源码目录直接运行时，将其替换为 `node packages/cli/bin/continue-harness.mjs`。
+
+## 快速开始
+
+### 创建新项目
+
+```bash
+continue-harness plan create my-h5 --json
+continue-harness create my-h5
+cd my-h5
+continue-harness inspect --json
+continue-harness doctor
+```
+
+`create` 默认安装生成项目的依赖。网络受限时可以使用 `continue-harness create my-h5 --skip-install`，然后在生成目录中自行执行 `pnpm install`。
+
+### 接入已有项目
+
+```bash
+continue-harness init --dry-run
+continue-harness plan init --json
+continue-harness init
+continue-harness doctor
+```
+
+`init` 会先预检，创建缺失文件并保留项目已有文件；发现真实冲突时不会写入任何文件。
+
+### 登记输入并验证任务
+
+```bash
+continue-harness inputs inspect --json
+continue-harness inputs analyze --json
+continue-harness task create --title "实现首批需求"
+continue-harness verify feature
+```
+
 ## 命令
 
 ```bash

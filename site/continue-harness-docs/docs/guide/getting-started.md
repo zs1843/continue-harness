@@ -1,5 +1,18 @@
 # 创建或接入项目
 
+## 安装 CLI
+
+当前 `0.1.0` 版本尚未发布到 npm，`@company` 仍是占位 scope。先从源码安装：
+
+```bash
+git clone https://github.com/zs1843/continue-harness.git
+cd continue-harness
+pnpm install
+node packages/cli/bin/continue-harness.mjs version
+```
+
+环境要求：Node.js 20 或更高版本、pnpm 10.12.1 或兼容版本。下文使用 `continue-harness` 作为 CLI 名称；从源码运行时，将其替换为 `node packages/cli/bin/continue-harness.mjs`。
+
 ## 从零创建
 
 先预览，再创建：
@@ -12,6 +25,17 @@ continue-harness inspect --json
 ```
 
 `create` 当前使用 `consumer-h5` preset，生成 uni-app + Vue 3 + Vite 的最小项目、Playwright 验证配置、`.continue-harness/` 状态目录、项目约束文件、历史和覆盖矩阵。默认会安装依赖；离线时使用 `--skip-install`。
+
+创建后可以按以下顺序完成第一次检查：
+
+```bash
+continue-harness inspect --json
+continue-harness doctor
+continue-harness inputs inspect --json
+continue-harness inputs analyze --json
+continue-harness task create --title "实现首批需求"
+continue-harness verify feature
+```
 
 创建阶段只建立容器，不要求 PRD、UI 或 API 已经齐全。材料准备好后，再登记输入和创建第一个任务。
 

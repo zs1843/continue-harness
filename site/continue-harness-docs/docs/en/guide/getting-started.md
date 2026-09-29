@@ -1,5 +1,18 @@
 # Create or adopt a project
 
+## Install the CLI
+
+Version `0.1.0` is not published to npm yet, and `@company` is still a placeholder scope. Install it from source:
+
+```bash
+git clone https://github.com/zs1843/continue-harness.git
+cd continue-harness
+pnpm install
+node packages/cli/bin/continue-harness.mjs version
+```
+
+Requirements: Node.js 20 or later, and pnpm 10.12.1 or a compatible version. The examples below use `continue-harness` as the CLI name; when running from source, replace it with `node packages/cli/bin/continue-harness.mjs`.
+
 ## Create from scratch
 
 Preview first, then create:
@@ -12,6 +25,17 @@ continue-harness inspect --json
 ```
 
 The current `consumer-h5` preset creates a minimal uni-app + Vue 3 + Vite project, Playwright checks, the `.continue-harness/` state directory, project constraints, history, and a coverage matrix. Dependencies are installed by default; use `--skip-install` offline.
+
+After creation, run the first checks in this order:
+
+```bash
+continue-harness inspect --json
+continue-harness doctor
+continue-harness inputs inspect --json
+continue-harness inputs analyze --json
+continue-harness task create --title "Implement the first scoped change"
+continue-harness verify feature
+```
 
 Creation builds the container. It does not require a complete PRD, UI, or API set. Register inputs and create the first task when the material is ready.
 

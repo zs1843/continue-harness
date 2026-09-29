@@ -12,6 +12,53 @@ The repository currently includes and validates this combination:
 - Platform adapter: `web-mobile`
 - Stack adapter: `uni-app`
 
+## Installation
+
+Version `0.1.0` is not published to npm yet, and `@company` is still a placeholder scope. Install dependencies from the source repository:
+
+```bash
+git clone https://github.com/zs1843/continue-harness.git
+cd continue-harness
+pnpm install
+node packages/cli/bin/continue-harness.mjs version
+```
+
+Requirements: Node.js 20 or later, and pnpm 10.12.1 or a compatible version. The commands below use `continue-harness` as the installed CLI name; when running directly from the source repository, replace it with `node packages/cli/bin/continue-harness.mjs`.
+
+## Quick start
+
+### Create a project
+
+```bash
+continue-harness plan create my-h5 --json
+continue-harness create my-h5
+cd my-h5
+continue-harness inspect --json
+continue-harness doctor
+```
+
+`create` installs dependencies for the generated project by default. For an offline scaffold, use `continue-harness create my-h5 --skip-install`, then run `pnpm install` in the generated directory.
+
+### Adopt an existing project
+
+```bash
+continue-harness init --dry-run
+continue-harness plan init --json
+continue-harness init
+continue-harness doctor
+```
+
+`init` preflights the project, creates missing files, and preserves files already owned by the project. A real conflict prevents all writes.
+
+### Register inputs and verify a task
+
+```bash
+continue-harness inputs inspect --json
+continue-harness inputs analyze --json
+continue-harness task create --title "Implement the first scoped change"
+continue-harness verify feature
+```
+
 ## Commands
 
 ```bash
