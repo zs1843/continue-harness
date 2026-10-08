@@ -2,12 +2,21 @@ import { createHash } from 'node:crypto';
 import { access, mkdir, readdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { dirname, relative, resolve } from 'node:path';
 
-const SENSITIVE_PATTERNS = [
-  /^\.env(?:\.|$)/,
-  /(?:access|auth|api|refresh)[_-]?token/i,
-  /cookie/i,
-  /secret/i,
-  /credential/i,
+import { inspectAcceptance } from './acceptance.mjs';
+import { inspectInputs } from './inputs.mjs';
+import { inspectIntake } from './intake.mjs';
+
+const EXCLUDED_SENSITIVE_BASENAMES = [
+  /^\.env(?:\..*)?$/i,
+  /^id_rsa(?:\..*)?$/i,
+  /\.(?:pem|key|p12|pfx)$/i,
+];
+
+const SENSITIVE_CONTENT_PATTERNS = [
+  /-----BEGIN [A-Z ]*PRIVATE KEY-----/,
+  /\bAKIA[0-9A-Z]{16}\b/,
+  /\bgh[pousr]_[A-Za-z0-9_]{20,}\b/,
+  /\bBearer\s+[A-Za-z0-9._-]{24,}/i,
 ];
 
 async function exists(path) {
@@ -32,7 +41,7 @@ async function walk(directory, root = directory) {
     if (['node_modules', '.git', 'dist', 'tmp', 'playwright-report', 'test-results'].includes(entry.name)) continue;
     const path = resolve(directory, entry.name);
     if (entry.isDirectory()) output.push(...(await walk(path, root)));
-    else output.push(relative(root, path));
+    else if (!EXCLUDED_SENSITIVE_BASENAMES.some((pattern) => pattern.test(entry.name))) output.push(relative(root, path));
   }
   return output.sort();
 }
@@ -41,8 +50,25 @@ async function fileHash(path) {
   return createHash('sha256').update(await readFile(path)).digest('hex');
 }
 
-function isSensitive(path) {
-  return SENSITIVE_PATTERNS.some((pattern) => pattern.test(path));
+async function containsSensitiveContent(path) {
+  try {
+    const source = await readFile(path, 'utf8');
+    if (source.includes('\u0000')) return false;
+    return SENSITIVE_CONTENT_PATTERNS.some((pattern) => pattern.test(source));
+  } catch {
+    return false;
+  }
+}
+
+async function readDecisionLines(cwd) {
+  try {
+    return (await readFile(resolve(cwd, 'docs/DECISIONS.md'), 'utf8'))
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter((line) => line.startsWith('- '));
+  } catch {
+    return [];
+  }
 }
 
 export async function inspectTaskHistory(cwd, taskId) {
@@ -74,10 +100,45 @@ export async function createTaskSnapshot(cwd, {
 } = {}) {
   if (!taskId) throw new Error('创建任务快照需要任务编号');
   const allFiles = await walk(cwd);
-  const sensitive = allFiles.filter(isSensitive);
-  if (sensitive.length) {
-    throw new Error(`任务快照检测到敏感文件名，已停止：${sensitive.slice(0, 5).join(', ')}`);
+  const sensitiveContent = [];
+  for (const file of allFiles) {
+    if (await containsSensitiveContent(resolve(cwd, file))) sensitiveContent.push(file);
   }
+  if (sensitiveContent.length) {
+    throw new Error(`任务快照检测到敏感内容，已停止：${sensitiveContent.slice(0, 5).join(', ')}`);
+  }
+  const inputs = await inspectInputs(cwd);
+  if (inputs.status === 'failed') {
+    throw new Error(`任务快照前输入未收口：${inputs.issues.map((issue) => issue.message).slice(0, 3).join('；')}`);
+  }
+  const acceptance = await inspectAcceptance(cwd);
+  const intake = await inspectIntake(cwd);
+  if (acceptance.status === 'needs_confirmation') {
+    throw new Error(`任务快照前验收未收口：${acceptance.unresolved || acceptance.issue || '存在未确认验收项'}`);
+  }
+  const reportPath = resolve(cwd, 'tmp/continue-harness/report.json');
+  let latestReport = null;
+  try {
+    latestReport = JSON.parse(await readFile(reportPath, 'utf8'));
+  } catch {
+    throw new Error('任务快照前必须先执行一次 continue-harness verify，并保留 tmp/continue-harness/report.json');
+  }
+  const inputByType = (type) => inputs.inputs
+    .filter((item) => item.type === type)
+    .map((item) => `${item.id} (${item.path})`);
+  const confirmedEvidence = (intake.evidence || [])
+    .filter((item) => item.status === 'confirmed')
+    .map((item) => `${item.id}${item.source ? `: ${item.source}` : ''}`);
+  const pendingEvidence = (intake.evidence || [])
+    .filter((item) => item.status === 'pending' || item.status === 'needs_confirmation')
+    .map((item) => item.id);
+  const decisions = await readDecisionLines(cwd);
+  const risks = acceptance.status === 'closed_with_risks'
+    ? acceptance.rows.filter((row) => !['verified', '已验证'].includes(row.status)).map((row) => `${row.id}: ${row.evidence}`)
+    : [];
+  const implementation = latestReport.status === 'passed'
+    ? '验证命令全部通过；具体文件清单见 files.json'
+    : `验证结果为 ${latestReport.status || 'unknown'}；具体失败见 tmp/continue-harness/report.json`;
   const id = timestamp();
   const root = resolve(cwd, 'docs/history/tasks', taskId, id);
   await mkdir(root, { recursive: true });
@@ -99,21 +160,23 @@ export async function createTaskSnapshot(cwd, {
     `- 任务名称：${title}`,
     `- 本次目标：${goal}`,
     `- 用户要求：${userRequest || '待确认'}`,
-    `- 使用的 PRD：待确认`,
-    `- 使用的 RP：待确认`,
-    `- 使用的 UI：待确认`,
-    `- 使用的 API/资产：待确认`,
-    `- 已确认：待补充`,
-    `- 推断：待补充`,
-    `- 待确认：待补充`,
+    `- 使用的 PRD：${inputByType('prd').join('；') || '无'}`,
+    `- 使用的 RP：${inputByType('rp').join('；') || '无'}`,
+    `- 使用的 UI：${inputByType('ui').join('；') || '无'}`,
+    `- 使用的 API/资产：${[...inputByType('api'), ...inputByType('assets')].join('；') || '无'}`,
+    `- 已确认：${[...confirmedEvidence, ...inputByType('prd')].join('；') || '无'}`,
+    `- 推断：以项目现有实现作为事实的内容见 docs/PROJECT.md；未新增推断`,
+    `- 待确认：${[...pendingEvidence, ...risks].join('；') || '无'}`,
     `- 冲突：无已记录冲突`,
-    `- 实际实现：待补充`,
-    `- 未实现：待补充`,
+    `- 实际实现：${implementation}`,
+    `- 未实现：${risks.join('；') || '无已登记未实现项'}`,
     `- 修改文件：见 files.json`,
     `- 验证命令：见 verification.json`,
     `- 验证结果：见 verification.json`,
-    `- 剩余风险：待确认`,
-    `- 持久决策：待确认`,
+    `- 验收状态：${acceptance.status}`,
+    `- 最近验证：${latestReport.status || 'unknown'}（${latestReport.mode || 'unknown'}）`,
+    `- 剩余风险：${acceptance.status === 'closed_with_risks' || latestReport.status !== 'passed' ? '见验收表和最近验证报告' : '无已登记风险'}`,
+    `- 持久决策：${decisions.join('；') || '无已登记持久决策'}`,
     `- 创建时间：${new Date().toISOString()}`,
     '',
   ].join('\n');
@@ -122,7 +185,7 @@ export async function createTaskSnapshot(cwd, {
     writeFile(resolve(root, 'files.json'), `${JSON.stringify({ files }, null, 2)}\n`, { flag: 'wx' }),
     writeFile(
       resolve(root, 'verification.json'),
-      `${JSON.stringify({ commands: verification, status: '未验证' }, null, 2)}\n`,
+      `${JSON.stringify({ commands: verification, latest_report: 'tmp/continue-harness/report.json', status: latestReport.status, mode: latestReport.mode }, null, 2)}\n`,
       { flag: 'wx' },
     ),
     writeFile(

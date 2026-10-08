@@ -54,6 +54,13 @@ function renderMarkdown(report) {
     '- UI 覆盖：未配置',
     '- 产品验收：未完成',
   );
+  if (report.acceptance) {
+    lines.push(
+      '',
+      `- Harness 验收门禁：${report.acceptance.status}`,
+      `- 未收口验收项：${report.acceptance.unresolved || 0}`,
+    );
+  }
   return `${lines.join('\n')}\n`;
 }
 

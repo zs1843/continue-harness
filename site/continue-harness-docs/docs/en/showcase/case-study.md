@@ -12,4 +12,4 @@ The repository uses `developer_tooling + node + node-esm` internally. The reposi
 and validates `consumer-h5 + web-mobile + uni-app`; these are adapters, not hard-coded business rules
 or a technology restriction in Core.
 
-The remaining limitation is evidence: a complete unrelated production project run, its reports, screenshots, and measured outcomes still need to be linked before claiming broad effectiveness.
+The first two real-project Pilots are now recorded in [Real-project Pilot verification](./real-project-pilot.md). They complete the Harness workflow and expose real project blockers; they do not claim either product is complete.

@@ -8,8 +8,9 @@ export { applyOpenApiGeneration, generateOpenApiArtifacts, listOpenApiOperations
 export { applyProjectCreation, planProjectCreation, publicPlan } from './project.mjs';
 export { writeReport } from './report.mjs';
 export { runShellCommand, runVerification } from './runner.mjs';
-export { createInitialIntake, inspectIntake, appendCommandLog, INTAKE_QUESTIONS } from './intake.mjs';
+export { createInitialIntake, inspectIntake, appendCommandLog, INTAKE_QUESTIONS, evidenceDefinition, intakeEvidenceStatus } from './intake.mjs';
 export { buildResumeState } from './resume.mjs';
+export { inspectAcceptance, ACCEPTANCE_TERMINAL_STATUSES } from './acceptance.mjs';
 export { displayStatus, localizeResult, STATUS_DISPLAY } from './status.mjs';
 export { inspectUiGovernance, validateAdjustmentLog, validateLayoutSpecCollection, validatePageFlowModel, validateUiSystemConfig } from './ui-system.mjs';
 export { inspectUiContract, renderUiComponentInventory, scanUiComponentInventory } from './ui-contract.mjs';

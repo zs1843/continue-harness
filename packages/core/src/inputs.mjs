@@ -21,6 +21,17 @@ export const INPUT_PRIORITY = {
   token: ['高保真 UI', '低保真 RP', '用户当前任务临时视觉要求', '项目已有 Design Token', 'DESIGN.md 全局原则', 'Harness 默认 Token', 'Agent 推断'],
 };
 
+const PLACEHOLDER_INPUTS = [
+  /^待补充产品需求。?$/m,
+  /^待补充(?:需求|输入|内容)。?$/m,
+  /^待确认(?:需求|输入|内容)。?$/m,
+];
+
+function isPlaceholderInput(source) {
+  const normalized = source.trim();
+  return PLACEHOLDER_INPUTS.some((pattern) => pattern.test(normalized));
+}
+
 const BUSINESS_PATTERNS = [
   ['amount', /金额|价格|费用|支付|退款|total|price|amount/i],
   ['permission', /权限|角色|认证|登录|租户|permission|role|auth/i],
@@ -214,6 +225,21 @@ export async function inspectInputs(cwd) {
         message: `输入文件哈希已变化，需要重新分析：${path}`,
         status: 'needs_confirmation',
       });
+    }
+    if (present && ['prd', 'rp', 'ui', 'api', 'assets'].includes(type)) {
+      try {
+        const source = await readFile(absolutePath, 'utf8');
+        if (isPlaceholderInput(source)) {
+          issues.push({
+            code: 'INPUT_PLACEHOLDER',
+            display_name: '失败',
+            message: `输入仍是 Harness 占位内容，需要补充真实证据：${path}`,
+            status: 'failed',
+          });
+        }
+      } catch {
+        // Binary inputs are valid evidence and are handled by the corresponding tool/agent.
+      }
     }
     entries.push({
       ...item,

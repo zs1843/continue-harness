@@ -56,6 +56,7 @@ export const rootSidebar = [
     items: [
       { text: '可复现操作示例', link: '/showcase/workflow-example' },
       { text: '项目案例', link: '/showcase/case-study' },
+      { text: '真实项目 Pilot', link: '/showcase/real-project-pilot' },
       { text: '截图与证据', link: '/showcase/demo-h5-capture' },
       { text: '为什么需要 Harness', link: '/background/why-harness' },
       { text: '要解决的问题', link: '/background/problems' },
@@ -124,6 +125,7 @@ export const englishSidebar = [
     items: [
       { text: 'Reproducible workflow', link: '/en/showcase/workflow-example' },
       { text: 'Case study', link: '/en/showcase/case-study' },
+      { text: 'Real-project Pilot', link: '/en/showcase/real-project-pilot' },
       { text: 'Screenshots and evidence', link: '/en/showcase/demo-h5-capture' },
       { text: 'Why a harness', link: '/en/background/why-harness' },
       { text: 'Problems solved', link: '/en/background/problems' },

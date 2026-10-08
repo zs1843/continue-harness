@@ -35,6 +35,8 @@ continue-harness create project-core
 cd project-core
 continue-harness intake inspect --json
 continue-harness intake answer --type backend --json
+continue-harness intake evidence --id requirements --status confirmed --source docs/PROJECT.md --version 1.0
+continue-harness intake evidence --id ui --status not_applicable --note "本次任务不涉及 UI"
 continue-harness inspect --json
 continue-harness doctor
 ```
@@ -59,7 +61,11 @@ continue-harness inputs inspect --json
 continue-harness inputs analyze --json
 continue-harness task create --title "实现首批需求"
 continue-harness verify feature
+continue-harness task snapshot T001 --title "交接快照" --request "原始任务要求" --json
 ```
+
+Harness 会拒绝仍是“待补充/待确认”的占位输入。`feature` 和 `audit` 会检查
+`docs/ACCEPTANCE.md` 的验收状态；生成交接快照前必须存在最近一次验证报告、有效输入和已收口验收项。
 
 ## 命令
 

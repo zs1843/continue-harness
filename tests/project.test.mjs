@@ -126,6 +126,19 @@ test('intake moves from basic facts to type-specific evidence questions', async 
   const payload = JSON.parse(answered.stdout);
   assert.equal(payload.phase, 'evidence');
   assert.ok(payload.evidence.some((item) => item.id === 'data_model'));
+  const required = ['requirements', 'domain'];
+  for (const id of required) {
+    const confirmed = spawnSync(process.execPath, [
+      cli, 'intake', 'evidence', '--id', id, '--status', 'confirmed', '--source', `docs/${id}.md`, '--version', '1.0', '--json',
+    ], { cwd: project, encoding: 'utf8' });
+    assert.equal(confirmed.status, 0, confirmed.stderr);
+  }
+  const finalState = spawnSync(process.execPath, [cli, 'intake', 'inspect', '--json'], {
+    cwd: project,
+    encoding: 'utf8',
+  });
+  assert.equal(JSON.parse(finalState.stdout).status, 'awaiting_evidence');
+  assert.equal(JSON.parse(finalState.stdout).evidence.filter((item) => item.status === 'pending').length, 4);
 });
 
 test('development CLI prefers repository resources over stale prepack staging', () => {

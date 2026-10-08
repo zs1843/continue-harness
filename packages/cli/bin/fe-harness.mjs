@@ -20,10 +20,13 @@ import {
   inspectUiContract,
   createInitialIntake,
   inspectIntake,
-  INTAKE_QUESTIONS,
+  evidenceDefinition,
+  intakeEvidenceStatus,
+  appendCommandLog,
   renderUiComponentInventory,
   scanUiComponentInventory,
   inspectTaskHistory,
+  inspectAcceptance,
   loadProjectConfig,
   listOpenApiOperations,
   planInitialization,
@@ -185,8 +188,9 @@ const HELP = {
 用法：
   continue-harness intake inspect [--json]
   continue-harness intake answer --type <frontend|backend|client|data|infrastructure|mixed> [--goal <目标>] [--runtime <环境>] [--toolchain <工具链>] [--json]
+  continue-harness intake evidence --id <输入项> --status <confirmed|not_applicable|pending> [--source <路径>] [--version <版本>] [--note <说明>] [--json]
 
-第一轮确认项目基本信息，第二轮按项目类型生成最小输入清单，不将 UI、API 或技术栈模板强加给所有项目。
+第一轮确认项目基本信息，第二轮按项目类型生成最小输入清单；必需输入必须有来源，非适用输入可以明确标记，不将 UI、API 或技术栈模板强加给所有项目。
 `,
   plan: `continue-harness plan - 输出结构化计划
 
@@ -381,6 +385,10 @@ async function initializationFiles() {
 }
 
 async function init() {
+  if (has('-h') || has('--help')) {
+    printHelp('init');
+    return;
+  }
   const plan = await initializationPlan();
   if (has('--json')) console.log(JSON.stringify({ action: 'init', ...plan }, null, 2));
   else printPlan(plan);
@@ -478,15 +486,45 @@ async function intake(command = 'inspect') {
     }
     const next = { ...state, project, updated_at: new Date().toISOString() };
     const type = project.type;
-    const evidence = INTAKE_QUESTIONS.evidence[type] || [];
+    const evidence = evidenceDefinition(type);
     if (type && evidence.length) {
       next.phase = 'evidence';
       next.status = 'awaiting_evidence';
-      next.evidence = evidence.map((id) => ({ id, status: 'pending' }));
-      next.questions = evidence.map((id) => ({ id, question: `请确认输入或说明 ${id} 是否适用、来源和版本。` }));
+      next.evidence = evidence.map((item) => ({ ...item, status: 'pending' }));
+      next.questions = evidence.map(({ id, question, required }) => ({ id, question, required }));
     }
     await writeFile(resolve(cwd, '.continue-harness/intake.yaml'), YAML.stringify(next), 'utf8');
+    await appendCommandLog(cwd, { kind: 'intake', action: 'answer', project: next.project, status: next.status });
     state = next;
+  }
+  if (command === 'evidence') {
+    const id = option('--id');
+    const status = option('--status');
+    const allowed = ['confirmed', 'not_applicable', 'pending', 'needs_confirmation'];
+    if (!id || !allowed.includes(status)) throw new Error('证据确认需要 --id 和有效的 --status');
+    const evidence = Array.isArray(state.evidence) ? state.evidence : [];
+    const index = evidence.findIndex((item) => item.id === id);
+    if (index < 0) throw new Error(`当前 Intake 没有输入项：${id}`);
+    const current = evidence[index];
+    evidence[index] = {
+      ...current,
+      status,
+      source: option('--source') || current.source || null,
+      version: option('--version') || current.version || null,
+      note: option('--note') || current.note || null,
+    };
+    const nextStatus = intakeEvidenceStatus({ ...state, evidence });
+    state = {
+      ...state,
+      evidence,
+      phase: 'evidence',
+      status: nextStatus.complete ? 'confirmed' : 'awaiting_evidence',
+      questions: evidence.filter((item) => item.status === 'pending' || item.status === 'needs_confirmation')
+        .map(({ id: questionId, question, required }) => ({ id: questionId, question, required })),
+      updated_at: new Date().toISOString(),
+    };
+    await writeFile(resolve(cwd, '.continue-harness/intake.yaml'), YAML.stringify(state), 'utf8');
+    await appendCommandLog(cwd, { kind: 'intake', action: 'evidence', id, status, source: evidence[index].source });
   }
   const payload = { ...state, next_questions: state.questions || [] };
   console.log(has('--json') ? JSON.stringify(payload, null, 2) : `Intake：${state.phase} / ${state.status}\n${(state.questions || []).map((item) => `- ${item.question}`).join('\n')}`);
@@ -671,6 +709,9 @@ async function resume() {
   console.log(`项目分支：${state.project.branch || '未配置 Git'}`);
   console.log(`当前任务：${state.task ? `${state.task.id} ${state.task.title || ''}`.trim() : '未找到'}`);
   console.log(`输入：${state.inputs.status}，${state.inputs.count} 项，未登记 ${state.inputs.unregistered} 项`);
+  if (state.intake) console.log(`Intake：${state.intake.phase || 'unknown'} / ${state.intake.status || 'unknown'}`);
+  if (state.acceptance) console.log(`验收：${state.acceptance.status}，未收口 ${state.acceptance.unresolved || 0} 项`);
+  if (state.verification) console.log(`最近验证：${state.verification.mode || 'unknown'} / ${state.verification.status || 'unknown'}`);
   console.log(`快照：${state.snapshots.snapshots.length} 个；覆盖矩阵：${state.coverage.total} 行，未收口 ${state.coverage.unresolved} 行`);
   if (state.project.dirty_files.length) console.log(`Git 改动：${state.project.dirty_files.length} 个文件`);
   if (state.decisions.length) console.log(`最近决策：${state.decisions[0]}`);
@@ -706,7 +747,32 @@ async function verify(mode) {
   }
   const { config } = await loadProjectConfig(cwd);
   const definition = resolveVerifySteps(config, mode);
-  const verification = await runVerification({ cwd, mode, ...definition });
+  let verification = await runVerification({ cwd, mode, ...definition });
+  if (['feature', 'audit'].includes(mode)) {
+    const acceptance = await inspectAcceptance(cwd);
+    verification = { ...verification, acceptance };
+    if (acceptance.status === 'needs_confirmation') {
+      verification.results.push({
+        name: 'acceptance',
+        command: 'docs/ACCEPTANCE.md',
+        durationMs: 0,
+        status: 'failed',
+        stderr: acceptance.issue || `存在 ${acceptance.unresolved} 个未收口验收项`,
+        stdout: '',
+      });
+      verification.status = 'failed';
+    } else if (acceptance.status === 'closed_with_risks') {
+      verification.results.push({
+        name: 'acceptance',
+        command: 'docs/ACCEPTANCE.md',
+        durationMs: 0,
+        status: 'blocked',
+        stderr: '验收项已记录延期或外部阻塞，不能宣称功能完成',
+        stdout: '',
+      });
+      verification.status = 'failed';
+    }
+  }
   const report = await writeReport(cwd, verification);
   console.log(has('--json') ? JSON.stringify(report, null, 2) : `continue-harness ${mode}: ${report.status}`);
   process.exitCode = report.status === 'passed' ? 0 : 1;

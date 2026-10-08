@@ -13,14 +13,65 @@ export const INTAKE_QUESTIONS = {
     { id: 'toolchain', question: '语言、框架、构建、包管理和测试工具是什么？未知项可标记 pending。' },
   ],
   evidence: {
-    frontend: ['prd', 'rp', 'ui', 'api', 'assets'],
-    client: ['prd', 'rp', 'ui', 'api', 'assets'],
-    backend: ['requirements', 'domain', 'api', 'data_model', 'deployment', 'non_functional'],
-    data: ['requirements', 'data_contract', 'evaluation', 'runtime', 'resource_constraints'],
-    infrastructure: ['architecture', 'environment', 'permissions', 'rollback', 'change_window'],
-    mixed: ['requirements', 'architecture', 'api', 'data', 'ui', 'deployment'],
+    frontend: [
+      { id: 'requirements', required: true, question: '需求范围、非目标和验收标准是什么？' },
+      { id: 'ui', required: false, question: '本次任务是否涉及 UI、视觉或交互输入？' },
+      { id: 'api', required: false, question: '本次任务是否依赖接口契约或后端数据？' },
+      { id: 'assets', required: false, question: '本次任务是否依赖品牌、图片、字体或其他素材？' },
+      { id: 'rp', required: false, question: '是否存在原型或页面流程输入？' },
+    ],
+    client: [
+      { id: 'requirements', required: true, question: '需求范围、非目标和验收标准是什么？' },
+      { id: 'ui', required: false, question: '本次任务是否涉及 UI、视觉或交互输入？' },
+      { id: 'api', required: false, question: '本次任务是否依赖接口契约或后端数据？' },
+      { id: 'assets', required: false, question: '本次任务是否依赖客户端资源或设备输入？' },
+    ],
+    backend: [
+      { id: 'requirements', required: true, question: '需求范围、非目标和验收标准是什么？' },
+      { id: 'domain', required: true, question: '领域规则、状态和权限边界是什么？' },
+      { id: 'api', required: false, question: '是否存在 API 契约或上下游接口输入？' },
+      { id: 'data_model', required: false, question: '是否涉及数据模型、迁移或数据约束？' },
+      { id: 'deployment', required: false, question: '是否存在部署、回滚或运行环境约束？' },
+      { id: 'non_functional', required: false, question: '是否有性能、安全、可靠性等非功能要求？' },
+    ],
+    data: [
+      { id: 'requirements', required: true, question: '目标、范围和验收指标是什么？' },
+      { id: 'data_contract', required: true, question: '数据来源、字段和版本契约是什么？' },
+      { id: 'evaluation', required: false, question: '是否存在评估集、指标或对照基线？' },
+      { id: 'runtime', required: false, question: '是否存在运行环境或资源约束？' },
+    ],
+    infrastructure: [
+      { id: 'requirements', required: true, question: '基础设施目标、范围和验收标准是什么？' },
+      { id: 'architecture', required: true, question: '架构、依赖和变更边界是什么？' },
+      { id: 'environment', required: true, question: '环境、权限和配置来源是什么？' },
+      { id: 'permissions', required: false, question: '是否需要额外权限审批？' },
+      { id: 'rollback', required: false, question: '回滚策略和恢复点是什么？' },
+    ],
+    mixed: [
+      { id: 'requirements', required: true, question: '需求范围、非目标和验收标准是什么？' },
+      { id: 'architecture', required: false, question: '是否需要记录跨模块或跨运行环境架构？' },
+      { id: 'api', required: false, question: '是否存在接口契约？' },
+      { id: 'data', required: false, question: '是否存在数据契约或数据迁移？' },
+      { id: 'ui', required: false, question: '是否涉及 UI 或交互输入？' },
+      { id: 'deployment', required: false, question: '是否存在部署和回滚约束？' },
+    ],
   },
 };
+
+export function evidenceDefinition(type) {
+  return INTAKE_QUESTIONS.evidence[type] || [];
+}
+
+export function intakeEvidenceStatus(state) {
+  const evidence = Array.isArray(state.evidence) ? state.evidence : [];
+  const unresolved = evidence.filter((item) => item.status === 'pending' || item.status === 'needs_confirmation');
+  const required = evidence.filter((item) => item.required && item.status !== 'confirmed');
+  return {
+    complete: unresolved.length === 0 && required.length === 0,
+    unresolved: unresolved.length,
+    required: required.length,
+  };
+}
 
 function initialState(name) {
   return {
