@@ -1,5 +1,16 @@
 # Roadmap
 
+## Current milestone: requirement-to-acceptance closure
+
+Focus on requirement → implementation item → acceptance item → evidence → handoff state.
+Project facts, task-specific inputs, evidence integrity and resumable project context are the active scope.
+Project type and toolchain select relevant inputs and checks; UI, APIs and Design Tokens are optional.
+Reuse the input manifest, acceptance ledger, logs and snapshots rather than adding parallel records.
+
+Existing adapters remain available. New profiles, stack templates, UI governance, distribution and upgrade
+expansion are deferred until this core loop is validated. The milestones below describe historical plans,
+not the current implementation priority.
+
 ## Milestone 0.1: H5 foundation
 
 The next architecture correction is to move the default from an H5-shaped project generator to a

@@ -27,6 +27,7 @@ import {
   scanUiComponentInventory,
   inspectTaskHistory,
   inspectAcceptance,
+  inspectTaskMetadata,
   loadProjectConfig,
   listOpenApiOperations,
   planInitialization,
@@ -219,7 +220,7 @@ const HELP = {
   verify: `continue-harness verify - 执行验证模式
 
 用法：
-  continue-harness verify <模式> [--json]
+  continue-harness verify <模式> [--task <任务编号>] [--json]
 
 模式：
   quick        快速验证，通常包含单元测试、类型检查和 Lint
@@ -280,7 +281,7 @@ const HELP = {
 
 说明：
   create 会创建模块化 PRD、metadata.yaml，并登记到 inputs/manifest.yaml 和 PRD_HISTORY。
-  snapshot 会创建不可变任务快照，包含 SNAPSHOT.md、files.json、verification.json 和 design-token-diff.json。
+  snapshot 会创建不可变任务快照，包含 SNAPSHOT.md、files.json、verification.json 和 context.json。
   快照不会保存 .env、密钥、Cookie 或 Access Token。
 `,
   version: `continue-harness version - 输出当前 continue-harness 版本
@@ -491,8 +492,18 @@ async function intake(command = 'inspect') {
     if (type && evidence.length) {
       next.phase = 'evidence';
       next.status = 'awaiting_evidence';
-      next.evidence = evidence.map((item) => ({ ...item, status: 'pending' }));
-      next.questions = evidence.map(({ id, question, required }) => ({ id, question, required }));
+      const changed = ['type', 'goal', 'runtime', 'toolchain'].some((key) => project[key] !== state.project?.[key]);
+      const previous = state.evidence || [];
+      next.evidence = evidence.map((item) => {
+        const saved = previous.find((entry) => entry.id === item.id);
+        return { ...item, ...saved, status: saved ? (changed ? 'needs_confirmation' : saved.status) : 'pending' };
+      });
+      // Keep project-defined inputs when project facts change, but re-confirm applicability.
+      next.evidence.push(...previous.filter((item) => !evidence.some((entry) => entry.id === item.id))
+        .map((item) => ({ ...item, status: changed ? 'needs_confirmation' : item.status })));
+      next.status = intakeEvidenceStatus(next).complete ? 'confirmed' : 'awaiting_evidence';
+      next.questions = next.evidence.filter((item) => ['pending', 'needs_confirmation'].includes(item.status))
+        .map(({ id, question, required }) => ({ id, question, required }));
     }
     await writeFile(resolve(cwd, '.continue-harness/intake.yaml'), YAML.stringify(next), 'utf8');
     await appendCommandLog(cwd, { kind: 'intake', action: 'answer', project: next.project, status: next.status });
@@ -504,8 +515,13 @@ async function intake(command = 'inspect') {
     const allowed = ['confirmed', 'not_applicable', 'pending', 'needs_confirmation'];
     if (!id || !allowed.includes(status)) throw new Error('证据确认需要 --id 和有效的 --status');
     const evidence = Array.isArray(state.evidence) ? state.evidence : [];
-    const index = evidence.findIndex((item) => item.id === id);
-    if (index < 0) throw new Error(`当前 Intake 没有输入项：${id}`);
+    if (!/^[a-z][a-z0-9_-]*$/.test(id)) throw new Error('输入编号必须使用小写字母、数字、下划线或连字符');
+    let index = evidence.findIndex((item) => item.id === id);
+    if (index < 0) {
+      if (!option('--note')) throw new Error('新增项目输入项需要 --note 说明适用原因');
+      evidence.push({ id, required: false, question: option('--note'), status: 'pending' });
+      index = evidence.length - 1;
+    }
     const current = evidence[index];
     evidence[index] = {
       ...current,
@@ -514,6 +530,10 @@ async function intake(command = 'inspect') {
       version: option('--version') || current.version || null,
       note: option('--note') || current.note || null,
     };
+    if (status === 'confirmed' && !evidence[index].source) throw new Error('确认输入需要 --source');
+    if (status === 'not_applicable' && (current.required || !evidence[index].note)) {
+      throw new Error('必需输入不能跳过；非适用输入需要 --note 说明原因');
+    }
     const nextStatus = intakeEvidenceStatus({ ...state, evidence });
     state = {
       ...state,
@@ -748,11 +768,16 @@ async function verify(mode) {
   }
   const { config } = await loadProjectConfig(cwd);
   const definition = resolveVerifySteps(config, mode);
-  let verification = await runVerification({ cwd, mode, ...definition });
+  const tasks = await inspectTaskMetadata(cwd);
+  const taskId = option('--task') || [...tasks.modules].sort((a, b) =>
+    String(b.metadata?.updated_at || '').localeCompare(String(a.metadata?.updated_at || '')))[0]?.id;
+  if (option('--task') && !tasks.modules.some((task) => task.id === taskId)) throw new Error(`任务不存在：${taskId}`);
+  let verification = await runVerification({ cwd, mode, ...definition, quiet: has('--json') });
+  verification.task_id = taskId || null;
   if (['feature', 'audit'].includes(mode)) {
-    const acceptance = await inspectAcceptance(cwd);
+    const acceptance = await inspectAcceptance(cwd, { taskId });
     verification = { ...verification, acceptance };
-    if (acceptance.status === 'needs_confirmation') {
+    if (acceptance.status === 'needs_confirmation' || (taskId && acceptance.status === 'not_configured')) {
       verification.results.push({
         name: 'acceptance',
         command: 'docs/ACCEPTANCE.md',

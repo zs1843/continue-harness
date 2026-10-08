@@ -5,6 +5,7 @@ import { dirname, relative, resolve } from 'node:path';
 import { inspectAcceptance } from './acceptance.mjs';
 import { inspectInputs } from './inputs.mjs';
 import { inspectIntake } from './intake.mjs';
+import { verificationContext, readProjectDocuments } from './verification-context.mjs';
 
 const EXCLUDED_SENSITIVE_BASENAMES = [
   /^\.env(?:\..*)?$/i,
@@ -108,12 +109,12 @@ export async function createTaskSnapshot(cwd, {
     throw new Error(`任务快照检测到敏感内容，已停止：${sensitiveContent.slice(0, 5).join(', ')}`);
   }
   const inputs = await inspectInputs(cwd);
-  if (inputs.status === 'failed') {
+  if (inputs.status !== 'passed') {
     throw new Error(`任务快照前输入未收口：${inputs.issues.map((issue) => issue.message).slice(0, 3).join('；')}`);
   }
-  const acceptance = await inspectAcceptance(cwd);
+  const acceptance = await inspectAcceptance(cwd, { taskId });
   const intake = await inspectIntake(cwd);
-  if (acceptance.status === 'needs_confirmation') {
+  if (acceptance.status === 'needs_confirmation' || acceptance.status === 'not_configured') {
     throw new Error(`任务快照前验收未收口：${acceptance.unresolved || acceptance.issue || '存在未确认验收项'}`);
   }
   const reportPath = resolve(cwd, 'tmp/continue-harness/report.json');
@@ -122,6 +123,10 @@ export async function createTaskSnapshot(cwd, {
     latestReport = JSON.parse(await readFile(reportPath, 'utf8'));
   } catch {
     throw new Error('任务快照前必须先执行一次 continue-harness verify，并保留 tmp/continue-harness/report.json');
+  }
+  const context = await verificationContext(cwd, taskId);
+  if (latestReport.task_id !== taskId || latestReport.context?.fingerprint !== context.fingerprint) {
+    throw new Error('验证报告与当前任务或输入/实现版本不匹配，请重新验证');
   }
   const inputByType = (type) => inputs.inputs
     .filter((item) => item.type === type)
@@ -160,14 +165,11 @@ export async function createTaskSnapshot(cwd, {
     `- 任务名称：${title}`,
     `- 本次目标：${goal}`,
     `- 用户要求：${userRequest || '待确认'}`,
-    `- 使用的 PRD：${inputByType('prd').join('；') || '无'}`,
-    `- 使用的 RP：${inputByType('rp').join('；') || '无'}`,
-    `- 使用的 UI：${inputByType('ui').join('；') || '无'}`,
-    `- 使用的 API/资产：${[...inputByType('api'), ...inputByType('assets')].join('；') || '无'}`,
+    `- 使用的输入：${context.inputs.map((item) => item.id).join('；') || '无'}`,
     `- 已确认：${[...confirmedEvidence, ...inputByType('prd')].join('；') || '无'}`,
-    `- 推断：以项目现有实现作为事实的内容见 docs/PROJECT.md；未新增推断`,
+    `- 推断与待确认事实：见 context.json 中的项目文档与 Intake；未登记不代表不存在`,
     `- 待确认：${[...pendingEvidence, ...risks].join('；') || '无'}`,
-    `- 冲突：无已记录冲突`,
+    `- 冲突：${inputs.issues.map((item) => item.message).join('；') || '输入检查未发现冲突'}`,
     `- 实际实现：${implementation}`,
     `- 未实现：${risks.join('；') || '无已登记未实现项'}`,
     `- 修改文件：见 files.json`,
@@ -185,12 +187,12 @@ export async function createTaskSnapshot(cwd, {
     writeFile(resolve(root, 'files.json'), `${JSON.stringify({ files }, null, 2)}\n`, { flag: 'wx' }),
     writeFile(
       resolve(root, 'verification.json'),
-      `${JSON.stringify({ commands: verification, latest_report: 'tmp/continue-harness/report.json', status: latestReport.status, mode: latestReport.mode }, null, 2)}\n`,
+      `${JSON.stringify({ commands: verification, report: latestReport, status: latestReport.status, mode: latestReport.mode }, null, 2)}\n`,
       { flag: 'wx' },
     ),
     writeFile(
-      resolve(root, 'design-token-diff.json'),
-      `${JSON.stringify({ added: [], changed: [], deleted: [] }, null, 2)}\n`,
+      resolve(root, 'context.json'),
+      `${JSON.stringify({ intake, acceptance, context, decisions, documents: await readProjectDocuments(cwd) }, null, 2)}\n`,
       { flag: 'wx' },
     ),
   ]);

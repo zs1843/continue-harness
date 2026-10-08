@@ -1,38 +1,47 @@
-# 验证与报告
+# 验证与验收
 
-验证模式由 `.continue-harness/project.yaml` 映射到底层命令。Agent 不应写死某个包管理器命令，而应读取项目配置。
+Continue Harness 将需求、实现项、验收项和证据关联到同一任务。验收标准在实现前确认，验证结果用于判断当前实现是否满足这些标准。
 
-| 模式 | 用途 |
-| --- | --- |
-| `quick` | 小范围改动的快速、失败即停检查 |
-| `feature` | 功能完成门禁，包含项目配置的完整检查 |
-| `runtime` | 页面启动、浏览器响应和运行时错误 |
-| `interaction` | 关键用户流程；项目未配置时会明确标记 |
-| `visual` | 截图基线和像素差异 |
-| `audit` | 尽量运行所有已配置检查并汇总失败 |
+## 验收记录
+
+使用项目已有的 `docs/ACCEPTANCE.md` 维护关联，无需增加平行台账：
+
+| 编号 | 任务 | 需求 | 实现项 | 验收标准 | 状态 | 证据 | 原因 | 确认人 | 后续条件 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| AC-001 | T001 | REQ-001 | src/export.py | 导出字段与已确认契约一致 | pending | | | | |
+
+需求列引用 manifest 中的 active 输入编号，可附章节；实现项和证据列填写项目相对文件路径。上表只是格式示例，路径与标准由项目决定。
+
+标记 verified 前，必须具备有效需求、实现文件和可读取的证据。自动检查验证引用与文件状态，证据是否足以证明业务正确仍需按验收标准审查。
+
+延期或阻塞分别使用 deferred、blocked，并记录原因、确认人和后续条件。它们表示已记录风险，不表示验收通过。尚未实现的延期项可以填写计划实现路径。
+
+## 执行检查
+
+使用 `continue-harness-verify` Skill，根据项目配置执行验证。quick 提供快速反馈；feature 和 audit 同时检查当前任务的验收关联。存在任务但未配置验收时不能通过这两个门禁。
+
+runtime、interaction、visual 等模式只在任务需要且项目已配置时使用。后端、数据或基础设施任务无需为了接入 Harness 而增加浏览器或视觉测试。
+
+## 报告有效性
+
+验证报告保存任务编号、输入哈希、实现文件哈希和验收记录指纹。恢复或创建快照时会检查它们是否仍然匹配；其他任务的报告、旧格式未绑定报告及已过期报告均需要重新验证。
+
+报告默认位于 `tmp/continue-harness/`。任务快照保存报告副本，不依赖之后可能被覆盖的最新报告。
+
+当前版本检测已关联输入、实现文件和验收记录的变化；未登记的依赖变化需要通过项目测试和人工审查发现。文件存在或命令成功本身不能证明业务验收完成。
+
+## 旧项目迁移
+
+旧验收表仍可读取，但仅有状态、没有需求与实现关联的行会标记为待确认。补齐现有记录并重新验证即可，不自动覆盖原表，也不沿用历史 passed 作为新门禁通过的证据。
+
+<details>
+<summary>CLI 参考</summary>
 
 ```bash
-continue-harness verify quick
-continue-harness verify feature
-continue-harness verify runtime
-continue-harness verify visual
-continue-harness verify audit
+continue-harness verify feature --task T001
+continue-harness verify audit --task T001
 ```
 
-Consumer H5 的 `feature` 和 `audit` 还包含 requirement closure：可达页面、弹窗、状态、动作和返回路径必须被验证、明确延期，或记录为外部阻塞。首屏能打开、构建成功或截图成功都只是证据，不能替代需求覆盖闭环。
+省略 --task 时按任务更新时间选择最近任务。多任务协作时应显式指定编号。
 
-## 报告
-
-报告默认写入：
-
-```text
-tmp/continue-harness/
-```
-
-目录中会有 Markdown、JSON 和每个命令的日志。业务失败、环境阻塞、未配置能力和通过状态需要分开解释。
-
-## 当前限制
-
-- 视觉验证没有基线时会报告 `not_configured`，不能当作通过。
-- 本地端口监听被环境禁止时会归类为环境阻塞。
-- 交互验证不会凭空生成关键流程，必须由项目配置真实入口。
+</details>

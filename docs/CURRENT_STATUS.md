@@ -1,8 +1,40 @@
 # Current Status
 
-Updated: 2026-09-29
+Updated: 2026-10-08
 
 ## Completed
+
+- Narrowed the active scope to requirement → implementation → acceptance → evidence → handoff.
+  Inputs now accept project-defined types; Intake records applicability reasons and reopens confirmation
+  after project-fact changes. Acceptance validates links and local evidence, and reports/snapshots bind
+  to task and content fingerprints. Resume includes project facts, source documents and active inputs.
+  Existing status-only acceptance tables require links and re-verification; earlier Pilot results are
+  historical evidence, not a rerun of the stricter gate. Site display name is Continue Harness.
+  Validation: 79 automated tests, ESLint, JavaScript syntax and project schema checks passed.
+  The bilingual Site built successfully in a temporary copy, preserving existing artifact deletions.
+
+- Reworked the documentation site into a skills-first handbook: single-source navigation (`navigation.mjs`)
+  with a `首页` entry and an optional version switcher (`versions.mjs`), simplified page titles, removal of
+  duplicated prompt blocks and duplicate Skill lists, and a new Skills section (install / built-in inventory
+  / execution steps). Corrected capability-boundary claims, including a fabricated `plan create` sample,
+  treating fixture-only UI System evidence as verified, a design-token diff that writes nothing, the
+  `generic-harness` aggregate Skill name, and missing CLI commands. `pnpm docs:build` passes with no broken
+  links or anchors, and the site gained a favicon.
+
+- Reworked the default from an H5-shaped generator into a generic constraint and evidence harness:
+  `create` now produces a technology-neutral container, and `consumer-h5` is an explicit preset rather
+  than the default project shape.
+- Added a stateful multi-round `intake` flow (`inspect` / `answer` / `evidence`) that confirms project
+  facts first, then generates a minimal, project-type-specific input list instead of imposing UI/API/stack
+  templates on every project.
+- Added a generic acceptance-closure path, structured command/agent/decision logs, and richer
+  `resume`/`task snapshot` handoff so a new agent can restore task, inputs, coverage, decisions, risks,
+  and verification without relying on the previous conversation.
+- Added a generic preset and a framework-neutral `chs-demo` fixture; kept `chs-demo-h5` as the standalone
+  H5 adapter fixture.
+- Validated the generic protocol against two unrelated real projects (HeTun-Site on React/Vite and
+  Workbench-Admin on Vue 2/Vue CLI); both `T001` pilot tasks closed with `verify audit` passed, and the
+  results are recorded in the documentation site showcase.
 
 - Added repository CI on Node.js 20 with frozen installs, syntax checks, tests, Doctor, Audit verification,
   documentation build, and high-severity dependency audits. The nested documentation site now has an
@@ -24,7 +56,7 @@ Updated: 2026-09-29
 - Added the initial `uni-app` Stack Adapter.
 - Added a JSON Schema draft for project configuration.
 - Added a minimal business-neutral uni-app H5 fixture.
-- Added the initial Core and orchestration test suite; the current suite contains 60 passing tests.
+- Added the initial Core and orchestration test suite; the current suite contains 71 passing tests.
 - Verified example Doctor and Audit execution.
 - Initialized an independent Git repository on branch `main`.
 - Strengthened runtime validation for supported project, platform, stack, command, and verification
@@ -34,7 +66,7 @@ Updated: 2026-09-29
   states, and write nothing when any conflict exists.
 - Added consumer-H5 product, current-status, decision, changelog, PRD-input, and UI-input templates.
 - Added focused configuration, Doctor, initialization, creation, UI System protocol, and two independent
-  flow-shape fixture tests; 60 tests now pass.
+  flow-shape fixture tests; 71 tests now pass.
 - Added lightweight Doctor checks for Node.js 20, package-manager/lockfile consistency, uni-app page
   registration and dependencies, Harness report ignore rules, and optional OpenAPI JSON snapshots.
 - Added an optional `sources.api` configuration protocol for Apifox-exported OpenAPI snapshots,
@@ -142,9 +174,10 @@ node ../../packages/cli/bin/continue-harness.mjs verify audit
 
 ## Current limitations
 
-- A Consumer H5 project has been run through the workflow (confirmed in project discussion), but its
-  repository, input manifest, verification reports, screenshots, and measured outcomes have not yet
-  been linked from this repository. The public evidence trail is therefore still incomplete.
+- The generic protocol is now validated against two unrelated real projects (HeTun-Site and
+  Workbench-Admin), but a real Consumer H5 project's repository, input manifest, verification reports,
+  and screenshots are not yet linked from this repository. The in-repo `chs-demo-h5` fixture remains the
+  only consumer-h5 evidence, so the H5-specific public trail is still thin.
 
 - Runtime validation still uses focused JavaScript rules; the CI contract now additionally validates the
   project configuration with the standards-compliant JSON Schema validator.
@@ -170,8 +203,8 @@ node ../../packages/cli/bin/continue-harness.mjs verify audit
 
 ## Next recommended task
 
-Document the completed Consumer H5 project run with its PRD/UI evidence, verification report, and
-screenshots where sharing is permitted. Use the recorded friction and outcomes to identify the next
-generalizable checks.
+Validate the stricter requirement-to-acceptance links and task-bound report freshness in real projects.
+Backfill existing acceptance records without replacing project-owned content. Adapter, template,
+upgrade and publishing expansion is deferred while the core delivery loop is stabilized.
 
 Do not restart the repository scaffold or copy files from a business project.

@@ -59,13 +59,17 @@ export const INTAKE_QUESTIONS = {
 };
 
 export function evidenceDefinition(type) {
-  return INTAKE_QUESTIONS.evidence[type] || [];
+  // Project types suggest questions; only requirements are universally required.
+  return (INTAKE_QUESTIONS.evidence[type] || INTAKE_QUESTIONS.evidence.mixed)
+    .map((item) => ({ ...item, required: item.id === 'requirements' }));
 }
 
 export function intakeEvidenceStatus(state) {
   const evidence = Array.isArray(state.evidence) ? state.evidence : [];
   const unresolved = evidence.filter((item) => item.status === 'pending' || item.status === 'needs_confirmation');
-  const required = evidence.filter((item) => item.required && item.status !== 'confirmed');
+  const required = evidence.filter((item) => (item.required && item.status !== 'confirmed')
+    || (item.status === 'confirmed' && !item.source)
+    || (item.status === 'not_applicable' && !item.note));
   return {
     complete: unresolved.length === 0 && required.length === 0,
     unresolved: unresolved.length,

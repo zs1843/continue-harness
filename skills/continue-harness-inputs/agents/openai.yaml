@@ -1,4 +1,4 @@
 interface:
   display_name: "管理 Harness 输入"
-  short_description: "检查分析项目的 PRD、RP、UI、API 与资产输入证据和冲突"
+  short_description: "按项目事实和任务范围登记输入，检查来源、版本变化与验收关联"
   default_prompt: "使用 $continue-harness-inputs 检查并分析当前任务输入。"

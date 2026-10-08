@@ -1,11 +1,15 @@
-import { cp, readFile, writeFile } from 'node:fs/promises';
+import { cp, readFile, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 const packageDirectory = resolve(import.meta.dirname, '..');
 const repositoryRoot = resolve(packageDirectory, '../..');
 
+// cp() overwrites but never deletes, so clear each staged directory first to keep
+// the published package in sync with the repository.
 for (const directory of ['presets', 'skills', 'templates', 'ui-systems']) {
-  await cp(resolve(repositoryRoot, directory), resolve(packageDirectory, directory), {
+  const target = resolve(packageDirectory, directory);
+  await rm(target, { force: true, recursive: true });
+  await cp(resolve(repositoryRoot, directory), target, {
     force: true,
     recursive: true,
   });

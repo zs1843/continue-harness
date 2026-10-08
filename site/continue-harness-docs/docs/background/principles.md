@@ -1,31 +1,39 @@
 # 设计原则
 
+本页说明 continue-harness 的边界划分、项目事实归属、初始化方式、能力启用策略和验证定位。这些原则决定哪些内容放进 Core，哪些内容留给目标项目。
+
 ## Core 不理解业务
 
-Core 不能包含产品页面、领域状态、接口路径、品牌和 Token 值。它只负责可复用机制：配置、命令解析、诊断、验证、报告和安全写入。
+Core 不包含产品页面、领域状态、接口路径、品牌和 Token 值；它只负责可复用机制：配置、命令解析、诊断、验证、报告和安全写入。适配器取值属于配置协议：`project.product_type`、`project.platforms` 和 `stack.adapter` 由 Core 的配置枚举与 `schemas/project.schema.json` 校验，其中不包含业务事实。
 
-这样做的代价是需要更多显式配置；收益是 Harness 不会被某个业务项目绑死。
+代价是需要更多显式配置，收益是 Harness 不被某个业务项目绑死。
 
 ## 项目事实归项目所有
 
-`.continue-harness/project.yaml` 是目标项目拥有的配置。项目选择 profile、platform、stack，并把符号化验证步骤映射到真实命令。
+`.continue-harness/project.yaml` 由目标项目拥有。项目选择 profile、platform、stack，并把符号化验证步骤映射到真实命令。
 
-Harness 可以提供模板和默认值，但不能长期替项目保存真实业务事实。
+Harness 提供模板和默认值，真实业务事实保存在项目自己的文件和配置里。
 
 ## 初始化必须安全
 
-接入已有项目时，Harness 要先预检所有目标文件。只要有真实冲突，就停止写入。已有相同文件保留，已有不同内容报告为项目已维护或冲突。
+接入已有项目时，Harness 先预检所有目标文件，出现真实冲突时停止写入。内容相同的文件保留，内容不同的文件报告为项目已维护或冲突。
 
-这条原则是为了避免工程工具用“初始化”的名义覆盖用户维护的规则。
+`continue-harness init --dry-run` 输出写入计划而不改动文件。
 
-## 能力默认轻量，按需展开
+## 能力默认轻量
 
-新项目默认只安装聚合 `generic-harness` Skill。Consumer H5 等专项 Skill、命令级 Skills、OpenAPI、UI System、Design Token discovery 和视觉基线都是按任务需要启用。
+新项目由 CLI 和项目类型选择聚合工作流 Skill，默认 preset 是 `generic`。Consumer H5 专项 Skill、命令级 Skills、OpenAPI、UI System、Design Token discovery 和视觉基线按任务需要启用。
 
-这不是删除能力，而是降低默认认知成本。
+这些能力按需展开，默认认知成本保持较低。
 
 ## 验证是完成证据
 
-验证报告不是形式化步骤，而是任务完成的证据。失败命令、环境阻塞、未配置能力和业务失败应该被区分记录。
+验证报告记录命令、结果和阻塞原因，业务失败、环境阻塞和未配置能力分开记录。未配置的检查返回未配置或阻塞状态，不计为通过。
 
-Consumer H5 的完整功能验收不只看构建和首屏，还要看需求闭环。
+通用任务验收检查需求、实现与证据的关联。延期和阻塞保留为风险，输入或实现版本变化后重新验证。
+
+## 约束与审批
+
+`AGENTS.md` 是唯一约束本体，`CLAUDE.md` 和 Cursor rule 是薄适配，Skills 是可调用工作流。
+
+发布、依赖升级和公共协议变更需要显式确认。

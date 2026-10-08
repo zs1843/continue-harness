@@ -1,50 +1,91 @@
-import { access, readFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { inspectInputs } from './inputs.mjs';
 
 const ACCEPTANCE_PATH = 'docs/ACCEPTANCE.md';
 const TERMINAL_STATUSES = new Set(['verified', 'deferred', 'blocked', '已验证', '明确延期', '外部阻塞']);
 
-async function exists(path) {
-  try { await access(path); return true; } catch { return false; }
-}
-
 function splitRow(line) {
-  return line.replace(/^\|/, '').replace(/\|$/, '').split('|').map((cell) => cell.trim());
+  return line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map((cell) => cell.trim());
 }
 
-export async function inspectAcceptance(cwd) {
-  const path = resolve(cwd, ACCEPTANCE_PATH);
-  if (!(await exists(path))) {
+export function localReference(reference) {
+  const markdown = reference.match(/\]\(([^)]+)\)/);
+  return (markdown ? markdown[1] : reference).replaceAll('`', '').split('#')[0].trim();
+}
+
+async function isFile(cwd, reference) {
+  const path = localReference(reference);
+  if (!path || /^[a-z]+:\/\//i.test(path)) return false;
+  try { return (await stat(resolve(cwd, path))).isFile(); } catch { return false; }
+}
+
+export async function inspectAcceptance(cwd, { taskId } = {}) {
+  let source;
+  try { source = await readFile(resolve(cwd, ACCEPTANCE_PATH), 'utf8'); }
+  catch (error) {
+    if (error.code !== 'ENOENT') throw error;
     return { exists: false, path: ACCEPTANCE_PATH, rows: [], status: 'not_configured', unresolved: 0 };
   }
-  const source = await readFile(path, 'utf8');
   const lines = source.split(/\r?\n/).filter((line) => line.trim().startsWith('|'));
-  if (lines.length < 2) {
-    return { exists: true, path: ACCEPTANCE_PATH, rows: [], status: 'not_configured', unresolved: 0 };
-  }
+  if (lines.length < 2) return { exists: true, path: ACCEPTANCE_PATH, rows: [], status: 'not_configured', unresolved: 0 };
   const header = splitRow(lines[0]);
-  const statusIndex = header.findIndex((cell) => /^(状态|status)$/i.test(cell));
-  if (statusIndex < 0) {
-    return { exists: true, path: ACCEPTANCE_PATH, rows: [], status: 'needs_confirmation', unresolved: 0, issue: '验收表缺少状态列' };
+  const column = (pattern) => header.findIndex((cell) => pattern.test(cell));
+  const indices = {
+    id: column(/^(编号|id)$/i),
+    task: column(/^(任务|task|task_id)$/i),
+    requirement: column(/^(需求|requirement)$/i),
+    implementation: column(/^(实现项|implementation)$/i),
+    criterion: column(/^(验收标准|criterion)$/i),
+    status: column(/^(状态|status)$/i),
+    evidence: column(/^(证据|evidence)$/i),
+    reason: column(/^(原因|reason)$/i),
+    owner: column(/^(确认人|owner)$/i),
+    next: column(/^(后续条件|next)$/i),
+  };
+  const inspection = await inspectInputs(cwd);
+  const rows = [];
+  for (const line of lines.slice(1)) {
+    const cells = splitRow(line);
+    if (cells.every((cell) => /^:?-{3,}:?$/.test(cell))) continue;
+    const row = Object.fromEntries(Object.entries(indices).map(([key, index]) => [key, cells[index] || '']));
+    if (taskId && row.task && row.task !== taskId) continue;
+    const issues = [];
+    if (inspection.status !== 'passed') issues.push('input_integrity');
+    for (const key of ['id', 'task', 'requirement', 'implementation', 'criterion', 'status']) {
+      if (!row[key]) issues.push('missing_' + key);
+    }
+    if (!TERMINAL_STATUSES.has(row.status)) issues.push('unresolved_status');
+    const input = inspection.inputs.find((item) => item.id === row.requirement.split('#')[0]);
+    if (!input || !input.exists || input.changed || input.status !== 'active'
+      || (input.task_id && input.task_id !== row.task)) issues.push('invalid_requirement');
+    if (['verified', '已验证'].includes(row.status)) {
+      if (!await isFile(cwd, row.implementation)) issues.push('missing_implementation');
+      if (!await isFile(cwd, row.evidence)) issues.push('missing_evidence');
+      if (/tmp\/continue-harness\/report\.(json|md)/.test(row.evidence)) issues.push('self_referencing_report');
+    } else if (TERMINAL_STATUSES.has(row.status) && (!row.reason || !row.owner || !row.next)) {
+      issues.push('missing_resolution');
+    }
+    rows.push({ ...row, issues });
   }
-  const rows = lines.slice(1)
-    .filter((line) => !/^\|?\s*:?-{3,}/.test(line.replace(/\|/g, '').trim()))
-    .map((line) => {
-      const cells = splitRow(line);
-      const status = cells[statusIndex] || '';
-      return { id: cells[0] || 'unknown', status, evidence: cells[statusIndex + 1] || '' };
-    });
-  const unresolved = rows.filter((row) => !TERMINAL_STATUSES.has(row.status));
-  if (unresolved.length) {
-    return { exists: true, path: ACCEPTANCE_PATH, rows, status: 'needs_confirmation', unresolved: unresolved.length };
+  const ids = new Set();
+  for (const row of rows) {
+    if (ids.has(row.id)) row.issues.push('duplicate_id');
+    ids.add(row.id);
   }
-  const hasNonVerified = rows.some((row) => !['verified', '已验证'].includes(row.status));
+  // Every active task input must appear in the acceptance ledger.
+  for (const input of inspection.inputs.filter((item) => item.status === 'active'
+    && ['requirements', 'prd'].includes(item.type) && (!taskId || item.task_id === taskId))) {
+    if (!rows.some((row) => row.requirement.split('#')[0] === input.id)) {
+      rows.push({ id: input.id, task: input.task_id || '', requirement: input.id, status: 'pending', evidence: '',
+        implementation: '', issues: ['uncovered_requirement'] });
+    }
+  }
+  const unresolved = rows.filter((row) => row.issues.length).length;
   return {
-    exists: true,
-    path: ACCEPTANCE_PATH,
-    rows,
-    status: hasNonVerified ? 'closed_with_risks' : 'passed',
-    unresolved: 0,
+    exists: true, path: ACCEPTANCE_PATH, rows, unresolved,
+    status: !rows.length ? 'not_configured' : unresolved ? 'needs_confirmation'
+      : rows.some((row) => !['verified', '已验证'].includes(row.status)) ? 'closed_with_risks' : 'passed',
   };
 }
 

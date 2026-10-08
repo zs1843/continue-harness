@@ -7,6 +7,7 @@ import { inspectInputs, inspectTaskMetadata } from './inputs.mjs';
 import { inspectTaskHistory } from './history.mjs';
 import { inspectAcceptance } from './acceptance.mjs';
 import { inspectIntake } from './intake.mjs';
+import { verificationContext, readProjectDocuments } from './verification-context.mjs';
 
 const execFileAsync = promisify(execFile);
 
@@ -47,12 +48,31 @@ async function readDecisionSummary(cwd) {
     .slice(0, 12);
 }
 
-async function readVerificationSummary(cwd) {
+async function readRecentLogs(cwd) {
+  const path = '.continue-harness/logs/commands.ndjson';
+  try {
+    const lines = (await readFile(resolve(cwd, path), 'utf8')).trim().split(/\r?\n/).slice(-10);
+    const entries = lines.map((line) => {
+      try {
+        const item = JSON.parse(line);
+        return { timestamp: item.timestamp, kind: item.kind, action: item.action,
+          command: item.command, status: item.status, exitCode: item.exitCode };
+      } catch { return { status: 'invalid_log_entry' }; }
+    });
+    return { path, entries };
+  } catch { return { path, entries: [] }; }
+}
+
+async function readVerificationSummary(cwd, taskId) {
   const path = resolve(cwd, 'tmp/continue-harness/report.json');
   if (!(await exists(path))) return null;
   try {
     const report = JSON.parse(await readFile(path, 'utf8'));
-    return { mode: report.mode || null, status: report.status || null, generatedAt: report.generatedAt || null };
+    const context = await verificationContext(cwd, taskId);
+    const valid = Boolean(taskId && report.task_id === taskId && report.context?.fingerprint === context.fingerprint);
+    return { path: 'tmp/continue-harness/report.json', task_id: report.task_id || null,
+      mode: report.mode || null, status: valid ? report.status : 'needs_confirmation',
+      recorded_status: report.status, applicable: valid, generatedAt: report.generatedAt || null };
   } catch {
     return { mode: null, status: 'invalid' };
   }
@@ -62,10 +82,12 @@ function chooseNextActions({ task, snapshots, coverage, inputs, intake, acceptan
   const actions = [];
   if (intake?.status === 'awaiting_evidence') actions.push({ action: 'intake inspect', reason: '项目输入证据尚未确认' });
   if (!task) actions.push({ action: 'task create', reason: '尚未找到当前任务' });
-  else if (!snapshots.length && inputs.status !== 'failed' && acceptance?.status !== 'needs_confirmation') {
+  else if (!snapshots.length && inputs.status === 'passed' && acceptance?.status === 'passed'
+    && verification?.status === 'passed' && verification.applicable) {
     actions.push({ action: `task snapshot ${task.id}`, reason: '当前任务还没有任务快照' });
   }
   if (coverage.unresolved) actions.push({ action: 'verify feature', reason: `覆盖矩阵还有 ${coverage.unresolved} 行未收口` });
+  if (task && acceptance?.status === 'not_configured') actions.push({ action: 'define acceptance', reason: '当前任务尚未配置验收关联' });
   if (inputs.status !== 'passed') actions.push({ action: 'inputs inspect', reason: '输入清单存在未收口项' });
   if (acceptance?.status === 'needs_confirmation') actions.push({ action: 'verify feature', reason: '验收标准存在未收口项' });
   if (acceptance?.status === 'closed_with_risks') actions.push({ action: 'verify feature', reason: '验收已记录延期或外部阻塞，不能宣称完成' });
@@ -88,13 +110,18 @@ export async function buildResumeState(cwd, { taskId } = {}) {
     readDecisionSummary(cwd),
     selectedTaskId ? inspectTaskHistory(cwd, selectedTaskId) : Promise.resolve({ snapshots: [], status: 'not_configured', task_id: null }),
     inspectIntake(cwd),
-    inspectAcceptance(cwd),
-    readVerificationSummary(cwd),
+    inspectAcceptance(cwd, { taskId: selectedTaskId }),
+    readVerificationSummary(cwd, selectedTaskId),
   ]);
   const state = {
     project: { branch: branch || null, dirty_files: status ? status.split(/\r?\n/).filter(Boolean) : [] },
     task: task ? { id: task.id, title: task.metadata?.title || null, status: task.metadata?.status || null, updated_at: task.metadata?.updated_at || null } : null,
-    inputs: { status: inputs.status, count: inputs.inputs.length, unregistered: inputs.discovered.length },
+    inputs: { status: inputs.status, count: inputs.inputs.length, unregistered: inputs.discovered.length,
+      manifest: inputs.manifest, entries: inputs.inputs.filter((item) => item.status === 'active'), issues: inputs.issues },
+    project_context: { facts: intake.project || {}, intake_path: intake.path,
+      documents: await readProjectDocuments(cwd),
+      tasks: metadata.modules.map((item) => ({ id: item.id, ...item.metadata })),
+      logs: await readRecentLogs(cwd) },
     intake: { status: intake.status || 'not_initialized', phase: intake.phase || null, unresolved: (intake.questions || []).length },
     acceptance,
     verification,

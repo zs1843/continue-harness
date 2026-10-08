@@ -2,7 +2,7 @@
 
 机器可读 Token 唯一事实来源是 `docs/design/tokens.json`。本文只解释 Token 的中文语义、来源和使用注意事项，不定义第二套数值。
 
-Token 更新必须记录来源优先级、修改前值、修改后值、影响页面、影响组件，并写入任务快照的 `design-token-diff.json`。
+Token 更新必须记录来源优先级、修改前值、修改后值、影响页面和影响组件，并随变更历史留存。任务快照当前不生成单独的 `design-token-diff.json`。
 
 ## 提炼规则
 

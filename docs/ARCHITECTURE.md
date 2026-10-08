@@ -1,5 +1,17 @@
 # Architecture
 
+## Active scope
+
+Continue Harness maintains requirement → implementation → acceptance → evidence → handoff links.
+Acceptance criteria are confirmed before implementation. Project types suggest input questions; project
+facts, toolchain and task scope determine applicability. Custom input types are supported by the manifest.
+Core validates traceability and evidence freshness, while project commands and reviewers establish behavior.
+
+The existing ACCEPTANCE.md ledger is the relationship authority. Reports bind to task and content
+fingerprints; snapshots retain report copies and context. Resume includes project facts and source documents.
+This does not provide automatic business correctness or detection of changes in unregistered dependencies.
+Adapter expansion is outside the current milestone.
+
 ## Composition model
 
 Target-project behavior is composed from four sources:

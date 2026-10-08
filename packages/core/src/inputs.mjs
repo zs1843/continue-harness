@@ -111,10 +111,11 @@ export async function analyzeInputs(cwd) {
   const inspection = await inspectInputs(cwd);
   const facts = [];
   for (const input of inspection.inputs) {
-    if (!input.exists || !['prd', 'rp', 'ui'].includes(input.type)) continue;
+    if (!input.exists || input.status !== 'active') continue;
     const absolutePath = resolve(cwd, input.path);
     try {
       const source = await readFile(absolutePath, 'utf8');
+      if (source.includes('\u0000') || source.includes('\uFFFD')) throw new Error('Non-text input');
       facts.push(...extractLabeledFacts(source, input.type).map((fact) => ({ ...fact, input_id: input.id, path: input.path })));
     } catch {
       facts.push({
@@ -202,7 +203,7 @@ export async function inspectInputs(cwd) {
       }
       seenActive.set(key, item);
     }
-    if (!INPUT_TYPES.includes(type)) {
+    if (typeof type !== 'string' || !/^[a-z][a-z0-9_-]*$/.test(type)) {
       issues.push({
         code: 'INPUT_TYPE_UNKNOWN',
         display_name: '待确认',
@@ -226,7 +227,7 @@ export async function inspectInputs(cwd) {
         status: 'needs_confirmation',
       });
     }
-    if (present && ['prd', 'rp', 'ui', 'api', 'assets'].includes(type)) {
+    if (present) {
       try {
         const source = await readFile(absolutePath, 'utf8');
         if (isPlaceholderInput(source)) {
@@ -244,7 +245,7 @@ export async function inspectInputs(cwd) {
     entries.push({
       ...item,
       changed,
-      display_type: INPUT_TYPE_DISPLAY[type] || '待确认输入',
+      display_type: INPUT_TYPE_DISPLAY[type] || type || '待确认输入',
       exists: present,
       sha256: hash,
       type,
@@ -253,7 +254,10 @@ export async function inspectInputs(cwd) {
 
   const discovered = [];
   const harnessDirectory = await resolveHarnessDirectory(cwd);
-  for (const type of INPUT_TYPES) {
+  const inputRoot = resolve(cwd, harnessDirectory, 'inputs');
+  const directories = (await exists(inputRoot)) ? (await readdir(inputRoot, { withFileTypes: true }))
+    .filter((entry) => entry.isDirectory()).map((entry) => entry.name) : [];
+  for (const type of new Set([...INPUT_TYPES, ...directories])) {
     const directory = resolve(cwd, harnessDirectory, 'inputs', type);
     for (const file of await walk(directory)) {
       if (file.endsWith('/README.md') || file.endsWith('\\README.md')) continue;

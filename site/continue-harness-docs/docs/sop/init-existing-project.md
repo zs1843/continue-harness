@@ -1,19 +1,52 @@
 # 接入已有项目
 
-已有项目接入时，首要原则是安全：不能覆盖项目已经维护的文件。
+本页说明给已有项目补 Harness 文件的命令、预检状态和增量接入顺序。命令参数见[命令](../reference/commands.md)。
 
-## 推荐命令
+## 命令
+
+先用 `init` Skill 做只读预检，确认不会覆盖项目自有文件。
+
+**Skill**：`continue-harness-init`
+
+**CLI（可选）**：
 
 ```bash
 continue-harness init --dry-run
+```
+
+需要机器可读的写入计划时用 `plan` Skill。
+
+**Skill**：`continue-harness-plan`
+
+**CLI（可选）**：
+
+```bash
 continue-harness plan init --json
+```
+
+确认计划后用 `init` Skill 写入缺失的 Harness 文件。
+
+**Skill**：`continue-harness-init`
+
+**CLI（可选）**：
+
+```bash
 continue-harness init
+```
+
+写入完成后用 `doctor` Skill 做只读诊断。
+
+**Skill**：`continue-harness-doctor`
+
+**CLI（可选）**：
+
+```bash
 continue-harness doctor
 ```
 
 ## 预检状态
 
-初始化计划会把文件分成几类：
+初始化计划在写入前把文件分成几类：
 
 | 状态 | 含义 |
 | --- | --- |
@@ -23,28 +56,34 @@ continue-harness doctor
 | `project_owned_modified` | 项目已维护，不能直接覆盖 |
 | `conflict` | 真实冲突，必须人工处理 |
 
-只要有冲突，`init` 就不会写入任何文件。
+计划中只要存在冲突，`init` 就不写入任何文件。`--dry-run` 和 `plan init` 输出同一份计划，分别用于人工检查和机器读取。
 
-## 为什么要保守
+## 增量接入
 
-已有项目的目录结构、脚本、样式和 Agent 规则可能已经承载真实业务经验。Harness 的职责是补充工程协议，而不是替换项目所有权。
+`init` 不替换项目的包管理器、测试运行器、样式和 Agent 规则，只补充缺失的 Harness 文件。团队按以下顺序启用能力：
 
-保守接入可以让团队逐步采用：
+1. 补 `.continue-harness/project.yaml`。
+2. 补输入目录和项目文档。
+3. 启用 `doctor` 和 `verify`。
+4. 按任务需要启用 Design Token、OpenAPI 或 UI System。
 
-- 先补 `.continue-harness/project.yaml`。
-- 再补输入目录和项目文档。
-- 再启用 Doctor 和 verify。
-- 最后按任务需要启用 Design Token、OpenAPI 或 UI System。
+## 存量 Token 发现
 
-## 接入后的第一件事
+接入后先用 Design Token Skill 扫描项目已有的视觉值。
 
-接入已有项目后，应运行存量视觉发现：
+**Skill**：`continue-harness-design-tokens`
+
+**CLI（可选）**：
 
 ```bash
 continue-harness design tokens discover --json
 continue-harness design tokens inspect --json
 ```
 
-发现命令只读扫描 `src/` 下 Vue/CSS/SCSS/Less，输出 CSS Variables、高频颜色、字体、间距、圆角、阴影、尺寸、层级、动效和断点候选。确认后再更新唯一 Token 真值。
+`discover` 只读扫描 `src/` 下 Vue、CSS、SCSS、Less 等样式文件，输出 CSS Variables、高频颜色、字体、间距、圆角、阴影、尺寸、层级、动效和断点候选。确认候选后再更新唯一 Token 真值。
 
-Token 定义必须遵循固定来源优先级：高保真 UI、RP、用户临时视觉要求、项目既有 Token、DESIGN 原则、Harness 默认值、Agent 推断。详见 [Design Token](../architecture/design-tokens.md)。
+Token 取值优先级见[术语表](../reference/glossary.md)。
+
+## 限制
+
+`discover` 只输出候选值，不写入 `docs/design/tokens.json`；Token 真值的更新由人确认后执行。

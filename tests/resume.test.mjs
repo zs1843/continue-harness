@@ -18,6 +18,6 @@ test('resume builds a handoff state with the current task and next action', asyn
   const state = await buildResumeState(cwd);
   assert.equal(state.task.id, 'T002');
   assert.equal(state.coverage.unresolved, 1);
-  assert.equal(state.next_actions[0].action, 'task snapshot T002');
+  assert.ok(!state.next_actions.some((item) => item.action === 'task snapshot T002'));
   assert.ok(state.next_actions.some((item) => item.action === 'verify feature'));
 });

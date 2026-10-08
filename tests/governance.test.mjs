@@ -112,7 +112,7 @@ test('not configured visual verification is not reported as passed', async () =>
 
 test('visual missing baseline output is normalized to not configured', async () => {
   const result = await runVerification({
-    cwd: process.cwd(),
+    cwd: await mkdtemp(resolve(tmpdir(), 'continue-harness-verify-')),
     failFast: true,
     mode: 'visual',
     steps: [
@@ -128,7 +128,7 @@ test('visual missing baseline output is normalized to not configured', async () 
 
 test('listen permission failures are reported as environment blocks', async () => {
   const result = await runVerification({
-    cwd: process.cwd(),
+    cwd: await mkdtemp(resolve(tmpdir(), 'continue-harness-verify-')),
     failFast: true,
     mode: 'runtime',
     steps: [
@@ -145,7 +145,7 @@ test('listen permission failures are reported as environment blocks', async () =
 
 test('successful commands are not blocked by diagnostic text in their output', async () => {
   const report = await runVerification({
-    cwd: process.cwd(),
+    cwd: await mkdtemp(resolve(tmpdir(), 'continue-harness-verify-')),
     failFast: true,
     mode: 'audit',
     steps: [{ command: `${process.execPath} -e "console.log('Error: listen EPERM: operation not permitted')"`, name: 'test' }],

@@ -1,14 +1,15 @@
 ---
 name: continue-harness-task
-description: Manage stable continue-harness task IDs, modular PRDs, task history, and immutable snapshots. Use when starting a feature/fix/visual adjustment, inspecting T001-style history, recording actual verification and files, or completing a task with traceable PRD/RP/UI/API/asset evidence.
+description: Manage Continue Harness tasks, requirement-to-acceptance links and durable handoff snapshots.
 ---
 
-# 管理任务与历史
+# 任务与交接
 
-1. 没有编号时运行 `continue-harness task create --title "<名称>" --json`；已有稳定编号时显式传入。
-2. 用 `continue-harness task inspect <id> --json` 或 `task history` 查看已有快照和模块信息。
-3. 实现前登记全部输入，并将 PRD/RP 中每个页面、弹窗、关键状态和跳转目标拆成覆盖矩阵独立行。
-4. 验证后更新 CURRENT_STATUS、DECISIONS、PRD_HISTORY、CHANGE_HISTORY 和 CHANGELOG。
-5. 创建快照前确认没有 `待分析`、`待实现`、`实现中`、`待验证` 或空状态；否则继续执行或集中询问用户。
-6. 执行 `continue-harness task snapshot <id> --title "<名称>" --request "<要求>" --json`。
-7. 快照默认不可修改；发现错误创建修订快照。不得把密钥、Cookie、Token、`.env` 内容或个人敏感数据写入快照。
+1. 使用 `resume --task <id> --json` 恢复已有任务；新任务使用 `task create --title "<名称>" --json` 创建编号。
+2. 登记有效需求，在 docs/ACCEPTANCE.md 关联需求编号、实现项、验收标准。实现前确认范围和非目标。
+3. 实施后执行 `verify feature --task <id>` 或 `verify audit --task <id>`。报告必须对应任务及当前输入和实现版本。
+4. 更新当前状态、决策及必要日志。延期或阻塞记录原因、确认人和后续条件，不能标记为通过。
+5. 用 `task snapshot <id> --title "<名称>" --request "<要求>" --json` 创建交接快照。快照保存验收关系、上下文和验证报告副本；旧报告不匹配时先重新验证。
+6. 交接说明目标、已完成项、未完成项、依据位置、风险和下一步。快照修订通过新建快照记录。
+
+不增加平行台账，也不要求任务无关的 UI 或 Token 文件。

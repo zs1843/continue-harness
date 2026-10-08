@@ -2,6 +2,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 import { displayStatus, localizeResult } from './status.mjs';
+import { verificationContext } from './verification-context.mjs';
 
 const VERIFY_DIMENSIONS = {
   audit: '汇总审计',
@@ -19,7 +20,7 @@ const VERIFY_DIMENSIONS = {
 
 function renderMarkdown(report) {
   const lines = [
-    '# continue-harness 验证报告',
+    '# Continue Harness 验证报告',
     '',
     `- 验证模式：\`${report.mode}\``,
     `- 总体状态：**${displayStatus(report.status)}**`,
@@ -27,12 +28,10 @@ function renderMarkdown(report) {
     '',
     '## 完成度说明',
     '',
-    '- 构建通过不等于功能完成。',
-    '- 页面可打开不等于交互完成。',
-    '- 交互可点击不等于业务正确。',
-    '- E2E 通过不等于视觉还原通过。',
-    '- 截图通过不等于 PRD 验收通过。',
-    '- 少量冒烟测试不能代表全业务覆盖。',
+    '- 检查结果只覆盖本次配置的范围。',
+    '- 完成结论需要需求、实现项、验收项与证据关联。',
+    '- 延期、阻塞及未配置验收不表示交付通过。',
+    `- 关联任务：${report.task_id || '未绑定'}`,
     '',
     '| 检查 | 分类 | 状态 | 耗时 | 命令 |',
     '| --- | --- | --- | ---: | --- |',
@@ -49,10 +48,7 @@ function renderMarkdown(report) {
     '',
     '## 产品验收状态',
     '',
-    '- PRD 覆盖：未配置',
-    '- RP 覆盖：未配置',
-    '- UI 覆盖：未配置',
-    '- 产品验收：未完成',
+    `- 验收：${report.acceptance?.status || 'not_configured'}`,
   );
   if (report.acceptance) {
     lines.push(
@@ -70,6 +66,7 @@ export async function writeReport(cwd, verification) {
   await mkdir(logDir, { recursive: true });
   const report = {
     ...verification,
+    context: verification.context || await verificationContext(cwd, verification.task_id),
     generatedAt: new Date().toISOString(),
     harnessVersion: '0.1.0',
     results: verification.results.map(localizeResult),

@@ -1,40 +1,25 @@
 # Core
 
-Core 位于 `packages/core/`，是 Harness 的业务无关运行时。
+Core 位于 `packages/core/`，是 Harness 的业务无关运行时。本页列出它的能力、边界、配置接口和内部模块。
 
-## Core 负责什么
+## 能力
 
-| 能力 | 说明 | 为什么放在 Core |
-| --- | --- | --- |
-| 配置加载 | 读取 `.continue-harness/project.yaml`，解析项目、平台、技术栈、facts 和命令映射 | 所有工作流都依赖同一个配置入口 |
-| 运行时校验 | 检查项目声明的产品类型、平台、stack、命令和 verify mode 是否有效 | 早失败，避免 Agent 在错误配置上继续实现 |
-| 命令解析 | 把 `unit_test`、`coverage_closure` 等符号命令映射到真实 shell 命令 | 项目拥有命令，Core 只执行映射 |
-| 验证执行 | 支持 fail-fast 和 audit 式继续执行 | 不同场景需要不同反馈成本 |
-| Doctor | 检查 Node、pnpm、脚本、页面注册、输入、Token、Agent 工作流等 | 诊断应只读且可重复 |
-| 初始化计划 | 为 `init` / `create` 生成 create、unchanged、conflict 等状态 | 写文件前必须能预览和保护已有项目 |
-| 报告 | 写 Markdown、JSON 和 command log | 人、CI、Agent 都能读取同一份结果 |
-| 输入分析 | 读取 manifest，发现未登记输入，抽取文本事实和冲突 | 输入证据是任务开始前的共同事实 |
-| OpenAPI 生成保护 | 记录 generated hash，拒绝覆盖手改 generated 文件 | 自动生成层和业务层必须分开 |
-| UI/Token 检查协议 | 检查唯一 Token 真值和 UI System Adapter 描述 | Core 只理解通用描述，不导入具体组件库 |
+| 能力 | 机制 |
+| --- | --- |
+| 配置加载 | 读取 `.continue-harness/project.yaml`，解析项目、平台、技术栈、facts 和命令映射，并校验声明取值 |
+| 验证执行 | 把 `unit_test`、`coverage_closure` 等符号命令映射到真实 shell 命令，按 fail-fast 或 audit 模式执行 |
+| 诊断 | Doctor 只读检查 Node、pnpm、脚本、页面注册、输入、Token 和 Agent 工作流 |
+| 报告 | 输出 Markdown、JSON 和 command log |
+| 输入分析 | 读取 manifest，发现未登记输入，抽取文本事实并报告冲突 |
+| resume | 汇总当前任务、输入状态、最近快照、覆盖矩阵、持久决策和 Git 改动 |
 
-## Core 不负责什么
+## 边界
 
-Core 不包含：
+Core 不 import 适配器模块，但通过配置枚举校验适配器取值；新增适配器需要同步 Core 枚举与 `schemas/project.schema.json`。当前枚举覆盖 generic / consumer-h5、node / web-mobile、node-esm / uni-app。
 
-- 业务页面。
-- 业务状态。
-- API endpoint。
-- 品牌名。
-- Design Token 值。
-- 具体 UI 组件库实现。
+Core 不包含业务页面、业务状态、API endpoint、品牌名、Design Token 值和具体 UI 组件库实现。Core 可以知道项目声明了一个 API snapshot，但不知道这是哪个业务接口；可以知道某个页面注册缺失，但不知道页面应该有哪些卡片。
 
-也就是说，Core 可以知道“项目声明了一个 API snapshot”，但不知道“这是酒店搜索接口”；可以知道“某个页面注册缺失”，但不知道“酒店列表页应该有哪些卡片”；可以知道“Token 未提炼”，但不知道“品牌主色应该是什么”。
-
-## 为什么 Core 要克制
-
-Core 一旦理解业务，扩展 profile 和 platform 时就会出现隐性耦合。保持 Core 只理解通用协议，才能让 Consumer H5 之外的产品形态在未来进入同一套 Harness。
-
-## 与配置的关系
+## 配置接口
 
 Core 通过项目配置工作：
 
@@ -48,19 +33,23 @@ verify:
       - acceptance
 ```
 
-项目声明自身事实和验证命令；需要产品、平台或框架专属检查时，再由项目配置选择对应适配器。
+项目声明自身事实和验证命令；需要产品、平台或框架专属检查时，由项目配置选择对应适配器。
 
-## Core 内部文件视角
+## 模块
 
-| 文件 | 大致职责 |
+| 文件 | 职责 |
 | --- | --- |
 | `config.mjs` | 项目配置加载和校验 |
 | `runner.mjs` | 命令执行、fail-fast、状态归一 |
 | `doctor.mjs` | 只读诊断 |
 | `init.mjs` | 初始化和创建计划、安全写入 |
+| `intake.mjs` | 多轮项目事实确认和最小输入清单 |
 | `inputs.mjs` | 输入清单、发现和分析 |
+| `resume.mjs` | 恢复当前协作现场 |
+| `acceptance.mjs` | 验收状态检查 |
 | `openapi.mjs` | OpenAPI operation 检查、类型和 wrapper 生成 |
-| `design.mjs` | Design Token inspect/discover/diff |
-| `ui-system.mjs` | UI System Adapter 检查 |
+| `design.mjs` | Design Token inspect、discover、diff |
+| `ui-system.mjs` | UI System Adapter 和协议文件检查 |
+| `ui-contract.mjs` | UI 组件清单扫描和 Contract 文件检查 |
 | `history.mjs` | 任务历史和快照 |
 | `report.mjs` | 报告和日志输出 |

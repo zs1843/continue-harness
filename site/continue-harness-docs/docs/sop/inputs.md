@@ -1,6 +1,8 @@
-# 输入登记与分析
+# 输入登记
 
-输入是实现的证据来源。continue-harness 把输入分成五类：
+本页列出常见输入的登记方式。先按项目类型、技术栈和任务范围选择所需依据，再登记到 manifest.yaml；可使用项目自定义类型与原有文件路径。下列五类是可选示例，动态选择方式见[输入与证据](../guide/evidence.md)。
+
+## 输入类型
 
 | 类型 | 目录 | 说明 |
 | --- | --- | --- |
@@ -10,38 +12,59 @@
 | API | `.continue-harness/inputs/api/` | OpenAPI / Apifox 导出 |
 | assets | `.continue-harness/inputs/assets/` | 图片、图标、字体、素材 |
 
-## Inspect
+`intake` 在第二轮按项目类型生成最小输入清单，并用 `intake evidence --id <输入项> --status confirmed|not_applicable|pending` 记录登记结果。
+
+## 检查
+
+用 `inputs` Skill 比对输入目录和登记清单。
+
+**Skill**：`continue-harness-inputs`
+
+**CLI（可选）**：
 
 ```bash
 continue-harness inputs inspect --json
 ```
 
-Inspect 负责发现输入目录和 manifest 之间的差异：
+`inspect` 比对输入目录和 `manifest.yaml`，报告：
 
 - 哪些文件已经登记。
 - 哪些文件还未登记。
 - 哪些登记项对应的文件缺失。
 - manifest 是否存在和可解析。
 
-## Analyze
+## 分析
+
+用 `inputs` Skill 抽取并分类输入中的事实。
+
+**Skill**：`continue-harness-inputs`
+
+**CLI（可选）**：
 
 ```bash
 continue-harness inputs analyze --json
 ```
 
-Analyze 负责从文本输入中抽取简单事实，并按业务、交互、视觉维度分类。它也会报告同 key 冲突。
+`analyze` 从文本输入中抽取简单事实，按业务、交互、视觉维度分类，并报告同 key 冲突。
 
-## 为什么原始输入默认只读
+## 变更
 
-原始输入是证据。实现过程可以生成分析结论、覆盖矩阵和任务快照，但不应该静默改写证据本身。
+用 `inputs` Skill 查看已登记文件和结论的变化。
 
-这个策略能减少两类问题：
+**Skill**：`continue-harness-inputs`
 
-- 需求被实现过程“顺手修掉”，后续无法追溯。
-- Agent 把自己的推断写回原始材料，导致证据和结论混在一起。
+**CLI（可选）**：
 
-## 与 Design Token 的关系
+```bash
+continue-harness inputs diff --json
+```
 
-UI 和 RP 输入是 Token 提炼的重要来源。发生视觉冲突时，Token 来源优先级为：高保真 UI、RP、用户临时视觉要求、项目既有 Token、DESIGN 原则、Harness 默认值、Agent 推断。
+`diff` 报告已登记文件和分析结论的变化，用于判断旧结论是否仍可继续使用。
 
-这意味着 Agent 不能因为模板里已有默认值，就忽略新进入的 UI 稿；也不能因为自己推断了一个更顺眼的值，就覆盖高保真 UI。
+## Token 来源
+
+UI 和 RP 是 Token 提炼的来源。视觉冲突时的取值优先级见[术语表](../reference/glossary.md)。
+
+## 边界
+
+原始输入只读：实现过程生成分析结论、覆盖矩阵和任务快照，但不改写 `.continue-harness/inputs/` 下的证据文件。二进制设计稿和原型文件可能需要工具辅助解读。

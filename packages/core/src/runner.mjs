@@ -2,7 +2,7 @@ import { spawn } from 'node:child_process';
 import { performance } from 'node:perf_hooks';
 import { appendCommandLog } from './intake.mjs';
 
-export function runShellCommand(command, { cwd, env = process.env } = {}) {
+export function runShellCommand(command, { cwd, env = process.env, quiet = false } = {}) {
   return new Promise((resolve) => {
     const startedAt = performance.now();
     const child = spawn(command, {
@@ -16,12 +16,12 @@ export function runShellCommand(command, { cwd, env = process.env } = {}) {
     child.stdout.on('data', (chunk) => {
       const text = String(chunk);
       stdout += text;
-      process.stdout.write(text);
+      if (!quiet) process.stdout.write(text);
     });
     child.stderr.on('data', (chunk) => {
       const text = String(chunk);
       stderr += text;
-      process.stderr.write(text);
+      if (!quiet) process.stderr.write(text);
     });
     child.on('error', async (error) => {
       const result = {
@@ -50,7 +50,7 @@ export function runShellCommand(command, { cwd, env = process.env } = {}) {
   });
 }
 
-export async function runVerification({ cwd, failFast, mode, notConfigured = false, steps }) {
+export async function runVerification({ cwd, failFast, mode, notConfigured = false, steps, quiet = false }) {
   if (notConfigured) {
     return {
       mode,
@@ -61,7 +61,7 @@ export async function runVerification({ cwd, failFast, mode, notConfigured = fal
   }
   const results = [];
   for (const step of steps) {
-    const result = await runShellCommand(step.command, { cwd });
+    const result = await runShellCommand(step.command, { cwd, quiet });
     const output = `${result.stdout || ''}\n${result.stderr || ''}`;
     const environmentBlocked = result.status !== 'passed' &&
       /listen EPERM|EACCES.*listen|operation not permitted.*listen/i.test(output);

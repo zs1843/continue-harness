@@ -1,8 +1,35 @@
 # Create or adopt a project
 
-## Install the CLI
+This page describes the Skill path used by default for a first adoption; the CLI is an optional fallback. The Agent selects the create, adoption, Intake, evidence, and verification flow from project facts.
 
-Version `0.1.0` is not published to npm yet, and `@company` is still a placeholder scope. Install it from source:
+## Adopt through an Agent
+
+See [Project adoption](/en/guide/ai-first) for the complete adoption prompt.
+
+For a new project, the Agent creates a technology-neutral constraint container. For an existing project, it previews the adoption impact and adds only missing files without overwriting project-owned content. Project constraints are declared by the target project; the Agent enables capabilities only from confirmed facts and does not assume a product shape or toolchain.
+
+## If the Skill is unavailable
+
+Ask the Agent to install only the project Skill required for the current stage and then rerun Intake. Do not install Consumer H5 or another specialized Skill unless project facts require it. See [Project adoption](/en/guide/ai-first) for the prompt and the install command.
+
+If the Agent needs a manual installation command, use [Install the CLI](#install-the-cli) below.
+
+## Working with an Agent
+
+After the facts and inputs are confirmed, give the Agent the goal, scope, non-goals, and acceptance criteria so it can restore context and start the task. See [Project adoption](/en/guide/ai-first) for the task prompt.
+
+To continue in a new Agent or session, reuse the same prompt, restore the current project context first, then continue the task.
+
+Decisions that stay with people are listed under [Human approval boundaries](./agent-workflow.md).
+
+<details>
+<summary>CLI reference (optional)</summary>
+
+### Install the CLI
+
+Installing the CLI requires the command line; the version check maps to the `continue-harness-version` Skill.
+
+Version `0.1.0` is not published to npm yet, and `@company` is still a placeholder scope. For manual execution, install from source:
 
 ```bash
 git clone https://github.com/zs1843/continue-harness.git
@@ -11,71 +38,43 @@ pnpm install
 node packages/cli/bin/continue-harness.mjs version
 ```
 
-Requirements: Node.js 20 or later, and pnpm 10.12.1 or a compatible version. The examples below use `continue-harness` as the CLI name; when running from source, replace it with `node packages/cli/bin/continue-harness.mjs`.
+Requirements: Node.js 20 or later and pnpm 10.12.1 or a compatible version.
 
-## Create from scratch
+### Create a project
 
-Preview first, then create:
-
-```bash
-continue-harness plan create my-h5 --json
-continue-harness create my-h5
-cd my-h5
-continue-harness intake inspect --json
-continue-harness inspect --json
-```
-
-The default `generic` preset creates technology-neutral project facts, inputs, tasks, logs, context, and acceptance records. Pass `--preset consumer-h5` explicitly when a Consumer H5 container is required; that preset creates the uni-app + Vue 3 + Vite files and related checks. The Consumer H5 preset installs project dependencies by default; the generic preset has no `package.json` and does not install dependencies. Use `--skip-install` to skip installation for presets that contain project dependencies.
-
-After creation, run the first checks in this order:
+**Skill**: `continue-harness-create` (create), `continue-harness-plan` (preview)
 
 ```bash
-continue-harness inspect --json
-continue-harness intake inspect --json
-continue-harness doctor
-continue-harness inputs inspect --json
-continue-harness inputs analyze --json
-continue-harness task create --title "Implement the first scoped change"
-continue-harness verify feature
+continue-harness plan create my-project --json
+continue-harness create my-project
+cd my-project
 ```
 
-Creation builds the container. It does not require a complete PRD, UI, or API set. Register inputs and create the first task when the material is ready.
+The default creation flow writes only constraints and collaboration records; it does not generate business code or dependencies. A specialized project template is generated only when selected explicitly.
 
-## Adopt an existing project
+### Adopt an existing project
+
+**Skill**: `continue-harness-init` (adopt), `continue-harness-plan` (preview)
 
 ```bash
 continue-harness init --dry-run
 continue-harness plan init --json
 continue-harness init
-continue-harness doctor
 ```
 
-`init` creates missing files and preserves files already maintained by the project. A real conflict prevents all writes.
+A real conflict prevents any initialization writes.
 
-| Plan state | Meaning |
-| --- | --- |
-| `create` | The file does not exist and will be created |
-| `managed_unchanged` | A harness-managed file is still the template version |
-| `project_owned_modified` | The project owns a modified file; it is preserved |
-| `conflict` | Manual resolution is required |
+### Migrate the legacy directory
 
-## First checks
-
-```bash
-continue-harness inspect --json
-continue-harness doctor --json
-continue-harness inputs inspect --json
-```
-
-For an existing front-end project, `continue-harness design tokens discover --json` can inventory current styles before a canonical Token file is confirmed.
-
-## Migrate the legacy directory
-
-Older projects may use `.fe-harness/`. Preview and then migrate it:
+`migrate` has no matching Skill, so this step is CLI-only.
 
 ```bash
 continue-harness migrate --dry-run --json
 continue-harness migrate
 ```
 
-Migration moves the directory only when `.continue-harness/` does not already exist. A conflict stops the operation. Projects that have not migrated remain readable and writable through the compatibility resolver.
+Migration moves `.fe-harness/` only when `.continue-harness/` does not already exist.
+
+See the [CLI reference](/en/reference/commands) for the complete command list.
+
+</details>

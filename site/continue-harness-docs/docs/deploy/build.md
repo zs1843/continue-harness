@@ -1,10 +1,6 @@
 # 构建与部署
 
-文档站使用 VitePress。源码位于：
-
-```text
-site/continue-harness-docs/docs/
-```
+文档站使用 VitePress，源码位于 `site/continue-harness-docs/docs/`。以下命令都在 `site/continue-harness-docs` 目录下执行。
 
 ## 安装依赖
 
@@ -31,7 +27,7 @@ pnpm docs:build
 site/continue-harness-docs/docs/.vitepress/dist/
 ```
 
-## 本地预览构建产物
+## 预览构建产物
 
 ```bash
 pnpm docs:preview
@@ -45,13 +41,13 @@ tar -czf continue-harness-docs.tar.gz -C site/continue-harness-docs/docs/.vitepr
 
 ## 部署
 
-把 dist 目录内容上传到任意静态托管服务：
+把 dist 目录内容上传到静态托管服务，例如：
 
-- Nginx 静态目录。
-- GitHub Pages。
-- OSS/CDN。
-- Vercel。
-- Netlify。
-- 任意对象存储静态网站。
+- Nginx 静态目录
+- GitHub Pages
+- OSS/CDN
+- Vercel
+- Netlify
+- 对象存储静态网站
 
-如果部署在子路径，需要在 `docs/.vitepress/config.mjs` 中配置 VitePress `base`。
+部署在子路径时，在 `docs/.vitepress/config.mjs` 中配置 VitePress `base`。

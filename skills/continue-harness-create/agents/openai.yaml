@@ -1,4 +1,4 @@
 interface:
-  display_name: "创建 Consumer H5 项目"
+  display_name: "创建项目约束工作区"
   short_description: "从问答、环境检查到安装依赖和首次验证的一体化创建流程"
-  default_prompt: "使用 $continue-harness-create 从零创建并初始化一个 Consumer H5 项目。"
+  default_prompt: "使用 $continue-harness-create 确认项目事实，创建约束工作区并登记当前任务所需输入。"

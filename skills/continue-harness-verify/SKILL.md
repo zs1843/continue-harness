@@ -1,15 +1,12 @@
 ---
 name: continue-harness-verify
-description: Select and execute continue-harness verification modes for Consumer H5 changes. Use when validating logic, types, lint, build, browser runtime, user interactions, visual regression, cross-module changes, or producing an audit report without overstating product completion.
+description: Run configured project checks and validate requirement-to-evidence links without overstating task completion.
 ---
 
-# 执行分层验证
+# 验证与验收
 
-- 小型逻辑变更：`continue-harness verify quick`。
-- 完成功能或生产构建：`continue-harness verify feature`。
-- 页面启动和浏览器错误：`continue-harness verify runtime`。
-- 关键流程：`continue-harness verify interaction`。
-- UI、布局、Token：`continue-harness verify visual`。
-- 配置、跨模块或交付前：`continue-harness verify audit`。
+读取项目配置与当前任务的验收标准，按任务范围选择检查。quick 用于快速反馈；feature 和 audit 用于任务验收。运行 `continue-harness verify feature --task <id>` 或 `continue-harness verify audit --task <id>` 明确报告所属任务。
 
-先读取 `.continue-harness/project.yaml` 的实际映射，不写死底层命令。失败后只修复当前范围并最多重试两轮。视觉基线缺失必须报告“未配置”。构建、冒烟、交互或截图单独通过均不能宣称产品验收完成。
+docs/ACCEPTANCE.md 中每项验收须关联有效需求、实现项及可读取的本地证据。延期或阻塞记录原因、确认人和后续条件，不能声明通过。旧验收表缺少关联时补齐原有记录，不重复创建台账。
+
+runtime、interaction、visual 等模式按实际项目配置使用，不为所有项目添加浏览器、UI 或截图要求。输入、实现或验收标准发生变化后重新验证；只有检查和验收均满足当前范围时才能报告完成。

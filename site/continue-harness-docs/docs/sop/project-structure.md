@@ -1,12 +1,18 @@
-# 新建项目后的项目结构
+# 项目结构
 
-运行通用项目创建命令：
+本页是目录树和路径职责的权威位置。目录树来自显式选择的 Consumer H5 preset。
+
+用 `create` Skill 生成该目录树。
+
+**Skill**：`continue-harness-create`
+
+**CLI（可选）**：
 
 ```bash
-continue-harness create my-project
+continue-harness create my-h5 --preset consumer-h5
 ```
 
-默认会得到一个业务中立、与技术栈无关的项目。它提供 Harness 事实目录、Agent 入口和验收记录骨架，不生成业务页面。只有显式使用 `--preset consumer-h5` 时，才会生成对应的 uni-app 项目结构；下方目录树仅适用于该专项 preset。
+默认 generic preset 只生成 Harness 事实目录、Agent 入口和验收骨架，不生成 `src/`、框架配置和业务模块；两个 preset 的文件差异见[配置与文件](../reference/config-and-files.md)。
 
 ## 标记说明
 
@@ -14,11 +20,11 @@ continue-harness create my-project
 | --- | --- |
 | 必需 | 默认工作流依赖，除非明确迁移，否则不要删除 |
 | 可选 | 只有对应任务或团队需要时才启用 |
-| 按需 | 默认生成目录或 README，但实际文件在任务发生时产生 |
-| 项目维护 | 由项目团队维护，Harness 不应擅自覆盖 |
+| 按需 | 默认生成目录或 README，实际文件在任务发生时产生 |
+| 项目维护 | 由项目团队维护，Harness 不擅自覆盖 |
 | Harness 管理 | 由 Harness 模板或 CLI 管理，更新前要看计划 |
 
-## 完整目录树
+## 目录树
 
 ```text
 my-h5/
@@ -63,9 +69,8 @@ my-h5/
 │   ├── composables/README.md             # 可复用 Vue composables 说明
 │   ├── fixtures/README.md                # 测试和开发 fixture 说明
 │   ├── pages/
-│   │   ├── index/
-│   │   │   └── index.vue                 # 默认占位首页
-│   │   └── pages.json                    # uni-app 页面注册
+│   │   └── index/
+│   │       └── index.vue                 # 默认占位首页
 │   ├── repositories/README.md            # 业务数据映射层说明
 │   ├── services/
 │   │   ├── http.ts                       # 通用 HTTP 请求封装
@@ -110,6 +115,8 @@ my-h5/
 └── vite.config.mjs                       # Vite / uni-app 构建配置
 ```
 
+`.continue-harness/project.yaml` 的键位说明见[配置与文件](../reference/config-and-files.md)。
+
 ## `.continue-harness/`
 
 这是 Harness 的项目事实区，不是业务源码区。
@@ -117,7 +124,7 @@ my-h5/
 | 路径 | 状态 | 用途 |
 | --- | --- | --- |
 | `.continue-harness/project.yaml` | 必需 / 项目维护 | 选择 profile、platform、stack、命令和验证模式 |
-| `.continue-harness/inputs/manifest.yaml` | 必需 | 记录 PRD/RP/UI/API/assets 的登记状态 |
+| `.continue-harness/inputs/manifest.yaml` | 必需 | 记录项目所需输入及来源、版本和任务关联 |
 | `.continue-harness/inputs/*/` | 必需目录 / 按需填充 | 保存原始输入，原始证据默认只读 |
 | `.continue-harness/api/selection.yaml` | 必需文件 / API 按需使用 | 为任务选择 operationId |
 | `.continue-harness/models/page-flow.yaml` | 按需 | 记录页面、状态、动作和转场 |
@@ -125,7 +132,7 @@ my-h5/
 | `.continue-harness/ui/adjustments.yaml` | UI 按需使用 | 记录视觉调整、前后值和影响范围 |
 | `.continue-harness/snapshots/` | 按需 | 保存快照说明和相关输入 |
 
-为什么单独建立这一层：Harness 的配置、输入和任务记录需要和 `src/` 解耦。这样业务代码可以变化，但任务证据和工程协议仍然可追踪。
+Harness 的配置、输入和任务记录放在 `src/` 之外，业务代码变化时，任务证据仍绑定到同一任务编号。
 
 ## `docs/`
 
@@ -165,7 +172,7 @@ my-h5/
 | `src/manifest.json` | 必需 | uni-app 应用元信息 |
 | `src/pages.json` | 必需 | uni-app 页面注册 |
 
-`src/pages/`、`src/components/`、`src/services/` 和 `src/utils/` 的边界应该保持清晰。不要把多个独立页面塞进一个 Vue 文件，也不要把所有 API 业务映射直接写进页面。
+`src/pages/`、`src/components/`、`src/services/` 和 `src/utils/` 的边界保持清晰：不同页面不合并进一个 Vue 文件，API 业务映射不直接写进页面。
 
 ## `tests/`
 
@@ -179,8 +186,6 @@ my-h5/
 | `tests/visual/baselines/` | 视觉任务可选 | 保存已确认的视觉基线 |
 | `tests/visual/diffs/` | 视觉任务可选 | 保存截图差异 |
 | `tests/unit/` | 业务需要时 | 放单元测试 |
-
-视觉目录默认只提供 README，不代表已经配置视觉基线。没有 baseline 时只能报告 visual `not_configured`。
 
 ## 根目录工程文件
 
@@ -201,13 +206,13 @@ my-h5/
 | `index.html` | 必需 | Vite HTML 入口 |
 | `env.d.ts` | TypeScript 可选 | 环境类型声明 |
 
-## 哪些内容可以删除
+## 可删除内容
 
-可以在项目确认不需要后删除或调整：
+项目确认不需要后可以删除或调整：
 
 - `src/components/BaseButton.vue`：只是最小基础组件示例。
 - `src/utils/format.ts`：只是格式化函数示例。
-- 各目录下的 `README.md`：如果团队已经在模块地图中维护等价边界说明，可以合并后删除。
+- 各目录下的 `README.md`：团队已在模块地图中维护等价边界说明时，可以合并后删除。
 - `tests/e2e/visual.spec.mjs` 和视觉目录：项目明确不做视觉回归时可以关闭，但必须同步 project config 和文档。
 - `src/repositories/`、`src/stores/`、`src/composables/`、`src/fixtures/`：项目不需要对应边界时可以保留空目录说明，也可以在团队确认后移除。
 
@@ -218,3 +223,7 @@ my-h5/
 - `docs/PROJECT_MAP.md` 和 `docs/CURRENT_STATUS.md`。
 - `src/pages.json`、`src/main.ts`、`src/App.vue`。
 - `tests/coverage-closure.mjs`，除非产品明确不采用需求闭环门禁并同步修改验证配置。
+
+## 限制
+
+本页目录树对应 Consumer H5 preset；generic preset 的目录更小，差异见[配置与文件](../reference/config-and-files.md)。视觉目录默认只提供 README，没有 baseline 时 `verify visual` 返回 `not_configured`。

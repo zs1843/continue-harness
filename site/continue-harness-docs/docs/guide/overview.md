@@ -1,41 +1,48 @@
-# 工作流总览
+# 工作流
 
-continue-harness 的最短闭环是：
+本页说明从项目接入到任务交付的完整流程和各阶段产物。开始前请先完成[项目接入](/guide/ai-first)。
 
-```text
-create / init → inspect → intake（适用时）→ inputs → task → implement → resume → verify → snapshot
-```
+## 协作流程
 
-每一步都对应一个可读取的项目事实或可验证的结果。Harness 不替 Agent 决定业务，而是保证 Agent 在同一套约束和证据上继续工作。
+追溯关系为：**需求 → 实现项 → 验收项 → 证据 → 交接状态**。验收标准在实现前确认；交接状态记录已验证内容、未完成项和下一步。
 
-## 两种入口
+<ZoomableImage
+  src="/diagrams/delivery-loop-zh.svg"
+  alt="需求到验收流程，包含修正与输入变化分支"
+  caption="验收标准在实现前确认。点击可放大查看。"
+/>
 
-| 场景 | 入口 | 结果 |
-| --- | --- | --- |
-| 从零开始 | `continue-harness create <name>` | 生成当前支持的业务中立项目容器和验证基础设施 |
-| 已有项目 | `continue-harness init --dry-run` | 预览将补充的约束、输入、历史和报告文件 |
+每一步都对应一个可读取的项目事实或可验证的结果。Harness 不替 Agent 决定业务，而是让 Agent 在同一套约束和证据上继续工作。
 
-## 推荐主线
+## 第一次使用
 
-```bash
-continue-harness inspect --json
-continue-harness intake inspect --json
-continue-harness inputs inspect --json
-continue-harness inputs analyze --json
-continue-harness task create --title "任务名称" --json
-continue-harness resume --json
-continue-harness verify feature
-continue-harness task snapshot T001 --title "任务名称" --request "本次用户要求" --json
-```
+接入提示词、Skill 安装方式、任务提示词和换 Agent 时的恢复提示词见[项目接入](/guide/ai-first)。
 
-`inspect` 用来确认项目事实，`inputs` 用来确认实现依据，`task` 用来建立稳定编号，`resume` 用来恢复协作现场，`verify` 和 `snapshot` 用来留下可追溯结果。
+## 按需加载能力
 
-## 能力按证据启用
-
-默认工作流只有项目检查、输入、任务和验证。只有任务确实需要时，才加载：
+默认流程只处理项目事实、输入、任务、日志、上下文和验收。只有任务确实需要时，Agent 才加载：
 
 - API 任务：OpenAPI snapshot、operationId 选择和生成保护。
-- UI 任务：Design Token、UI Contract、UI System 和视觉验证。
+- 涉及视觉验收时：使用项目确认的设计依据；Design Token、UI Contract 和 UI System 仅在项目确有需要时启用。
 - 架构任务：`ARCHITECTURE.md`、`DECISIONS.md` 和相关历史。
 
-这样可以减少 Agent 上下文污染，也避免为尚未发生的需求预先安装大量 Skill。
+专项 Skill 在对应任务出现时才加载，普通任务不会读到 API、Design Token 或视觉基线相关规则。
+
+本阶段集中完善需求到验收的关联、证据有效性和项目上下文恢复，暂不扩展专项适配器或技术栈模板。
+
+<details>
+<summary>CLI 参考（可选）</summary>
+
+**Skill**：`generic-harness`（Intake）、`continue-harness-task`（任务）、`continue-harness-verify`（验证）
+
+如果 Agent 不可用、需要 CI 或需要排查执行细节，再使用 CLI：
+
+```bash
+continue-harness intake inspect --json
+continue-harness task create --title "任务名称" --json
+continue-harness verify feature
+```
+
+完整命令清单见[命令](/reference/commands)。
+
+</details>

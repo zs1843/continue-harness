@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 48 48" role="img" aria-label="continue-harness">
+  <title>continue-harness</title>
+  <rect x="2" y="2" width="44" height="44" rx="10" fill="#2f6f73"/>
+  <g fill="#fffdf8">
+    <rect x="13" y="15.2" width="22" height="3.6" rx="1.8"/>
+    <rect x="13" y="22.2" width="15" height="3.6" rx="1.8"/>
+    <rect x="13" y="29.2" width="22" height="3.6" rx="1.8"/>
+  </g>
+</svg>
