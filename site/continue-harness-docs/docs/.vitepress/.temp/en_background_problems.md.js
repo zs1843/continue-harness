@@ -1,7 +1,7 @@
 import { ssrRenderAttrs } from "vue/server-renderer";
 import { useSSRContext } from "vue";
 import { _ as _export_sfc } from "./plugin-vue_export-helper.1tPrXgE0.js";
-const __pageData = JSON.parse('{"title":"Problems solved","description":"","frontmatter":{},"headers":[],"relativePath":"en/background/problems.md","filePath":"en/background/problems.md","lastUpdated":null}');
+const __pageData = JSON.parse('{"title":"Problems solved","description":"","frontmatter":{},"headers":[],"relativePath":"en/background/problems.md","filePath":"en/background/problems.md","lastUpdated":1790672909000}');
 const _sfc_main = { name: "en/background/problems.md" };
 function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
   _push(`<div${ssrRenderAttrs(_attrs)}><h1 id="problems-solved" tabindex="-1">Problems solved <a class="header-anchor" href="#problems-solved" aria-label="Permalink to &quot;Problems solved&quot;">​</a></h1><p>continue-harness addresses recurring collaboration failures:</p><ul><li>Requirements and design evidence are scattered across chat, files, and screenshots.</li><li>Agents load too much context or start guessing when context is missing.</li><li>A successful build is mistaken for complete requirement coverage.</li><li>Generated API files and manual changes overwrite each other.</li><li>Provider-specific Agent rules drift apart.</li></ul><p>The harness responds with registered inputs, task-scoped evidence, requirement closure, managed-file protection, one constraint authority, and resumable reports.</p></div>`);

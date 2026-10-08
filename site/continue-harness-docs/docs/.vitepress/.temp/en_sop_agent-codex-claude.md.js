@@ -1,7 +1,7 @@
 import { ssrRenderAttrs, ssrRenderStyle } from "vue/server-renderer";
 import { useSSRContext } from "vue";
 import { _ as _export_sfc } from "./plugin-vue_export-helper.1tPrXgE0.js";
-const __pageData = JSON.parse('{"title":"Agent integration details","description":"","frontmatter":{},"headers":[],"relativePath":"en/sop/agent-codex-claude.md","filePath":"en/sop/agent-codex-claude.md","lastUpdated":null}');
+const __pageData = JSON.parse('{"title":"Agent integration details","description":"","frontmatter":{},"headers":[],"relativePath":"en/sop/agent-codex-claude.md","filePath":"en/sop/agent-codex-claude.md","lastUpdated":1790672909000}');
 const _sfc_main = { name: "en/sop/agent-codex-claude.md" };
 function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
   _push(`<div${ssrRenderAttrs(_attrs)}><h1 id="agent-integration-details" tabindex="-1">Agent integration details <a class="header-anchor" href="#agent-integration-details" aria-label="Permalink to &quot;Agent integration details&quot;">​</a></h1><p><code>AGENTS.md</code> is the canonical constraint body. Claude Code and Cursor files are thin adapters:</p><div class="language-text vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">text</span><pre class="shiki shiki-themes github-dark github-dark vp-code" tabindex="0"><code><span class="line"><span>AGENTS.md</span></span>

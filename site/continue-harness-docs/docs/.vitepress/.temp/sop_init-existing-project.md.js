@@ -1,7 +1,7 @@
 import { ssrRenderAttrs, ssrRenderStyle } from "vue/server-renderer";
 import { useSSRContext } from "vue";
 import { _ as _export_sfc } from "./plugin-vue_export-helper.1tPrXgE0.js";
-const __pageData = JSON.parse('{"title":"接入已有项目","description":"","frontmatter":{},"headers":[],"relativePath":"sop/init-existing-project.md","filePath":"sop/init-existing-project.md","lastUpdated":null}');
+const __pageData = JSON.parse('{"title":"接入已有项目","description":"","frontmatter":{},"headers":[],"relativePath":"sop/init-existing-project.md","filePath":"sop/init-existing-project.md","lastUpdated":1790672909000}');
 const _sfc_main = { name: "sop/init-existing-project.md" };
 function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
   _push(`<div${ssrRenderAttrs(_attrs)}><h1 id="接入已有项目" tabindex="-1">接入已有项目 <a class="header-anchor" href="#接入已有项目" aria-label="Permalink to &quot;接入已有项目&quot;">​</a></h1><p>已有项目接入时，首要原则是安全：不能覆盖项目已经维护的文件。</p><h2 id="推荐命令" tabindex="-1">推荐命令 <a class="header-anchor" href="#推荐命令" aria-label="Permalink to &quot;推荐命令&quot;">​</a></h2><div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-dark github-dark vp-code" tabindex="0"><code><span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#F97583", "--shiki-dark": "#F97583" })}">continue</span><span style="${ssrRenderStyle({ "--shiki-light": "#9ECBFF", "--shiki-dark": "#9ECBFF" })}">-harness</span><span style="${ssrRenderStyle({ "--shiki-light": "#9ECBFF", "--shiki-dark": "#9ECBFF" })}"> init</span><span style="${ssrRenderStyle({ "--shiki-light": "#79B8FF", "--shiki-dark": "#79B8FF" })}"> --dry-run</span></span>

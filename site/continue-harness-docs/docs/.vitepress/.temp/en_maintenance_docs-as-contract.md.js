@@ -1,7 +1,7 @@
 import { ssrRenderAttrs } from "vue/server-renderer";
 import { useSSRContext } from "vue";
 import { _ as _export_sfc } from "./plugin-vue_export-helper.1tPrXgE0.js";
-const __pageData = JSON.parse('{"title":"Documentation as a contract","description":"","frontmatter":{},"headers":[],"relativePath":"en/maintenance/docs-as-contract.md","filePath":"en/maintenance/docs-as-contract.md","lastUpdated":null}');
+const __pageData = JSON.parse('{"title":"Documentation as a contract","description":"","frontmatter":{},"headers":[],"relativePath":"en/maintenance/docs-as-contract.md","filePath":"en/maintenance/docs-as-contract.md","lastUpdated":1790672909000}');
 const _sfc_main = { name: "en/maintenance/docs-as-contract.md" };
 function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
   _push(`<div${ssrRenderAttrs(_attrs)}><h1 id="documentation-as-a-contract" tabindex="-1">Documentation as a contract <a class="header-anchor" href="#documentation-as-a-contract" aria-label="Permalink to &quot;Documentation as a contract&quot;">​</a></h1><p>Update the docs when any of these change:</p><ul><li>public CLI commands, JSON output, or configuration schema;</li><li>Core, Profile, Platform, Stack, UI System, or UI Contract protocols;</li><li>generated file paths, task snapshot contents, or verification semantics;</li><li>Agent constraints, Skill installation, or provider adapters.</li></ul><p>Run the docs build and the workspace test suite before publishing. Keep examples business-neutral and do not copy project secrets or domain values into the documentation.</p></div>`);

@@ -1,7 +1,7 @@
 import { ssrRenderAttrs } from "vue/server-renderer";
 import { useSSRContext } from "vue";
 import { _ as _export_sfc } from "./plugin-vue_export-helper.1tPrXgE0.js";
-const __pageData = JSON.parse('{"title":"Architecture overview","description":"","frontmatter":{},"headers":[],"relativePath":"en/architecture/overview.md","filePath":"en/architecture/overview.md","lastUpdated":null}');
+const __pageData = JSON.parse('{"title":"Architecture overview","description":"","frontmatter":{},"headers":[],"relativePath":"en/architecture/overview.md","filePath":"en/architecture/overview.md","lastUpdated":1790672909000}');
 const _sfc_main = { name: "en/architecture/overview.md" };
 function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
   _push(`<div${ssrRenderAttrs(_attrs)}><h1 id="architecture-overview" tabindex="-1">Architecture overview <a class="header-anchor" href="#architecture-overview" aria-label="Permalink to &quot;Architecture overview&quot;">​</a></h1><p>continue-harness composes target-project behavior from:</p><div class="language-text vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">text</span><pre class="shiki shiki-themes github-dark github-dark vp-code" tabindex="0"><code><span class="line"><span>Core</span></span>

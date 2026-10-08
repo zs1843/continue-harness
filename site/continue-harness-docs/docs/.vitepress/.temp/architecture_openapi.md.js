@@ -1,7 +1,7 @@
 import { ssrRenderAttrs } from "vue/server-renderer";
 import { useSSRContext } from "vue";
 import { _ as _export_sfc } from "./plugin-vue_export-helper.1tPrXgE0.js";
-const __pageData = JSON.parse('{"title":"OpenAPI","description":"","frontmatter":{},"headers":[],"relativePath":"architecture/openapi.md","filePath":"architecture/openapi.md","lastUpdated":null}');
+const __pageData = JSON.parse('{"title":"OpenAPI","description":"","frontmatter":{},"headers":[],"relativePath":"architecture/openapi.md","filePath":"architecture/openapi.md","lastUpdated":1790672909000}');
 const _sfc_main = { name: "architecture/openapi.md" };
 function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
   _push(`<div${ssrRenderAttrs(_attrs)}><h1 id="openapi" tabindex="-1">OpenAPI <a class="header-anchor" href="#openapi" aria-label="Permalink to &quot;OpenAPI&quot;">​</a></h1><p>OpenAPI 能力用于任务级接口生成。</p><h2 id="当前范围" tabindex="-1">当前范围 <a class="header-anchor" href="#当前范围" aria-label="Permalink to &quot;当前范围&quot;">​</a></h2><p>当前实现从本地 OpenAPI JSON 开始，通常来自 Apifox 官方导出。</p><div class="language-text vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">text</span><pre class="shiki shiki-themes github-dark github-dark vp-code" tabindex="0"><code><span class="line"><span>.continue-harness/inputs/api/</span></span>

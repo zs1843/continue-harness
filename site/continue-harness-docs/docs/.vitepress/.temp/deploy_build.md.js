@@ -1,7 +1,7 @@
 import { ssrRenderAttrs, ssrRenderStyle } from "vue/server-renderer";
 import { useSSRContext } from "vue";
 import { _ as _export_sfc } from "./plugin-vue_export-helper.1tPrXgE0.js";
-const __pageData = JSON.parse('{"title":"构建与部署","description":"","frontmatter":{},"headers":[],"relativePath":"deploy/build.md","filePath":"deploy/build.md","lastUpdated":null}');
+const __pageData = JSON.parse('{"title":"构建与部署","description":"","frontmatter":{},"headers":[],"relativePath":"deploy/build.md","filePath":"deploy/build.md","lastUpdated":1790672909000}');
 const _sfc_main = { name: "deploy/build.md" };
 function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
   _push(`<div${ssrRenderAttrs(_attrs)}><h1 id="构建与部署" tabindex="-1">构建与部署 <a class="header-anchor" href="#构建与部署" aria-label="Permalink to &quot;构建与部署&quot;">​</a></h1><p>文档站使用 VitePress。源码位于：</p><div class="language-text vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">text</span><pre class="shiki shiki-themes github-dark github-dark vp-code" tabindex="0"><code><span class="line"><span>site/continue-harness-docs/docs/</span></span></code></pre></div><h2 id="安装依赖" tabindex="-1">安装依赖 <a class="header-anchor" href="#安装依赖" aria-label="Permalink to &quot;安装依赖&quot;">​</a></h2><div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-dark github-dark vp-code" tabindex="0"><code><span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#79B8FF", "--shiki-dark": "#79B8FF" })}">cd</span><span style="${ssrRenderStyle({ "--shiki-light": "#9ECBFF", "--shiki-dark": "#9ECBFF" })}"> site/continue-harness-docs</span></span>
