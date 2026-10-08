@@ -21,15 +21,17 @@ Preview first, then create:
 continue-harness plan create my-h5 --json
 continue-harness create my-h5
 cd my-h5
+continue-harness intake inspect --json
 continue-harness inspect --json
 ```
 
-The current `consumer-h5` preset creates a minimal uni-app + Vue 3 + Vite project, Playwright checks, the `.continue-harness/` state directory, project constraints, history, and a coverage matrix. Dependencies are installed by default; use `--skip-install` offline.
+The default `generic` preset creates technology-neutral project facts, inputs, tasks, logs, context, and acceptance records. Pass `--preset consumer-h5` explicitly when a Consumer H5 container is required; that preset creates the uni-app + Vue 3 + Vite files and related checks. The Consumer H5 preset installs project dependencies by default; the generic preset has no `package.json` and does not install dependencies. Use `--skip-install` to skip installation for presets that contain project dependencies.
 
 After creation, run the first checks in this order:
 
 ```bash
 continue-harness inspect --json
+continue-harness intake inspect --json
 continue-harness doctor
 continue-harness inputs inspect --json
 continue-harness inputs analyze --json

@@ -11,7 +11,7 @@ CLAUDE.md
 Install workflows by provider when needed:
 
 ```bash
-continue-harness skills install --project --provider all --name consumer-h5-harness
+continue-harness skills install --project --provider all --name generic-harness
 ```
 
 Codex and Cursor use `.agents/skills`; Claude Code uses `.claude/skills`. Skills describe procedures and never override project constraints.

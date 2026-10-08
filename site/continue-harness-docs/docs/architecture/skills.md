@@ -6,8 +6,9 @@ Skills 是 Agent 可调用的工作流说明。
 
 | Skill | 默认安装 | 什么时候用 |
 | --- | --- | --- |
-| `consumer-h5-harness` | 是 | 创建、接入、实现和验证 Consumer H5 项目的总工作流 |
-| `continue-harness-create` | 否 | 从零创建 Consumer H5 项目，处理输入收集和首个任务 |
+| `generic-harness` | 是 | 创建、接入、实现和验证技术栈无关项目的总工作流 |
+| `consumer-h5-harness` | 否 | 创建、接入、实现和验证 Consumer H5 项目的专项工作流 |
+| `continue-harness-create` | 否 | 从零创建通用或指定 preset 的项目，处理输入收集和首个任务 |
 | `continue-harness-init` | 否 | 安全接入已有项目，处理冲突和存量 Token discovery |
 | `continue-harness-inspect` | 否 | 读取项目事实、输入、Token、验证模式和 Agent 工作流状态 |
 | `continue-harness-plan` | 否 | 在写文件前查看 create/init 计划 |
@@ -22,17 +23,17 @@ Skills 是 Agent 可调用的工作流说明。
 
 ## 默认安装策略
 
-新项目默认只安装：
+通用项目默认只安装：
 
 ```text
-consumer-h5-harness
+generic-harness
 ```
 
 安装位置：
 
 ```text
-.agents/skills/consumer-h5-harness/
-.claude/skills/consumer-h5-harness/
+.agents/skills/generic-harness/
+.claude/skills/generic-harness/
 ```
 
 Codex 和 Cursor 共用 `.agents/skills`，Claude Code 使用 `.claude/skills`。
@@ -40,7 +41,7 @@ Codex 和 Cursor 共用 `.agents/skills`，Claude Code 使用 `.claude/skills`�
 如果需要给所有供应商安装默认聚合 Skill：
 
 ```bash
-continue-harness skills install --project --provider all --name consumer-h5-harness
+continue-harness skills install --project --provider all --name generic-harness
 ```
 
 如果某个任务需要专项能力，再安装对应 Skill：
@@ -52,7 +53,7 @@ continue-harness skills install --project --name continue-harness-design-tokens
 
 ## 为什么只默认安装一个
 
-命令级 Skills 很有用，但不应该成为默认上下文。默认安装全部命令级 Skills 会让 Agent 在普通业务任务里也读到 API、Design Token、UI System、visual baseline 等不相关规则。
+命令级 Skills 很有用，但不应该成为默认上下文。默认安装全部命令级 Skills 会让 Agent 在普通项目任务里也读到 API、Design Token、UI System、visual baseline 等不相关规则。
 
 聚合 Skill 负责稳定工作流；命令级 Skills 通过显式命令按需安装：
 

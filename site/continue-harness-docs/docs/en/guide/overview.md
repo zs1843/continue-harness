@@ -3,7 +3,7 @@
 The shortest continue-harness loop is:
 
 ```text
-create / init → inspect → inputs → task → implement → resume → verify → snapshot
+create / init → inspect → intake (when applicable) → inputs → task → implement → resume → verify → snapshot
 ```
 
 Each step reads or produces a durable project fact. The harness does not make business decisions for an Agent; it keeps Agents working from the same constraints and evidence.
@@ -19,6 +19,7 @@ Each step reads or produces a durable project fact. The harness does not make bu
 
 ```bash
 continue-harness inspect --json
+continue-harness intake inspect --json
 continue-harness inputs inspect --json
 continue-harness inputs analyze --json
 continue-harness task create --title "Task title" --json

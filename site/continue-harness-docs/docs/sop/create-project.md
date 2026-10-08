@@ -3,26 +3,26 @@
 ## 命令
 
 ```bash
-continue-harness plan create my-h5 --json
-continue-harness create my-h5
+continue-harness plan create my-project --preset consumer-h5 --json
+continue-harness create my-project --preset consumer-h5
 ```
 
 离线创建：
 
 ```bash
-continue-harness create my-h5 --skip-install
+continue-harness create my-project --preset consumer-h5 --skip-install
 ```
 
 ## 会生成什么
 
-Consumer H5 preset 会生成：
+以上命令显式选择 Consumer H5 preset，会生成：
 
 - uni-app + Vue 3 + Vite 基础项目。
 - Playwright runtime/visual 验证配置。
 - `.continue-harness/project.yaml`。
 - `.continue-harness/inputs/` 标准输入目录。
 - `AGENTS.md`、`CLAUDE.md`、Cursor rule。
-- 默认聚合 Skill：`consumer-h5-harness`。
+- 该 preset 使用的聚合 Skill：`consumer-h5-harness`。
 - docs 下的 PRODUCT、DESIGN、CURRENT_STATUS、PROJECT_MAP、history 和 coverage 文件。
 - src 下的 components、services、repositories、stores、utils 等边界目录。
 
@@ -38,7 +38,7 @@ Consumer H5 preset 会生成：
 
 ## 默认只安装聚合 Skill
 
-新项目默认只安装 `consumer-h5-harness`。命令级 Skills 仍可按需安装：
+Consumer H5 preset 默认安装 `consumer-h5-harness`。通用项目默认安装 `generic-harness`；命令级 Skills 仍可按需安装：
 
 ```bash
 continue-harness skills install --project --name continue-harness-api

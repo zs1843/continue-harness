@@ -80,7 +80,7 @@ export default {
             items: [
               { text: '可复现操作示例', link: '/showcase/workflow-example' },
               { text: '项目案例', link: '/showcase/case-study' },
-              { text: '截图与证据', link: '/showcase/demo-h5-capture' },
+              { text: '证据记录', link: '/showcase/demo-h5-capture' },
               { text: '为什么需要 Harness', link: '/background/why-harness' },
               { text: '要解决的问题', link: '/background/problems' },
               { text: '设计原则', link: '/background/principles' },

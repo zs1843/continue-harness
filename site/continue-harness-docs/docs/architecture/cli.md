@@ -6,7 +6,7 @@ CLI 位于 `packages/cli/`，是开发者、CI 和 Agent 的共同入口。
 
 | 命令 | 作用 |
 | --- | --- |
-| `create` | 创建新的 Consumer H5 项目 |
+| `create` | 创建通用项目或指定 preset 的项目 |
 | `init` | 接入已有项目 |
 | `inputs` | 检查和分析输入 |
 | `task` | 创建任务、历史和快照 |

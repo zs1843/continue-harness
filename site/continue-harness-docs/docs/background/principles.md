@@ -20,7 +20,7 @@ Harness 可以提供模板和默认值，但不能长期替项目保存真实业
 
 ## 能力默认轻量，按需展开
 
-新项目默认只安装聚合 Consumer H5 Skill。命令级 Skills、OpenAPI、UI System、Design Token discovery 和视觉基线都是按任务需要启用。
+新项目默认只安装聚合 `generic-harness` Skill。Consumer H5 等专项 Skill、命令级 Skills、OpenAPI、UI System、Design Token discovery 和视觉基线都是按任务需要启用。
 
 这不是删除能力，而是降低默认认知成本。
 

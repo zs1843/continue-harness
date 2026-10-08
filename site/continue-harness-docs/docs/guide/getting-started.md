@@ -21,15 +21,17 @@ node packages/cli/bin/continue-harness.mjs version
 continue-harness plan create my-h5 --json
 continue-harness create my-h5
 cd my-h5
+continue-harness intake inspect --json
 continue-harness inspect --json
 ```
 
-`create` 当前使用 `consumer-h5` preset，生成 uni-app + Vue 3 + Vite 的最小项目、Playwright 验证配置、`.continue-harness/` 状态目录、项目约束文件、历史和覆盖矩阵。默认会安装依赖；离线时使用 `--skip-install`。
+`create` 默认使用 `generic` preset，生成与技术栈无关的项目事实、输入、任务、日志、上下文和验收目录。需要专项 Consumer H5 容器时显式传入 `--preset consumer-h5`，该 preset 才会生成 uni-app + Vue 3 + Vite 相关文件。Consumer H5 preset 默认安装项目依赖；generic preset 不包含 `package.json`，不会执行依赖安装。使用 `--skip-install` 可跳过有项目依赖的 preset 的安装。
 
 创建后可以按以下顺序完成第一次检查：
 
 ```bash
 continue-harness inspect --json
+continue-harness intake inspect --json
 continue-harness doctor
 continue-harness inputs inspect --json
 continue-harness inputs analyze --json

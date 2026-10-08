@@ -7,7 +7,7 @@ Core 位于 `packages/core/`，是 Harness 的业务无关运行时。
 | 能力 | 说明 | 为什么放在 Core |
 | --- | --- | --- |
 | 配置加载 | 读取 `.continue-harness/project.yaml`，解析项目、平台、技术栈、facts 和命令映射 | 所有工作流都依赖同一个配置入口 |
-| 运行时校验 | 检查产品类型、平台、stack、命令和 verify mode 是否受支持 | 早失败，避免 Agent 在错误配置上继续实现 |
+| 运行时校验 | 检查项目声明的产品类型、平台、stack、命令和 verify mode 是否有效 | 早失败，避免 Agent 在错误配置上继续实现 |
 | 命令解析 | 把 `unit_test`、`coverage_closure` 等符号命令映射到真实 shell 命令 | 项目拥有命令，Core 只执行映射 |
 | 验证执行 | 支持 fail-fast 和 audit 式继续执行 | 不同场景需要不同反馈成本 |
 | Doctor | 检查 Node、pnpm、脚本、页面注册、输入、Token、Agent 工作流等 | 诊断应只读且可重复 |
@@ -40,19 +40,15 @@ Core 通过项目配置工作：
 
 ```yaml
 project:
-  product_type: consumer_h5
-platforms:
-  - web_mobile
-stack:
-  adapter: uni_app
+  product_type: generic
 verify:
   feature:
     commands:
       - unit_test
-      - coverage_closure
+      - acceptance
 ```
 
-项目选择能力，Core 执行协议。
+项目声明自身事实和验证命令；需要产品、平台或框架专属检查时，再由项目配置选择对应适配器。
 
 ## Core 内部文件视角
 

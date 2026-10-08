@@ -117,6 +117,7 @@ const HELP = {
   create      创建通用约束项目，可用 --preset consumer-h5 生成 H5 适配项目
   init        向现有项目补充通用 Harness 文件，不覆盖项目已维护内容
   migrate     将旧 .fe-harness 状态目录迁移为 .continue-harness
+  intake      通过多轮问答确认项目事实和最小输入清单
   inputs      查看、比对和分析 PRD/RP/UI/API/assets 输入
   task        创建任务、查看历史、创建不可变任务快照
   verify      执行 quick/feature/runtime/interaction/visual/audit

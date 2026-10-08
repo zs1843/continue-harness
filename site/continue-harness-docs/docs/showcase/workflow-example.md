@@ -42,7 +42,7 @@ node packages/cli/bin/continue-harness.mjs plan create demo-h5 --json
 node packages/cli/bin/continue-harness.mjs inspect --json
 ```
 
-当前仓库的输出会标明 `product_type: developer_tooling`、`stack.adapter: node-esm`，并列出 `quick`、`feature`、`audit` 验证模式。这个配置用于维护 Harness 本身；生成的 Consumer H5 项目有自己的 `.continue-harness/project.yaml`，不要把两者的模式和输入状态混为一谈。
+当前仓库的输出会标明 `product_type: developer_tooling`、`stack.adapter: node-esm`，并列出 `quick`、`feature`、`audit` 验证模式。这个配置用于维护 Harness 本身；生成项目会使用自己的 `.continue-harness/project.yaml`，项目类型、技术栈、验证模式和输入状态不能与 Harness 仓库混用。
 
 ## 4. 运行只读诊断
 
@@ -52,6 +52,6 @@ node packages/cli/bin/continue-harness.mjs doctor --json
 
 Doctor 给每项检查一个稳定 `code` 和状态，例如 `passed`、`not_configured` 或 `not_applicable`。在当前仓库中，CI 入口和 OpenAPI Snapshot 会被报告为 `not_configured`；这表示它们当前没有配置，不能解读为检查失败。目标项目的诊断内容取决于自己的配置和文件。
 
-## 下一种值得加入的实例
+## 示例状态
 
-`demo-h5` 已登记一份 PRD 草稿，现阶段可以展示需求输入及检查结果；业务页面仍未实现。[截图与证据清单](./demo-h5-capture.md) 标明了当前可留的画面，以及完整流程通过后应补的页面与报告截图。
+`demo-h5` 已登记一份 PRD 草稿。当前可验证的是输入登记、哈希检查和 `draft` 状态；业务页面与业务验收尚未完成。[证据记录](./demo-h5-capture.md)区分了已验证事实与后续业务验收所需的证据类型。

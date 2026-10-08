@@ -3,7 +3,7 @@
 continue-harness 的最短闭环是：
 
 ```text
-create / init → inspect → inputs → task → implement → resume → verify → snapshot
+create / init → inspect → intake（适用时）→ inputs → task → implement → resume → verify → snapshot
 ```
 
 每一步都对应一个可读取的项目事实或可验证的结果。Harness 不替 Agent 决定业务，而是保证 Agent 在同一套约束和证据上继续工作。
@@ -19,6 +19,7 @@ create / init → inspect → inputs → task → implement → resume → verif
 
 ```bash
 continue-harness inspect --json
+continue-harness intake inspect --json
 continue-harness inputs inspect --json
 continue-harness inputs analyze --json
 continue-harness task create --title "任务名称" --json

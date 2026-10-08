@@ -42,7 +42,7 @@ Token 取值的权威来源。优先级为：高保真 UI、RP、用户临时视
 
 ## Aggregate Skill
 
-默认安装的聚合工作流 Skill，例如 `consumer-h5-harness`。
+按 preset 默认安装的聚合工作流 Skill，例如通用项目的 `generic-harness` 或 Consumer H5 项目的 `consumer-h5-harness`。
 
 ## Command-specific Skill
 

@@ -15,13 +15,14 @@ continue-harness 的 SOP 分成七步：
 ```bash
 continue-harness create my-h5
 cd my-h5
+continue-harness intake inspect --json
 continue-harness inputs inspect --json
 continue-harness inputs analyze --json
 continue-harness task create --title "根据首批输入实现项目" --json
 continue-harness verify feature
 ```
 
-`create` 默认会安装依赖。离线或网络不可用时使用：
+Consumer H5 preset 默认会安装依赖；generic preset 不包含 `package.json`，不会执行依赖安装。对于包含项目依赖的 preset，离线或网络不可用时使用：
 
 ```bash
 continue-harness create my-h5 --skip-install

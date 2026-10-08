@@ -1,12 +1,12 @@
 # 新建项目后的项目结构
 
-运行：
+运行通用项目创建命令：
 
 ```bash
-continue-harness create my-h5
+continue-harness create my-project
 ```
 
-会得到一个业务中立的 Consumer H5 项目。它提供可运行的技术容器、Harness 事实目录、Agent 入口和验证骨架，但不会生成真实业务页面。
+默认会得到一个业务中立、与技术栈无关的项目。它提供 Harness 事实目录、Agent 入口和验收记录骨架，不生成业务页面。只有显式使用 `--preset consumer-h5` 时，才会生成对应的 uni-app 项目结构；下方目录树仅适用于该专项 preset。
 
 ## 标记说明
 

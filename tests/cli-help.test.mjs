@@ -22,6 +22,7 @@ test('prints lightweight default workflow with no arguments', () => {
   assert.match(result.stdout, /默认流程/);
   assert.match(result.stdout, /continue-harness create <项目名> --output <目录>/);
   assert.match(result.stdout, /基础命令/);
+  assert.match(result.stdout, /intake\s+通过多轮问答确认项目事实和最小输入清单/);
 });
 
 test('prints rich help for -h', () => {
@@ -29,6 +30,15 @@ test('prints rich help for -h', () => {
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /全局选项/);
   assert.match(result.stdout, /continue-harness verify feature/);
+  assert.match(result.stdout, /intake\s+通过多轮问答确认项目事实和最小输入清单/);
+});
+
+test('prints intake topic help from the main command router', () => {
+  const result = run(['help', 'intake']);
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /continue-harness intake - 多轮项目事实与输入确认/);
+  assert.match(result.stdout, /continue-harness intake inspect/);
+  assert.match(result.stdout, /continue-harness intake answer/);
 });
 
 test('prints the same version through command and option aliases', () => {

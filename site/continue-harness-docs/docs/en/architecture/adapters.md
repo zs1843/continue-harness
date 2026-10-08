@@ -9,9 +9,12 @@ Adapters keep changes isolated:
 | Stack Adapter | Framework directories, scripts, and page registration | Product rules |
 | UI System Adapter | Component catalog, semantic mapping, and Token mapping | Production dependency installation |
 
-The repository currently includes and validates `consumer-h5 + web-mobile + uni-app`. This is the
-initial implementation, not a Core limitation; other combinations can be added through independent
-Profile, Platform, and Stack Adapters.
+The repository includes focused verification samples for the adapter combination
+`consumer-h5 + web-mobile + uni-app`. These samples are not required by the generic harness and do
+not define the Core support boundary. The generic Core reads project facts, constraints, and
+verification commands from project configuration. Other combinations require the corresponding
+configuration or adapter and their own verification evidence before the related capability can be
+claimed.
 
 ## Configuration ownership
 

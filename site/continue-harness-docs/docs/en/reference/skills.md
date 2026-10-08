@@ -4,7 +4,8 @@ The current Skill families are:
 
 | Skill | Purpose |
 | --- | --- |
-| `consumer-h5-harness` | Aggregate Consumer H5 workflow |
+| `generic-harness` | Technology-neutral aggregate workflow |
+| `consumer-h5-harness` | Specialized Consumer H5 workflow |
 | `continue-harness-create` | Create a project |
 | `continue-harness-init` | Adopt an existing project |
 | `continue-harness-inspect` | Read project facts |

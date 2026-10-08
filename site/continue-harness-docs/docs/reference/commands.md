@@ -5,7 +5,7 @@
 | 命令 | 作用 | 什么时候用 | 是否写文件 |
 | --- | --- | --- | --- |
 | `version` | 输出 CLI 版本 | 检查工具是否可用 | 否 |
-| `create` | 创建 Consumer H5 项目 | 新项目从零开始 | 是 |
+| `create` | 创建通用项目或指定 preset 的项目 | 新项目从零开始 | 是 |
 | `init` | 接入已有项目 | 给现有项目补 Harness 文件 | 是，冲突时不写 |
 | `migrate` | 迁移旧 `.fe-harness` 目录 | 升级已有项目状态目录 | 是，冲突时不写 |
 | `plan` | 输出 create/init 结构化计划 | 写文件前预览 | 否 |
@@ -35,9 +35,10 @@ continue-harness verify feature
 ## 创建和接入
 
 ```bash
-continue-harness plan create my-h5 --json
-continue-harness create my-h5
-continue-harness create my-h5 --skip-install
+continue-harness plan create my-project --json
+continue-harness create my-project
+continue-harness create my-project --preset consumer-h5
+continue-harness create my-project --skip-install
 continue-harness init --dry-run
 continue-harness plan init --json
 continue-harness init

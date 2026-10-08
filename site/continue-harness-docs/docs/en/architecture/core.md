@@ -10,9 +10,9 @@ The canonical entry point is `continue-harness`. `fe-harness` remains an executa
 
 ## Adapters
 
-- A Product Profile describes checks caused by product shape. The first public profile is `consumer-h5`.
-- A Platform Adapter describes runtime acceptance. The first public adapter is `web-mobile`.
-- A Stack Adapter describes framework and toolchain integration. The first public adapter is `uni-app`.
+- A Product Profile describes checks caused by product shape. `consumer-h5` is a specialized adapter example.
+- A Platform Adapter describes runtime acceptance. `web-mobile` is a specialized adapter example.
+- A Stack Adapter describes framework and toolchain integration. `uni-app` is a specialized adapter example.
 - A UI System Adapter describes component semantics and Token mapping without importing a production UI dependency.
 
 Target projects select adapters in `.continue-harness/project.yaml`; Core loads the descriptors without importing product code.

@@ -14,21 +14,21 @@ continue-harness 的 Agent 接入目标是：不同 Agent 使用同一套项目�
 
 ## 新项目默认状态
 
-`continue-harness create` 默认安装聚合 Skill：
+`continue-harness create` 默认使用通用聚合 Skill：
 
 ```text
-.agents/skills/consumer-h5-harness/SKILL.md
-.claude/skills/consumer-h5-harness/SKILL.md
+.agents/skills/generic-harness/SKILL.md
+.claude/skills/generic-harness/SKILL.md
 ```
 
-这已经足够让 Codex 和 Claude Code 理解 Consumer H5 的默认工作流。
+这已经足够让 Codex 和 Claude Code 理解技术栈无关的默认工作流。显式使用 `--preset consumer-h5` 时，项目才使用 `consumer-h5-harness`。
 
 ## 已有项目补齐
 
 如果接入已有项目后缺少供应商适配，可以运行：
 
 ```bash
-continue-harness skills install --project --provider all --name consumer-h5-harness
+continue-harness skills install --project --provider all --name generic-harness
 ```
 
 如果当前任务需要专项能力，再安装对应 Skill：
@@ -46,7 +46,7 @@ Codex 进入项目后应先读取：
 2. `.continue-harness/project.yaml`
 3. `docs/PROJECT_MAP.md`
 4. `docs/CURRENT_STATUS.md`
-5. `.agents/skills/consumer-h5-harness/SKILL.md`
+5. `.agents/skills/generic-harness/SKILL.md`
 
 然后根据任务类型继续读取输入、设计、API 或历史证据。
 
@@ -57,7 +57,7 @@ Codex 进入项目后应先读取：
 Claude Code 读取 `CLAUDE.md`，再由它导入 `AGENTS.md`。项目级 Skill 位于：
 
 ```text
-.claude/skills/consumer-h5-harness/SKILL.md
+.claude/skills/generic-harness/SKILL.md
 ```
 
 Claude Code 不应该维护另一份项目规则。所有长期约束都回到 `AGENTS.md`。

@@ -26,21 +26,21 @@ features:
 
 `continue-harness` is a project-neutral collaboration and quality harness. It does not choose a project's business, pages, APIs, or design. It provides a stable protocol for registering facts, loading constraints, numbering tasks, resuming work, running verification, and leaving evidence.
 
-## Current implementation boundary
+## Generic Core capabilities and boundary
 
 | Layer | Current implementation | Boundary |
 | --- | --- | --- |
-| Core | Configuration, diagnostics, input analysis, tasks, resume, verification, reports | Independent of product and framework |
-| Product Profile | `consumer-h5` | The product-shape profile currently included in the repository |
-| Platform Adapter | `web-mobile` | The mobile Web acceptance adapter currently included in the repository |
-| Stack Adapter | `uni-app` | The uni-app, Vue 3, and Vite adapter currently included in the repository |
-| Optional capabilities | OpenAPI, Design Token, UI Contract, UI System | Enabled when task evidence requires them |
+| Core | Configuration, diagnostics, input analysis, tasks, resume, verification, reports | Independent of product, platform, language, and framework |
+| Project integration protocol | Project facts, constraints, command mappings, logs, context, and acceptance records | Declared by the target project and its verification model |
+| Evidence and extension capabilities | Input registration, contract analysis, design facts, UI Contract, UI System | Enabled by project facts and task evidence; independent of product, platform, and framework |
+
+The repository's `consumer-h5`, `web-mobile`, and `uni-app` implementations are specialized adapter and regression-test samples. They are not required components of the generic harness and do not define the Core support boundary. Adapter availability must be established by the target project's configuration and corresponding verification evidence.
 
 ## Default workflow
 
 ```bash
-continue-harness create my-h5
-cd my-h5
+continue-harness create my-project
+cd my-project
 continue-harness inspect --json
 continue-harness inputs inspect --json
 continue-harness task create --title "Implement the first scoped change" --json
@@ -48,4 +48,4 @@ continue-harness resume --json
 continue-harness verify feature
 ```
 
-The default project setup installs the aggregate `consumer-h5-harness` Skill. Deeper Skills are installed only when a task needs them.
+The default project setup uses the `generic` preset and installs the aggregate `generic-harness` Skill. It provides technology-neutral project facts, inputs, tasks, logs, context, and acceptance constraints. OpenAPI, UI System, Design Token, visual baseline, and command-specific Skills are enabled when a task requires them. `consumer-h5` is an explicit specialized preset, not a Core technology boundary. Other products, platforms, and stacks declare their facts and verification commands in project configuration; platform- or framework-specific checks require a corresponding adapter.

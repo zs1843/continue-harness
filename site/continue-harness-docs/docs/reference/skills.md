@@ -8,10 +8,10 @@ continue-harness skills list --json
 
 ## 安装策略
 
-默认项目只需要聚合 Skill：
+通用项目默认使用聚合 Skill：
 
 ```bash
-continue-harness skills install --project --provider all --name consumer-h5-harness
+continue-harness skills install --project --provider all --name generic-harness
 ```
 
 命令级 Skills 按需安装：
@@ -23,14 +23,15 @@ continue-harness skills install --project --name continue-harness-api
 全局安装需要用户确认：
 
 ```bash
-continue-harness skills install --global --provider claude --name consumer-h5-harness
+continue-harness skills install --global --provider claude --name generic-harness
 ```
 
 ## 清单
 
 | Skill | 作用 | 典型触发 |
 | --- | --- | --- |
-| `consumer-h5-harness` | Consumer H5 总工作流 | 创建/接入项目、实现页面、验证功能、创建快照 |
+| `generic-harness` | 技术栈无关的总工作流 | 创建/接入项目、登记输入、任务、验证和交接 |
+| `consumer-h5-harness` | Consumer H5 专项工作流 | 显式选择 Consumer H5 preset 后使用 |
 | `continue-harness-create` | 创建项目专项流程 | 从零创建项目、准备输入目录、建立首个任务 |
 | `continue-harness-init` | 接入已有项目专项流程 | init dry-run、冲突处理、存量 Token discovery |
 | `continue-harness-inspect` | 状态读取 | 查看 project facts、输入状态、Token 状态、Agent readiness |
