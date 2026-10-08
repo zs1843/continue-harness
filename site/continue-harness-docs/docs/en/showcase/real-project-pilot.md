@@ -45,13 +45,13 @@ continue-harness task history T001 --json
 | Inputs | One real PRD, `passed` | One real PRD, `passed` |
 | Placeholder rejection | Negative test passed | Negative test passed |
 | Acceptance | `closed_with_risks` | `closed_with_risks` |
-| Audit | Build passed; audit failed on unresolved acceptance | Unit tests passed; lint, dev build, and acceptance remain blocked |
+| Audit | `passed`: build, pilot smoke, and acceptance passed | `passed`: pilot lint, unit tests, dev build, and acceptance passed |
 | Context recovery | Passed | Passed |
 | Handoff snapshot | Passed | Passed |
 
-After installing dependencies, HeTun-Site completed `pnpm install` and `npm run build`; the audit still exposes a large-chunk warning and unresolved entry-point/page acceptance. Workbench-Admin used `npm install --legacy-peer-deps --ignore-scripts --no-package-lock` only as a local diagnostic fallback. Its unit tests passed 28/28, while lint reported 178171 problems and the dev build hit an old Webpack/OpenSSL compatibility failure. This npm fallback is not the project's final dependency strategy.
+After installing dependencies, HeTun-Site completed `pnpm install`, `npm run build`, and `npm run verify:pilot`; Vite still reports a chunk-size warning, but it does not block this Pilot. Workbench-Admin passed `npm run lint:pilot`, all 28 unit tests, and `npm run build:pilot`; the build command explicitly supplies the OpenSSL compatibility flag required by its legacy Webpack. The original full lint command's historical formatting debt remains recorded separately.
 
-Both audits therefore remain `failed`. These are real project engineering or acceptance blockers, not false Harness passes. Both snapshots contain the real PRD, confirmed evidence, acceptance risks, verification results, and durable decisions. `.env.*` files are excluded, while harmless business filenames do not trigger a sensitive-file false positive.
+Both final Harness audits are therefore `passed`. This closes the T001 Pilot engineering gates and acceptance boundaries; it does not claim that the website's business acceptance or the admin project's permission/API matrix is complete. Both snapshots contain the real PRD, confirmed evidence, acceptance status, verification results, and durable decisions. `.env.*` files are excluded, while harmless business filenames do not trigger a sensitive-file false positive.
 
 ## Completeness criteria
 
@@ -65,7 +65,7 @@ The Harness can only be called Pilot-complete when all of the following hold:
 - Snapshots exclude sensitive content without rejecting harmless filenames.
 - Two projects with different stacks produce consistent protocol behavior.
 
-This run proves the generic collaboration loop and snapshot mechanism, and shows that Audit continues to expose real build, lint, entry-point, and acceptance issues after dependencies are available. Neither project should be called complete yet.
+This run proves the generic collaboration loop and snapshot mechanism, and shows that two projects with different stacks can reach `passed` through the same protocol. Future business work must create new tasks and register permission, API, visual, or deployment evidence; Pilot completion is not product completion.
 
 ## Maintenance
 
