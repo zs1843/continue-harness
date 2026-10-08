@@ -190,17 +190,18 @@ async function checkUniAppPageRegistry(cwd, relativePath) {
 }
 
 async function checkAgentWorkflow(cwd, config) {
-  if (config.project?.product_type !== 'consumer_h5') {
+  if (!['consumer_h5', 'generic'].includes(config.project?.product_type)) {
     return result('AGENT_WORKFLOW', 'agent-workflow', 'not_applicable', '非 consumer-h5 项目');
   }
   const agentGuidePath = resolve(cwd, config.facts?.agent_entry || 'AGENTS.md');
-  const skillPath = resolve(cwd, '.agents/skills/consumer-h5-harness/SKILL.md');
+  const skillName = config.project?.product_type === 'generic' ? 'generic-harness' : 'consumer-h5-harness';
+  const skillPath = resolve(cwd, `.agents/skills/${skillName}/SKILL.md`);
   if (!(await exists(agentGuidePath)) || !(await exists(skillPath))) {
     return result(
       'AGENT_WORKFLOW',
       'agent-workflow',
       'failed',
-      '缺少 AGENTS.md 或 consumer-h5-harness 项目 Skill',
+      `缺少 AGENTS.md 或 ${skillName} 项目 Skill`,
       '重新执行 continue-harness plan init，并在无冲突后执行 continue-harness init',
     );
   }
@@ -229,7 +230,7 @@ async function checkAgentWorkflow(cwd, config) {
 }
 
 async function checkAgentAdapters(cwd, config) {
-  if (config.project?.product_type !== 'consumer_h5') {
+  if (!['consumer_h5', 'generic'].includes(config.project?.product_type)) {
     return result('AGENT_ADAPTERS', 'agent-adapters', 'not_applicable', '非 consumer-h5 项目');
   }
   const canonicalPath = resolve(cwd, config.facts?.agent_entry || 'AGENTS.md');
@@ -238,11 +239,12 @@ async function checkAgentAdapters(cwd, config) {
   }
   const claudePath = resolve(cwd, 'CLAUDE.md');
   const cursorPath = resolve(cwd, '.cursor/rules/continue-harness.mdc');
-  const claudeSkillPath = resolve(cwd, '.claude/skills/consumer-h5-harness/SKILL.md');
+  const skillName = config.project?.product_type === 'generic' ? 'generic-harness' : 'consumer-h5-harness';
+  const claudeSkillPath = resolve(cwd, `.claude/skills/${skillName}/SKILL.md`);
   const missing = [];
   if (!(await exists(claudePath))) missing.push('CLAUDE.md');
   if (!(await exists(cursorPath))) missing.push('.cursor/rules/continue-harness.mdc');
-  if (!(await exists(claudeSkillPath))) missing.push('.claude/skills/consumer-h5-harness/SKILL.md');
+  if (!(await exists(claudeSkillPath))) missing.push(`.claude/skills/${skillName}/SKILL.md`);
   if (missing.length) {
     return result(
       'AGENT_ADAPTERS',
@@ -425,7 +427,7 @@ export async function runDoctor(cwd, config) {
     result(
       'PROJECT_PACKAGE_JSON',
       'package-json',
-      packageJsonPresent ? 'passed' : 'failed',
+      packageJsonPresent ? 'passed' : config.harness?.mode === 'generic' ? 'not_configured' : 'failed',
       packageJsonPresent ? 'package.json 已存在' : '缺少 package.json',
     ),
   );

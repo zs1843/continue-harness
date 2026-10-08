@@ -3,7 +3,7 @@
   "$id": "https://example.invalid/continue-harness/project.schema.json",
   "title": "continue-harness project configuration",
   "type": "object",
-  "required": ["harness", "project", "stack", "commands", "verify"],
+  "required": ["harness", "project", "commands", "verify"],
   "properties": {
     "harness": {
       "type": "object",
@@ -15,12 +15,12 @@
     },
     "project": {
       "type": "object",
-      "required": ["name", "product_type", "platforms"],
+      "required": ["name"],
       "properties": {
         "name": { "type": "string", "minLength": 1 },
         "product_type": {
           "type": "string",
-          "enum": ["consumer_h5", "developer_tooling"]
+          "enum": ["generic", "consumer_h5", "developer_tooling"]
         },
         "platforms": {
           "type": "array",

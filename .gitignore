@@ -4,3 +4,7 @@ tmp/
 .DS_Store
 .env*
 !.env.example
+.continue-harness/logs/
+site/continue-harness-docs/docs/.vitepress/.temp/
+site/continue-harness-docs/docs/.vitepress/cache/
+site/continue-harness-docs/docs/.vitepress/dist/

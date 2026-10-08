@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 import { performance } from 'node:perf_hooks';
+import { appendCommandLog } from './intake.mjs';
 
 export function runShellCommand(command, { cwd, env = process.env } = {}) {
   return new Promise((resolve) => {
@@ -22,25 +23,29 @@ export function runShellCommand(command, { cwd, env = process.env } = {}) {
       stderr += text;
       process.stderr.write(text);
     });
-    child.on('error', (error) => {
-      resolve({
+    child.on('error', async (error) => {
+      const result = {
         command,
         durationMs: Math.round(performance.now() - startedAt),
         error: error.message,
         status: 'blocked',
         stderr,
         stdout,
-      });
+      };
+      await appendCommandLog(cwd, { kind: 'command', ...result }).catch(() => {});
+      resolve(result);
     });
-    child.on('exit', (code) => {
-      resolve({
+    child.on('exit', async (code) => {
+      const result = {
         command,
         durationMs: Math.round(performance.now() - startedAt),
         exitCode: code ?? 1,
         status: code === 0 ? 'passed' : 'failed',
         stderr,
         stdout,
-      });
+      };
+      await appendCommandLog(cwd, { kind: 'command', ...result }).catch(() => {});
+      resolve(result);
     });
   });
 }

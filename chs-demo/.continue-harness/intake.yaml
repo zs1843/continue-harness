@@ -1,0 +1,19 @@
+version: 1
+phase: basic_info
+status: awaiting_answers
+project:
+  name: chs-demo
+  type: pending
+  goal: pending
+  runtime: pending
+  toolchain: pending
+evidence: []
+questions:
+  - id: project_type
+    question: 项目属于前端、后端、客户端、数据、基础设施还是混合项目？
+  - id: goal
+    question: 项目目标、范围、非目标和主要交付物是什么？
+  - id: runtime
+    question: 运行环境、部署目标和协作/交接对象是什么？
+  - id: toolchain
+    question: 语言、框架、构建、包管理和测试工具是什么？未知项可标记 pending。

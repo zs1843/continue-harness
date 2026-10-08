@@ -9,11 +9,25 @@
   "packageManager": "pnpm@10.12.1",
   "scripts": {
     "doctor": "node packages/cli/bin/continue-harness.mjs doctor",
+    "check:syntax": "node scripts/check-syntax.mjs",
+    "check:schema": "node scripts/check-schema.mjs",
+    "check:safety": "node scripts/check-safety.mjs",
+    "pack:check": "node scripts/check-pack.mjs",
+    "lint": "eslint --no-eslintrc --config .eslintrc.cjs packages scripts tests --ext .js,.mjs,.cjs",
+    "typecheck": "pnpm --dir chs-demo-h5 type-check",
+    "lint:project": "pnpm --dir chs-demo-h5 lint",
+    "demo:install": "pnpm --dir chs-demo-h5 install --ignore-workspace --frozen-lockfile --force",
     "test": "node --test tests/*.test.mjs",
     "verify:audit": "node packages/cli/bin/continue-harness.mjs verify audit",
-    "verify:quick": "node packages/cli/bin/continue-harness.mjs verify quick"
+    "verify:quick": "node packages/cli/bin/continue-harness.mjs verify quick",
+    "security:deps": "pnpm audit --audit-level=high",
+    "docs:install": "pnpm --dir site/continue-harness-docs install --ignore-workspace",
+    "docs:build": "pnpm --dir site/continue-harness-docs docs:build"
   },
   "devDependencies": {
+    "ajv": "8.17.1",
+    "eslint": "8.57.1",
+    "typescript": "5.5.4",
     "yaml": "^2.8.1"
   }
 }

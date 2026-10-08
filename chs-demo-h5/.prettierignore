@@ -1,0 +1,10 @@
+dist
+.agents/skills
+.claude/skills
+node_modules
+playwright-report
+pnpm-lock.yaml
+test-results
+tmp
+tests/visual/baselines
+tests/visual/diffs

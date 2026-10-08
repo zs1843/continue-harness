@@ -25,6 +25,7 @@ developers, CI pipelines, and coding agents through the same configuration and C
 | `examples/` | Disposable integration fixtures |
 | `tests/` | Harness unit and orchestration tests |
 | `docs/` | Architecture, status, roadmap, and adoption guidance |
+| `docs/GENERIC_HARNESS_DESIGN.md` | 通用 Harness、Intake、上下文和验收闭环目标设计 |
 
 ## Dependency direction
 

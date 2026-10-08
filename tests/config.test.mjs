@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 import { resolveVerifySteps, validateProjectConfig } from '../packages/core/src/index.mjs';
-import schema from '../schemas/project.schema.json' with { type: 'json' };
+
+const schema = JSON.parse(readFileSync(new URL('../schemas/project.schema.json', import.meta.url), 'utf8'));
 
 const config = {
   commands: { lint: 'pnpm lint', test: 'pnpm test' },

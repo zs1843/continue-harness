@@ -4,22 +4,49 @@ Install dependencies and run the self-tests:
 
 ```bash
 corepack pnpm install
+corepack pnpm check:syntax
+corepack pnpm check:schema
+corepack pnpm check:safety
+corepack pnpm lint
 corepack pnpm test
+corepack pnpm doctor
 ```
 
-To create a new consumer H5 project:
+仓库中的 Consumer H5 生成项目还提供真实的 ESLint 和 `vue-tsc` 类型检查：
 
 ```bash
-continue-harness plan create my-h5 --json
-continue-harness create my-h5
-cd my-h5
-pnpm exec playwright install chromium
-continue-harness doctor
-continue-harness verify audit
+corepack pnpm demo:install
+corepack pnpm lint:project
+corepack pnpm typecheck
 ```
 
-`create` 默认使用项目声明的 Corepack/pnpm 安装依赖。离线生成时使用
-`continue-harness create my-h5 --skip-install`，之后手动执行 `pnpm install`。
+仓库 CI 会重复执行语法检查、测试、Doctor、Audit 验证、文档构建和高危依赖审计。
+同时会执行标准 Schema、敏感路径和 Core/CLI tarball 打包检查。
+
+文档站是独立 workspace 外项目，安装依赖时使用：
+
+```bash
+corepack pnpm docs:install --frozen-lockfile
+```
+
+To create a technology-neutral constraint project:
+
+```bash
+continue-harness plan create project-core --json
+continue-harness create project-core
+cd project-core
+continue-harness intake inspect --json
+continue-harness intake answer --type backend --goal "项目目标" --runtime "运行环境" --toolchain "待确认" --json
+continue-harness doctor
+```
+
+`create` 默认只生成约束、输入、任务、日志、上下文和验收容器，不创建代码目录或技术栈依赖。第一轮 Intake 确认项目基本信息，第二轮按项目类型生成最小输入清单。
+
+需要 H5 工程时显式选择 preset：
+
+```bash
+continue-harness create my-h5 --preset consumer-h5
+```
 
 生成项目默认只包含总工作流 Skill，避免把每个命令 Skill 重复复制到项目。默认工作路径只有
 `create/init → inputs → task → verify`；Design Token、UI System、OpenAPI 和视觉基线仅在对应任务

@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.12.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install workspace dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install documentation dependencies
+        run: pnpm --dir site/continue-harness-docs install --ignore-workspace --frozen-lockfile --force
+
+      - name: Install generated project dependencies
+        run: pnpm demo:install
+
+      - name: Check JavaScript syntax
+        run: pnpm check:syntax
+
+      - name: Validate project schema
+        run: pnpm check:schema
+
+      - name: Check tracked sensitive and generated paths
+        run: pnpm check:safety
+
+      - name: Run ESLint on Harness sources
+        run: pnpm lint
+
+      - name: Run ESLint on generated project
+        run: pnpm lint:project
+
+      - name: Run TypeScript check on generated project
+        run: pnpm typecheck
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Run Harness Doctor
+        run: pnpm doctor
+
+      - name: Run Harness audit verification
+        run: pnpm verify:audit
+
+      - name: Build documentation
+        run: pnpm docs:build
+
+      - name: Validate package tarballs
+        run: pnpm pack:check
+
+      - name: Audit workspace dependencies
+        run: pnpm security:deps
+
+      - name: Audit documentation dependencies
+        run: pnpm --dir site/continue-harness-docs audit --audit-level=high

@@ -2,6 +2,11 @@
 
 ## Milestone 0.1: H5 foundation
 
+The next architecture correction is to move the default from an H5-shaped project generator to a
+generic constraint and evidence harness. Consumer H5 remains an explicit Adapter/Preset used for
+validation, not the Core's default project shape. The target workflow and migration order are
+defined in `docs/GENERIC_HARNESS_DESIGN.md`.
+
 - Keep the default workflow limited to `create/init → inputs → task → verify`; expose Design Token,
   UI System, OpenAPI, visual baselines, and command-specific Skills only when task evidence requires them.
 - Stabilize configuration, runner, reports, and exit semantics.

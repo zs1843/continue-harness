@@ -22,6 +22,13 @@ pnpm install
 pnpm docs:dev
 ```
 
+文档站位于主仓库目录下，但拥有独立的 lockfile。目录内的 `.npmrc` 会让 pnpm 自动按独立项目安装；
+如果使用旧版 pnpm 或配置未生效，可以显式执行：
+
+```bash
+pnpm install --ignore-workspace
+```
+
 构建：
 
 ```bash

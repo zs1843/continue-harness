@@ -8,16 +8,15 @@ import test from 'node:test';
 const repository = resolve(import.meta.dirname, '..');
 const cli = resolve(repository, 'packages/cli/bin/continue-harness.mjs');
 
-test('creates a consumer-h5 project with one default workflow skill', async () => {
+test('creates a consumer-h5 project through an explicit preset', async () => {
   const parent = await mkdtemp(resolve(tmpdir(), 'continue-harness-create-'));
-  const result = spawnSync(process.execPath, [cli, 'create', 'pilot-h5', '--skip-install'], {
+  const result = spawnSync(process.execPath, [cli, 'create', 'pilot-h5', '--preset', 'consumer-h5', '--skip-install'], {
     cwd: parent,
     encoding: 'utf8',
   });
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /项目容器已准备好/);
-  assert.match(result.stdout, /\.continue-harness\/inputs\/prd/);
-  assert.match(result.stdout, /不要在项目创建前阻塞等待这些文件/);
+  assert.match(result.stdout, /项目约束容器已准备好/);
+  assert.match(result.stdout, /continue-harness intake inspect --json/);
   assert.match(result.stdout, /continue-harness inputs inspect --json/);
   const project = resolve(parent, 'pilot-h5');
   assert.match(await readFile(resolve(project, 'package.json'), 'utf8'), /"name": "pilot-h5"/);
@@ -91,11 +90,49 @@ test('create dry-run returns a structured plan without writing', async () => {
   await assert.rejects(readFile(resolve(parent, 'planned-h5/package.json')), /ENOENT/);
 });
 
+test('creates a generic constraint-only project by default', async () => {
+  const parent = await mkdtemp(resolve(tmpdir(), 'continue-harness-generic-'));
+  const result = spawnSync(process.execPath, [cli, 'create', 'generic-project', '--skip-install'], {
+    cwd: parent,
+    encoding: 'utf8',
+  });
+  assert.equal(result.status, 0, result.stderr);
+  const project = resolve(parent, 'generic-project');
+  assert.match(await readFile(resolve(project, '.continue-harness/project.yaml'), 'utf8'), /mode: generic/);
+  assert.match(await readFile(resolve(project, 'AGENTS.md'), 'utf8'), /不得猜测或生成框架模板/);
+  assert.match(await readFile(resolve(project, '.continue-harness/intake.yaml'), 'utf8'), /phase: basic_info/);
+  await assert.rejects(readFile(resolve(project, 'package.json')), /ENOENT/);
+  await assert.rejects(readFile(resolve(project, 'src/pages/index/index.vue')), /ENOENT/);
+});
+
+test('intake moves from basic facts to type-specific evidence questions', async () => {
+  const parent = await mkdtemp(resolve(tmpdir(), 'continue-harness-intake-'));
+  const created = spawnSync(process.execPath, [cli, 'create', 'intake-project', '--skip-install'], {
+    cwd: parent,
+    encoding: 'utf8',
+  });
+  assert.equal(created.status, 0, created.stderr);
+  const project = resolve(parent, 'intake-project');
+  const initial = spawnSync(process.execPath, [cli, 'intake', 'inspect', '--json'], {
+    cwd: project,
+    encoding: 'utf8',
+  });
+  assert.equal(initial.status, 0, initial.stderr);
+  assert.equal(JSON.parse(initial.stdout).phase, 'basic_info');
+  const answered = spawnSync(process.execPath, [
+    cli, 'intake', 'answer', '--type', 'backend', '--goal', 'service', '--runtime', 'container', '--json',
+  ], { cwd: project, encoding: 'utf8' });
+  assert.equal(answered.status, 0, answered.stderr);
+  const payload = JSON.parse(answered.stdout);
+  assert.equal(payload.phase, 'evidence');
+  assert.ok(payload.evidence.some((item) => item.id === 'data_model'));
+});
+
 test('development CLI prefers repository resources over stale prepack staging', () => {
   const source = spawnSync(process.execPath, [cli, 'help', 'create'], {
     cwd: repository,
     encoding: 'utf8',
   });
   assert.equal(source.status, 0, source.stderr);
-  assert.match(source.stdout, /不要求提前提供 PRD\/RP\/UI/);
+  assert.match(source.stdout, /默认 preset=generic/);
 });

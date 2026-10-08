@@ -30,6 +30,7 @@ export async function loadProjectConfig(cwd, configPath) {
 
 export function validateProjectConfig(config) {
   const issues = [];
+  const generic = config?.harness?.mode === 'generic' || config?.project?.product_type === 'generic';
   if (!config || typeof config !== 'object') issues.push('配置必须是对象');
   if (typeof config?.harness?.version !== 'string' || !config.harness.version.trim()) {
     issues.push('缺少 harness.version');
@@ -37,15 +38,15 @@ export function validateProjectConfig(config) {
   if (typeof config?.project?.name !== 'string' || !config.project.name.trim()) {
     issues.push('缺少 project.name');
   }
-  if (!['consumer_h5', 'developer_tooling'].includes(config?.project?.product_type)) {
-    issues.push('project.product_type 必须是 consumer_h5 或 developer_tooling');
+  if (!generic && !['consumer_h5', 'developer_tooling'].includes(config?.project?.product_type)) {
+    issues.push('project.product_type 必须是 consumer_h5、developer_tooling 或 generic');
   }
-  if (!Array.isArray(config?.project?.platforms) || !config.project.platforms.length) {
+  if (!generic && (!Array.isArray(config?.project?.platforms) || !config.project.platforms.length)) {
     issues.push('project.platforms 至少配置一个平台');
-  } else if (config.project.platforms.some((platform) => !['web_mobile', 'node'].includes(platform))) {
+  } else if (!generic && config.project.platforms.some((platform) => !['web_mobile', 'node'].includes(platform))) {
     issues.push('project.platforms 包含不支持的平台');
   }
-  if (!['uni-app', 'node-esm'].includes(config?.stack?.adapter)) {
+  if (!generic && !['uni-app', 'node-esm'].includes(config?.stack?.adapter)) {
     issues.push('stack.adapter 必须是 uni-app 或 node-esm');
   }
   if (
@@ -54,18 +55,22 @@ export function validateProjectConfig(config) {
   ) {
     issues.push('stack.package_manager 必须是 pnpm、npm 或 yarn');
   }
-  if (!config?.commands || typeof config.commands !== 'object' || Array.isArray(config.commands)) {
+  if (!generic && (!config?.commands || typeof config.commands !== 'object' || Array.isArray(config.commands))) {
     issues.push('缺少 commands');
-  } else {
+  } else if (config?.commands && (typeof config.commands !== 'object' || Array.isArray(config.commands))) {
+    issues.push('commands 必须是对象');
+  } else if (config?.commands) {
     for (const [name, command] of Object.entries(config.commands)) {
       if (!name || typeof command !== 'string' || !command.trim()) {
         issues.push(`commands.${name || '<empty>'} 必须是非空字符串`);
       }
     }
   }
-  if (!config?.verify || typeof config.verify !== 'object' || Array.isArray(config.verify)) {
+  if (!generic && (!config?.verify || typeof config.verify !== 'object' || Array.isArray(config.verify))) {
     issues.push('缺少 verify');
-  } else {
+  } else if (config?.verify && (typeof config.verify !== 'object' || Array.isArray(config.verify))) {
+    issues.push('verify 必须是对象');
+  } else if (config?.verify) {
     for (const [mode, definition] of Object.entries(config.verify)) {
       const commandNames = Array.isArray(definition) ? definition : definition?.commands;
       const explicitlyNotConfigured = !Array.isArray(definition) && definition?.status === 'not_configured';

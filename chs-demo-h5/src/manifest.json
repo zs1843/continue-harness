@@ -1,0 +1,8 @@
+{
+  "name": "chs-demo",
+  "appid": "__UNI__FEHARNESS",
+  "versionName": "0.1.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "h5": { "title": "chs-demo" }
+}

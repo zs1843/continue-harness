@@ -18,6 +18,9 @@ import {
   inspectInputs,
   inspectUiGovernance,
   inspectUiContract,
+  createInitialIntake,
+  inspectIntake,
+  INTAKE_QUESTIONS,
   renderUiComponentInventory,
   scanUiComponentInventory,
   inspectTaskHistory,
@@ -44,7 +47,7 @@ const cwd = process.cwd();
 const packageDirectory = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const repositoryRoot = resolve(packageDirectory, '../..');
 const packageRoot = existsSync(resolve(repositoryRoot, 'presets')) ? repositoryRoot : packageDirectory;
-const defaultProjectSkills = ['consumer-h5-harness'];
+const defaultProjectSkills = ['generic-harness'];
 
 async function copyDirectory(source, target, { force = false } = {}) {
   await mkdir(target, { recursive: true });
@@ -101,15 +104,15 @@ const HELP = {
   continue-harness <命令> [参数] [选项]
 
 默认流程：
-  continue-harness create <项目名> --output <目录>  创建 consumer-h5 项目
+  continue-harness create <项目名> --output <目录>  创建通用约束项目
   continue-harness init --dry-run                  查看接入现有项目会创建哪些文件
   continue-harness inputs inspect --json           登记并检查本次任务输入
   continue-harness task create --title "任务名称"  创建稳定任务编号
   continue-harness verify feature                  验证完整功能改动
 
 基础命令：
-  create      创建新的 consumer-h5 项目
-  init        向现有项目补充 Harness 文件，不覆盖项目已维护内容
+  create      创建通用约束项目，可用 --preset consumer-h5 生成 H5 适配项目
+  init        向现有项目补充通用 Harness 文件，不覆盖项目已维护内容
   migrate     将旧 .fe-harness 状态目录迁移为 .continue-harness
   inputs      查看、比对和分析 PRD/RP/UI/API/assets 输入
   task        创建任务、查看历史、创建不可变任务快照
@@ -131,27 +134,28 @@ const HELP = {
 按需查看帮助：
   continue-harness help <命令>
 `,
-  create: `continue-harness create - 创建新的 consumer-h5 项目
+  create: `continue-harness create - 创建通用约束项目
 
 用法：
-  continue-harness create <项目名> [--output <目录>] [--dry-run] [--skip-install] [--json]
+  continue-harness create <项目名> [--output <目录>] [--preset generic|consumer-h5] [--dry-run] [--skip-install] [--json]
 
 说明：
   项目名只能使用小写字母、数字和连字符。
   默认输出到当前目录下的同名子目录。
-  create 会生成中文 AGENTS、输入目录、历史目录、Token 文件、uni-app H5 最小工程和测试基础设施，并默认安装依赖。
-  create 不要求提前提供 PRD/RP/UI；项目创建后会输出标准输入目录，再进入输入登记和任务分析阶段。
+  默认 preset=generic，只生成与技术栈无关的约束、输入、任务、日志、上下文和验收容器。
+  consumer-h5 是显式 preset，会额外生成 uni-app H5 工程。create 不要求提前提供业务输入。
   离线创建或暂不安装依赖时使用 --skip-install。
 
 示例：
-  continue-harness create hotel-h5
+  continue-harness create project-core
+  continue-harness create hotel-h5 --preset consumer-h5
   continue-harness create hotel-h5 --output /tmp/hotel-h5
   continue-harness create hotel-h5 --dry-run --json
 `,
   init: `continue-harness init - 接入现有项目
 
 用法：
-  continue-harness init [--dry-run] [--json]
+  continue-harness init [--preset generic|consumer-h5] [--dry-run] [--json]
 
 说明：
   init 只创建缺失文件，不覆盖项目已有内容。
@@ -174,7 +178,15 @@ const HELP = {
 用法：
   continue-harness resume [--task T001] [--json]
 
-输出当前任务、输入状态、最近快照、覆盖矩阵、持久决策、Git 改动和下一步动作。
+  输出当前任务、输入状态、最近快照、覆盖矩阵、持久决策、Git 改动和下一步动作。
+`,
+  intake: `continue-harness intake - 多轮项目事实与输入确认
+
+用法：
+  continue-harness intake inspect [--json]
+  continue-harness intake answer --type <frontend|backend|client|data|infrastructure|mixed> [--goal <目标>] [--runtime <环境>] [--toolchain <工具链>] [--json]
+
+第一轮确认项目基本信息，第二轮按项目类型生成最小输入清单，不将 UI、API 或技术栈模板强加给所有项目。
 `,
   plan: `continue-harness plan - 输出结构化计划
 
@@ -345,7 +357,8 @@ async function initializationPlan() {
 async function skillFiles() {
   const root = resolve(packageRoot, 'skills');
   const paths = [];
-  for (const name of defaultProjectSkills) {
+  const selected = option('--preset') === 'consumer-h5' ? ['consumer-h5-harness'] : defaultProjectSkills;
+  for (const name of selected) {
     paths.push(...(await listFiles(resolve(root, name))).map((path) => `${name}/${path}`));
   }
   return paths.flatMap((path) => [
@@ -356,7 +369,12 @@ async function skillFiles() {
 
 async function initializationFiles() {
   const directory = await resolveHarnessDirectory(cwd);
-  return [...initFiles, ...(await skillFiles())].map(([source, target]) => [
+  const preset = option('--preset') || 'generic';
+  if (!['generic', 'consumer-h5'].includes(preset)) throw new Error('preset 必须是 generic 或 consumer-h5');
+  const files = preset === 'generic'
+    ? (await listFiles(resolve(packageRoot, 'presets/generic'))).map((path) => [`presets/generic/${path}`, path])
+    : initFiles;
+  return [...files, ...(await skillFiles())].map(([source, target]) => [
     source,
     target.replace(/^\.continue-harness(?=\/|$)/, directory),
   ]);
@@ -397,16 +415,21 @@ async function migrate() {
 
 async function creationPlan(name) {
   if (!name || !/^[a-z0-9][a-z0-9-]*$/.test(name)) throw new Error('项目名必须使用小写字母、数字和连字符');
-  const presetRoot = resolve(packageRoot, 'presets/consumer-h5');
+  const preset = option('--preset') || 'generic';
+  if (!['generic', 'consumer-h5'].includes(preset)) throw new Error('preset 必须是 generic 或 consumer-h5');
+  const presetRoot = resolve(packageRoot, `presets/${preset}`);
   const files = await listFiles(presetRoot);
-  for (const name of defaultProjectSkills) {
-    for (const path of await listFiles(resolve(packageRoot, 'skills', name))) {
-      const skillPath = `${name}/${path}`;
+  const skills = preset === 'consumer-h5' ? ['consumer-h5-harness'] : defaultProjectSkills;
+  for (const skillName of skills) {
+    for (const path of await listFiles(resolve(packageRoot, 'skills', skillName))) {
+      const skillPath = `${skillName}/${path}`;
       files.push({ source: resolve(packageRoot, 'skills', skillPath), target: `.agents/skills/${skillPath}` });
       files.push({ source: resolve(packageRoot, 'skills', skillPath), target: `.claude/skills/${skillPath}` });
     }
   }
-  return planProjectCreation({ name, output: resolve(option('--output') || resolve(cwd, name)), presetRoot, files });
+  const plan = await planProjectCreation({ name, output: resolve(option('--output') || resolve(cwd, name)), presetRoot, files });
+  plan.preset = preset;
+  return plan;
 }
 
 async function create(name) {
@@ -416,7 +439,7 @@ async function create(name) {
   if (has('--dry-run')) return;
   await applyProjectCreation(plan);
   console.log(`已创建项目 ${name}：${plan.output}`);
-  if (!has('--skip-install')) {
+  if (!has('--skip-install') && await exists(resolve(plan.output, 'package.json'))) {
     console.log('正在使用项目声明的 pnpm/Corepack 安装依赖……');
     const installation = await runShellCommand('corepack pnpm install', { cwd: plan.output });
     if (installation.status !== 'passed') {
@@ -424,19 +447,49 @@ async function create(name) {
     }
     console.log('依赖安装完成。');
   }
+  await createInitialIntake(plan.output, name);
   const inputRoot = resolve(plan.output, '.continue-harness/inputs');
-  console.log('\n项目容器已准备好。现在请把原始输入文件放入以下目录：');
-  console.log(`PRD  → ${resolve(inputRoot, 'prd')}`);
-  console.log(`RP   → ${resolve(inputRoot, 'rp')}`);
-  console.log(`UI   → ${resolve(inputRoot, 'ui')}`);
-  console.log(`API  → ${resolve(inputRoot, 'api')}`);
-  console.log(`资产 → ${resolve(inputRoot, 'assets')}`);
-  console.log('\n输入可以暂时为空；不要在项目创建前阻塞等待这些文件。');
+  console.log('\n项目约束容器已准备好。先确认项目基本信息：');
+  console.log(`cd ${plan.output}`);
+  console.log('continue-harness intake inspect --json');
+  console.log(`\n原始输入统一放入：${inputRoot}`);
+  console.log('输入类型由第二轮 Intake 根据项目类型生成，不默认要求 UI、API 或其他技术栈输入。');
   console.log(`文件放好后：cd ${plan.output}`);
   console.log('然后执行：continue-harness inputs inspect --json');
   console.log('继续分析：continue-harness inputs analyze --json');
   console.log('确认输入后创建首个任务：continue-harness task create --title "根据首批输入实现项目" --json');
   console.log('最后执行：continue-harness doctor');
+}
+
+async function intake(command = 'inspect') {
+  let state = await inspectIntake(cwd);
+  if (!state.exists) {
+    let name = 'project';
+    try { name = (await loadProjectConfig(cwd)).config.project.name; } catch {}
+    await createInitialIntake(cwd, name);
+    state = await inspectIntake(cwd);
+  }
+  if (wantsHelp(command)) return printHelp('intake');
+  if (command === 'answer') {
+    const project = { ...(state.project || {}) };
+    for (const key of ['type', 'goal', 'runtime', 'toolchain']) {
+      const value = option(`--${key}`);
+      if (value) project[key] = value;
+    }
+    const next = { ...state, project, updated_at: new Date().toISOString() };
+    const type = project.type;
+    const evidence = INTAKE_QUESTIONS.evidence[type] || [];
+    if (type && evidence.length) {
+      next.phase = 'evidence';
+      next.status = 'awaiting_evidence';
+      next.evidence = evidence.map((id) => ({ id, status: 'pending' }));
+      next.questions = evidence.map((id) => ({ id, question: `请确认输入或说明 ${id} 是否适用、来源和版本。` }));
+    }
+    await writeFile(resolve(cwd, '.continue-harness/intake.yaml'), YAML.stringify(next), 'utf8');
+    state = next;
+  }
+  const payload = { ...state, next_questions: state.questions || [] };
+  console.log(has('--json') ? JSON.stringify(payload, null, 2) : `Intake：${state.phase} / ${state.status}\n${(state.questions || []).map((item) => `- ${item.question}`).join('\n')}`);
 }
 
 async function skills(command = 'list') {
@@ -599,14 +652,14 @@ async function inspect() {
     agentWorkflow: {
       canonicalConstraints: await exists(resolve(cwd, 'AGENTS.md')),
       claudeAdapter: await exists(resolve(cwd, 'CLAUDE.md')),
-      claudeSkills: await exists(resolve(cwd, '.claude/skills/consumer-h5-harness/SKILL.md')),
+      claudeSkills: await exists(resolve(cwd, `.claude/skills/${config.project?.product_type === 'generic' ? 'generic-harness' : 'consumer-h5-harness'}/SKILL.md`)),
       cursorAdapter: await exists(resolve(cwd, '.cursor/rules/continue-harness.mdc')),
       guide: await exists(resolve(cwd, config.facts?.agent_entry || 'AGENTS.md')),
-      skill: await exists(resolve(cwd, '.agents/skills/consumer-h5-harness/SKILL.md')),
+      skill: await exists(resolve(cwd, `.agents/skills/${config.project?.product_type === 'generic' ? 'generic-harness' : 'consumer-h5-harness'}/SKILL.md`)),
       cli: true,
     },
   };
-  console.log(has('--json') ? JSON.stringify(payload, null, 2) : `${payload.project.name}: ${payload.project.product_type} / ${payload.stack.adapter}`);
+  console.log(has('--json') ? JSON.stringify(payload, null, 2) : `${payload.project.name}: ${payload.project.product_type || 'generic'} / ${payload.stack?.adapter || 'not-selected'}`);
 }
 
 async function resume() {
@@ -901,6 +954,10 @@ async function main() {
   if (command === 'resume') {
     if (wantsHelp(argument)) return printHelp('resume');
     return resume();
+  }
+  if (command === 'intake') {
+    if (wantsHelp(argument)) return printHelp('intake');
+    return intake(argument || 'inspect');
   }
   if (command === 'plan') return plan(argument, secondArgument);
   if (command === 'doctor') {

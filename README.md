@@ -2,13 +2,15 @@
 
 [中文](README.md) ｜ [English](README.en.md)
 
-`continue-harness` 是一个与业务无关的项目协作与质量保障工具。它提供可追踪的项目约束、可恢复的 AI 交接、基于配置的验证、诊断、报告、初始化模板和 CI 入口。
+`continue-harness` 是一个与技术栈无关的项目约束与质量保障工具。它提供可追踪的项目事实、可恢复的 AI 交接、输入与决策管理、结构化日志、自动化验证、验收闭环和可审计报告。
 
-当前仓库已内置并验证的组合是：
+当前仓库已内置的可选适配器包括：
 
 - 产品形态：`consumer-h5`
 - 平台适配器：`web-mobile`
 - 技术栈适配器：`uni-app`
+
+以上适配器只在显式选择对应 preset 时启用，默认项目不绑定语言、框架或技术栈。
 
 ## 安装
 
@@ -28,14 +30,16 @@ node packages/cli/bin/continue-harness.mjs version
 ### 创建新项目
 
 ```bash
-continue-harness plan create my-h5 --json
-continue-harness create my-h5
-cd my-h5
+continue-harness plan create project-core --json
+continue-harness create project-core
+cd project-core
+continue-harness intake inspect --json
+continue-harness intake answer --type backend --json
 continue-harness inspect --json
 continue-harness doctor
 ```
 
-`create` 默认安装生成项目的依赖。网络受限时可以使用 `continue-harness create my-h5 --skip-install`，然后在生成目录中自行执行 `pnpm install`。
+`create` 默认只生成约束容器，不创建业务代码或技术栈依赖。确认项目类型后，使用 `intake answer` 生成最小必要输入清单；技术栈适配器按需启用。
 
 ### 接入已有项目
 
@@ -86,7 +90,7 @@ continue-harness -v
 continue-harness --version
 ```
 
-`create` 会生成一个真实的 Consumer H5 项目，包含 uni-app、Vue 3、Vite、Playwright、项目事实、Agent 自动化说明和默认的 Consumer H5 聚合 Skill。默认会安装项目依赖；离线脚手架可以使用 `--skip-install`。`init` 会接入已有项目，不覆盖项目自有文件。AI Agent 应先使用 `inspect` 和 `plan`，再执行变更，并根据变更类型自动选择验证模式。
+`create --preset consumer-h5` 才会生成 uni-app、Vue 3、Vite、Playwright 等 H5 工程内容。`init` 会接入已有项目，不覆盖项目自有文件。AI Agent 应先恢复上下文和 Intake，再登记证据、创建任务，并根据项目配置选择验证模式。
 
 如果任务需要，仍可通过显式安装使用命令级 Skill。
 

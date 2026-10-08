@@ -1,0 +1,7 @@
+.continue-harness/logs/*.ndjson
+.continue-harness/reports/
+.continue-harness/tmp/
+tmp/
+tmp/continue-harness/
+.env*
+!.env.example

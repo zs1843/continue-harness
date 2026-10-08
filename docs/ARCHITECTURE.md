@@ -26,6 +26,12 @@ Core owns:
 
 Core does not understand UI pages, business domains, product copy, brands, or API payloads.
 
+The target architecture is project-neutral by default. A generic project receives constraints,
+evidence registration, task/history state, context snapshots, structured logs, command orchestration,
+and acceptance closure without receiving a language, framework, UI, or page template. Product, runtime,
+and toolchain behavior is enabled only after project facts select an Adapter or preset. See
+`docs/GENERIC_HARNESS_DESIGN.md` for the multi-round intake and context model.
+
 Profiles, Platform Adapters, and Stack Adapters are independent extension points. The entries below
 are the initial public implementations, not a limitation imposed by Core; other combinations can be
 supported when their corresponding descriptors are available.

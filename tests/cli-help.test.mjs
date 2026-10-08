@@ -54,7 +54,7 @@ test('prints topic help through help subcommand', () => {
 test('prints topic help through subcommand help flag', () => {
   const result = run(['verify', '-h']);
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /用法：\n  continue-harness verify <模式> \[--json\]/);
+  assert.match(result.stdout, /用法：\n\x20\x20continue-harness verify <模式> \[--json\]/);
 });
 
 test('unknown command exits non-zero and shows main help', () => {

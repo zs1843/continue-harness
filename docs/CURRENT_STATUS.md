@@ -4,6 +4,14 @@ Updated: 2026-09-29
 
 ## Completed
 
+- Added repository CI on Node.js 20 with frozen installs, syntax checks, tests, Doctor, Audit verification,
+  documentation build, and high-severity dependency audits. The nested documentation site now has an
+  explicit independent-install policy and a root `docs:install` command.
+- Added root ESLint for Harness JavaScript sources and real generated-project ESLint plus `vue-tsc --noEmit`
+  gates. CI installs the generated project's locked dependencies independently before running these checks.
+- Added standards-compliant Ajv project-schema validation and tracked-file safety checks to the CI gate.
+- Added Core/CLI tarball pack checks so package contents are validated before a future release decision.
+
 - Created the Core and CLI workspace packages.
 - Added YAML project configuration loading and focused runtime validation.
 - Added Quick, Feature, Visual, and Audit command resolution.
@@ -138,15 +146,16 @@ node ../../packages/cli/bin/continue-harness.mjs verify audit
   repository, input manifest, verification reports, screenshots, and measured outcomes have not yet
   been linked from this repository. The public evidence trail is therefore still incomplete.
 
-- Runtime validation does not yet execute the JSON Schema through a standards-compliant validator.
+- Runtime validation still uses focused JavaScript rules; the CI contract now additionally validates the
+  project configuration with the standards-compliant JSON Schema validator.
 - Initialization deliberately provides only a lightweight terminal plan; it does not generate
   conflict patches, perform three-way merges, or roll back exceptional mid-write filesystem errors.
 - Upgrade is not implemented.
 - Online Apifox synchronization and token-based OpenAPI fetching are not implemented; the current
   adapter starts from a local Apifox OpenAPI JSON export. Referenced parameters, advanced media
   types, discriminator mapping, and provider-specific extensions remain future work.
-- Doctor does not yet validate CI entry points or sensitive source contents beyond file naming and
-  `.env*` ignore rules.
+- Doctor validates the repository CI entry point and `.env*` ignore rules; CI additionally checks tracked
+  sensitive/generated paths, while full CI job semantic analysis remains future work.
 - Platform Adapter defaults are not yet fully materialized automatically; the consumer-H5 preset
   configures its Playwright mobile viewport explicitly.
 - Input analysis is heuristic and text-first; PDF/image/RP binary inputs still require Agent or

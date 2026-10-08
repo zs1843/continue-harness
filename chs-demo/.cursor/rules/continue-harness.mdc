@@ -1,0 +1,6 @@
+---
+description: Load the project's canonical Harness constraints
+alwaysApply: true
+---
+
+请读取根目录 `AGENTS.md`，它是唯一的项目约束本体。

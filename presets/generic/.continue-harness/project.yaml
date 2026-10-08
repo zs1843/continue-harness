@@ -1,0 +1,22 @@
+harness:
+  package: '@company/continue-harness'
+  version: '0.1.0'
+  mode: generic
+
+project:
+  name: __PROJECT_NAME__
+  product_type: generic
+
+intake:
+  phase: basic_info
+  status: awaiting_answers
+  state: .continue-harness/intake.yaml
+
+commands: {}
+verify:
+  quick:
+    status: not_configured
+    commands: []
+  audit:
+    status: not_configured
+    commands: []

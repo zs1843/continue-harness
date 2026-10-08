@@ -1,0 +1,7 @@
+schema: ui-adjustments/v1
+evaluation:
+  first_pass_visual_diff_ratio: null
+  final_visual_diff_ratio: null
+  generation_iterations: 0
+  manual_adjustment_count: 0
+adjustments: []

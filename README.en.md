@@ -2,15 +2,18 @@
 
 [中文](README.md) ｜ [English](README.en.md)
 
-`continue-harness` is a business-agnostic project collaboration and quality harness. It provides
-traceable project constraints, resumable AI handoffs, configuration-driven verification, diagnostics,
-reports, initialization templates, and CI entry points.
+`continue-harness` is a technology-neutral project constraint and quality harness. It provides
+traceable project facts, resumable AI handoffs, input and decision management, structured logs,
+automated verification, acceptance closure, and auditable reports.
 
-The repository currently includes and validates this combination:
+The repository currently includes these optional adapters:
 
 - Product profile: `consumer-h5`
 - Platform adapter: `web-mobile`
 - Stack adapter: `uni-app`
+
+These adapters are enabled only by an explicit preset. The default project is not bound to a language,
+framework, or technology stack.
 
 ## Installation
 
@@ -30,14 +33,18 @@ Requirements: Node.js 20 or later, and pnpm 10.12.1 or a compatible version. The
 ### Create a project
 
 ```bash
-continue-harness plan create my-h5 --json
-continue-harness create my-h5
-cd my-h5
+continue-harness plan create project-core --json
+continue-harness create project-core
+cd project-core
+continue-harness intake inspect --json
+continue-harness intake answer --type backend --json
 continue-harness inspect --json
 continue-harness doctor
 ```
 
-`create` installs dependencies for the generated project by default. For an offline scaffold, use `continue-harness create my-h5 --skip-install`, then run `pnpm install` in the generated directory.
+`create` generates only a constraint container by default; it does not create business code or
+technology-specific dependencies. After confirming the project type, use `intake answer` to generate
+the minimum evidence checklist and enable adapters only when needed.
 
 ### Adopt an existing project
 
@@ -88,11 +95,10 @@ continue-harness -v
 continue-harness --version
 ```
 
-`create` generates a real consumer-H5 project with uni-app, Vue 3, Vite, Playwright, project facts,
-automatic Agent instructions, and the default aggregate Consumer H5 workflow Skill. It installs
-project dependencies by default; use `--skip-install` for offline scaffolding. `init` connects an
-existing project without overwriting project-owned files. AI agents should use `inspect` and `plan`
-before mutation, then invoke the appropriate verification mode automatically.
+`create --preset consumer-h5` generates the uni-app, Vue 3, Vite, and Playwright H5 project contents.
+`init` connects an existing project without overwriting project-owned files. AI agents should restore
+context and Intake first, then register evidence, create tasks, and select verification from project
+configuration.
 
 Command-specific Skills remain available through explicit installation when a task needs them.
 

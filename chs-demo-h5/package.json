@@ -1,0 +1,63 @@
+{
+  "name": "chs-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@10.12.1",
+  "scripts": {
+    "dev": "pnpm run dev:h5",
+    "dev:h5": "uni -p h5",
+    "dev:h5:host": "uni -p h5 --host 0.0.0.0",
+    "build": "pnpm run build:h5",
+    "build:h5": "uni build -p h5",
+    "preview": "pnpm run preview:h5",
+    "preview:h5": "vite preview --outDir dist/build/h5 --host 127.0.0.1 --port 4173",
+    "type-check": "vue-tsc --noEmit",
+    "lint": "eslint . --ext .js,.cjs,.mjs,.ts,.vue",
+    "format:check": "prettier --check .",
+    "format": "prettier --write .",
+    "ci:gate": "pnpm format:check && pnpm type-check && pnpm lint && pnpm test && pnpm build:h5",
+    "test": "node --test tests/*.test.mjs",
+    "test:coverage": "node tests/coverage-closure.mjs",
+    "test:dev-ready": "node tests/e2e/dev-ready.mjs",
+    "test:runtime": "playwright test tests/e2e/runtime.spec.mjs",
+    "test:interaction": "playwright test --grep @interaction",
+    "test:visual": "playwright test tests/e2e/visual.spec.mjs",
+    "test:visual:update": "playwright test tests/e2e/visual.spec.mjs --update-snapshots",
+    "harness:inspect": "continue-harness inspect",
+    "harness:doctor": "continue-harness doctor",
+    "harness:quick": "continue-harness verify quick",
+    "harness:feature": "continue-harness verify feature",
+    "harness:runtime": "continue-harness verify runtime",
+    "harness:interaction": "continue-harness verify interaction",
+    "harness:visual": "continue-harness verify visual",
+    "harness:audit": "continue-harness verify audit"
+  },
+  "dependencies": {
+    "@dcloudio/uni-app": "3.0.0-5000720260410001",
+    "@dcloudio/uni-components": "3.0.0-5000720260410001",
+    "@dcloudio/uni-h5": "3.0.0-5000720260410001",
+    "vue": "3.4.21",
+    "vue-i18n": "9.1.10"
+  },
+  "devDependencies": {
+    "@dcloudio/types": "3.4.28",
+    "@dcloudio/uni-cli-shared": "3.0.0-5000720260410001",
+    "@dcloudio/uni-stacktracey": "3.0.0-5000720260410001",
+    "@dcloudio/vite-plugin-uni": "3.0.0-5000720260410001",
+    "@playwright/test": "1.62.1",
+    "@typescript-eslint/eslint-plugin": "7.18.0",
+    "@typescript-eslint/parser": "7.18.0",
+    "@vue/runtime-core": "3.4.21",
+    "eslint": "8.57.1",
+    "eslint-plugin-vue": "9.33.0",
+    "prettier": "3.8.1",
+    "typescript": "5.5.4",
+    "vite": "5.2.8",
+    "vue-eslint-parser": "9.4.3",
+    "vue-tsc": "2.2.12"
+  }
+}

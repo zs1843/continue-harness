@@ -1,0 +1,4 @@
+interface:
+  display_name: "Consumer H5 Harness"
+  short_description: "创建和维护可追溯、可验证的 Consumer H5 项目"
+  default_prompt: "使用 $consumer-h5-harness 创建或更新这个 Consumer H5 项目，读取 PRD/RP/UI/API/assets 输入，按中文约束实现、验证并创建任务快照。"

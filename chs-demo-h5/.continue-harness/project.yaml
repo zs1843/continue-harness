@@ -1,0 +1,68 @@
+harness:
+  package: '@company/continue-harness'
+  version: '0.1.0'
+project:
+  name: chs-demo
+  product_type: consumer_h5
+  platforms: [web_mobile]
+stack:
+  adapter: uni-app
+  framework: vue
+  language: typescript
+  bundler: vite
+  package_manager: pnpm
+ui:
+  system:
+    status: not_configured
+facts:
+  agent_entry: AGENTS.md
+  project_map: docs/PROJECT_MAP.md
+  design_guide: docs/DESIGN.md
+  design_tokens: docs/design/tokens.json
+  product_guide: docs/PRODUCT.md
+  current_status: docs/CURRENT_STATUS.md
+  decisions: docs/DECISIONS.md
+  prd_history: docs/history/PRD_HISTORY.md
+  change_history: docs/history/CHANGE_HISTORY.md
+  implementation_coverage: docs/IMPLEMENTATION_COVERAGE.md
+  page_flow_model: .continue-harness/models/page-flow.yaml
+  layout_specs: .continue-harness/models/layout-specs.yaml
+  ui_adjustments: .continue-harness/ui/adjustments.yaml
+commands:
+  format_check: pnpm format:check
+  lint: pnpm lint
+  type_check: pnpm type-check
+  unit_test: pnpm test
+  coverage_closure: pnpm test:coverage
+  build: pnpm build:h5
+  dev_ready: pnpm test:dev-ready
+  runtime: pnpm test:runtime
+  interaction: pnpm test:interaction
+  visual: pnpm test:visual
+verify:
+  quick:
+    { fail_fast: true, commands: [format_check, unit_test, type_check, lint] }
+  feature:
+    {
+      fail_fast: true,
+      commands:
+        [format_check, unit_test, type_check, lint, coverage_closure, build],
+    }
+  runtime: { fail_fast: true, commands: [dev_ready, runtime] }
+  interaction: { status: not_configured }
+  visual: { fail_fast: true, commands: [visual] }
+  audit:
+    {
+      fail_fast: false,
+      commands:
+        [
+          format_check,
+          unit_test,
+          type_check,
+          lint,
+          coverage_closure,
+          build,
+          dev_ready,
+          runtime,
+        ],
+    }
