@@ -101,6 +101,11 @@ test('creates a generic constraint-only project by default', async () => {
   assert.match(await readFile(resolve(project, '.continue-harness/project.yaml'), 'utf8'), /mode: generic/);
   assert.match(await readFile(resolve(project, 'AGENTS.md'), 'utf8'), /不得猜测或生成框架模板/);
   assert.match(await readFile(resolve(project, '.continue-harness/intake.yaml'), 'utf8'), /phase: basic_info/);
+  await assert.rejects(readFile(resolve(project, 'docs/CONSTRAINTS.md')), /ENOENT/);
+  await assert.rejects(readFile(resolve(project, 'docs/CHANGELOG.md')), /ENOENT/);
+  await assert.rejects(readFile(resolve(project, 'docs/PROJECT_MAP.md')), /ENOENT/);
+  assert.match(await readFile(resolve(project, 'docs/ACCEPTANCE.md'), 'utf8'), /验收标准/);
+  assert.match(await readFile(resolve(project, 'docs/DECISIONS.md'), 'utf8'), /决策记录/);
   await assert.rejects(readFile(resolve(project, 'package.json')), /ENOENT/);
   await assert.rejects(readFile(resolve(project, 'src/pages/index/index.vue')), /ENOENT/);
 });

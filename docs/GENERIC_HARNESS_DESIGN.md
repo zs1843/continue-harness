@@ -39,9 +39,8 @@ Core 不应导入 Vue、uni-app、React、Java、Go、Node、H5 或任何具体 
 - `.continue-harness/project.yaml`：项目事实、输入策略、命令和验收配置。
 - `.continue-harness/inputs/`：原始证据登记入口。
 - `docs/PROJECT.md`：项目目标、范围和非目标。
-- `docs/CONSTRAINTS.md`：长期有效的工程约束。
 - `docs/DECISIONS.md`：持续影响实现的架构决策。
-- `docs/CHANGELOG.md`：Harness 和项目协作变更记录。
+- `.continue-harness/logs/commands.ndjson` 和任务历史：记录可追溯的命令、验证和交接事实；需要面向用户的变更日志时再按项目需求启用。
 - `docs/ACCEPTANCE.md`：验收标准和覆盖状态。
 - `docs/history/`：任务历史、快照和上下文交接记录。
 - `.continue-harness/logs/`：命令与 Agent 运行日志目录。

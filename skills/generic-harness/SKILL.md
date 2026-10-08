@@ -15,8 +15,10 @@ Intake 第二轮必须逐项确认输入：必需项要有来源，非适用项�
 1. `.continue-harness/project.yaml`
 2. `.continue-harness/intake.yaml`
 3. `AGENTS.md`
-4. `docs/PROJECT.md`、`docs/CONSTRAINTS.md`、`docs/CURRENT_STATUS.md`
-5. 当前任务、有效输入、决策、快照和日志
+4. `docs/PROJECT.md`、`docs/CURRENT_STATUS.md`、`docs/ACCEPTANCE.md`
+5. `docs/DECISIONS.md`、当前任务、有效输入、快照和日志
+
+职责边界：`inputs/` 保存原始证据，`logs/` 保存追加式执行轨迹，`docs/history/` 保存不可变交接快照，`docs/DECISIONS.md` 保存长期决策；不要在这些目录之间复制同一份内容。
 
 ## 交接要求
 

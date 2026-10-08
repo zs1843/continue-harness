@@ -67,6 +67,30 @@ The Harness can only be called Pilot-complete when all of the following hold:
 
 This run proves the generic collaboration loop and snapshot mechanism, and shows that two projects with different stacks can reach `passed` through the same protocol. Future business work must create new tasks and register permission, API, visual, or deployment evidence; Pilot completion is not product completion.
 
+## Capability boundaries and evidence
+
+### Verified capabilities
+
+| Capability | Evidence | Current conclusion |
+| --- | --- | --- |
+| Cross-stack onboarding | HeTun-Site (React/Vite) and Workbench-Admin (Vue 2/Vue CLI) used the same generic Harness protocol | Core is not coupled to one business framework; project configuration supplies commands and engineering gates |
+| Multi-round Intake | Both projects completed basic facts, evidence registration, and non-applicable evidence decisions | The Harness asks for project facts first, then narrows evidence questions by project type |
+| Traceable inputs | Real PRDs, sources, versions, hashes, and task IDs are recorded in the manifest and snapshots | Placeholder evidence is rejected and original inputs remain unchanged |
+| Engineering and acceptance closure | Both project Audits are `passed`; unresolved acceptance makes Audit fail | Build, test, lint, or smoke commands come from project configuration, while acceptance independently affects the result |
+| Context recovery and handoff | Both projects generated immutable T001 snapshots containing inputs, decisions, risks, and latest verification | A new Agent can recover from task history instead of relying on the previous conversation |
+| Logs and security boundaries | Command logs, reports, and snapshots are linked; `.env.*` files are excluded and harmless filenames no longer trigger false positives | Execution remains traceable while reducing the risk of sensitive content entering snapshots |
+| Regression protection | Harness root `pnpm test` passed 70/70 and the Site build passed | Core/CLI closure behavior has automated regression coverage |
+
+### Not yet verified
+
+- Broad applicability across enough languages, platforms, and deployment environments.
+- Quantified improvement in delivery speed, rework, defect rate, or Agent cost.
+- Replacement of product-owner confirmation for business, permission, API, visual, and release outcomes.
+- Product completeness: a `passed` Pilot closes the T001 engineering gates and acceptance boundaries, not every product requirement.
+- Elimination of historical formatting debt, legacy dependencies, performance warnings, or business-scope gaps.
+
+The current version can therefore substantiate that different projects can collaborate, verify, recover, and hand off through one traceable protocol. It cannot substantiate that it can automatically complete arbitrary software projects or inevitably improve engineering efficiency.
+
 ## Maintenance
 
 When Harness behavior changes, update together:
