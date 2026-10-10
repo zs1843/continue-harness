@@ -42,8 +42,8 @@ pnpm docs:build
 site/continue-harness-docs/docs/.vitepress/dist/
 ```
 
-打包命令：
+在上述站点目录中执行打包命令：
 
 ```bash
-tar -czf continue-harness-docs.tar.gz -C site/continue-harness-docs/docs/.vitepress/dist .
+tar -czf continue-harness-docs.tar.gz -C docs/.vitepress/dist .
 ```

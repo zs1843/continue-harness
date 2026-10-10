@@ -38,6 +38,6 @@ continue-harness verify feature
 continue-harness resume --json
 ```
 
-Creation prepares constraints and collaboration records; it does not create business implementation. During adoption, the plan distinguishes files to create, unchanged managed files, and project-modified files. Modified files are preserved while missing files can still be added. A write error or concurrent change may leave a partial result; the process does not promise transactional rollback.
+Default creation prepares constraints and collaboration records; consult the plan and execution result for generation and dependency installation by an explicitly selected specialized preset. During adoption, the plan distinguishes files to create, unchanged managed files, and project-modified files. Modified files are preserved while missing files can still be added. A write error or concurrent change may leave a partial result; the process does not promise transactional rollback.
 
 See the [CLI reference](/en/reference/commands) for command details.

@@ -27,7 +27,7 @@ Task IDs usually look like `T001`. As applicable to the task, the ID connects:
 | Task type | Read |
 | --- | --- |
 | Business implementation | manifest, PRODUCT, PRD/RP |
-| UI adjustment | DESIGN, Design Tokens, UI input, visual adjustment records |
+| UI adjustment | Confirmed applicable design references, visual inputs, and verification records |
 | API integration | API input, OpenAPI snapshot, selection.yaml |
 | Architecture decision | DECISIONS, ARCHITECTURE, related history |
 

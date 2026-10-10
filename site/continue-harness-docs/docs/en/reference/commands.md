@@ -10,7 +10,7 @@ This page is a CLI reference for maintainers who need direct operation, automati
 | `create` | Create a generic or explicitly selected preset project | Start a new project | Yes | `continue-harness-create` |
 | `init` | Adopt an existing project | Preserve project changes and add missing Harness files | Yes; creates missing files individually without overwriting existing files | `continue-harness-init` |
 | `migrate` | Move `.fe-harness` to `.continue-harness` | Upgrade an existing state directory | Yes; no writes on conflict | CLI only |
-| `intake` | Confirm project facts and candidate evidence items in rounds | Project facts or evidence applicability is not settled | `inspect` read-only; `answer` and `evidence` write `.continue-harness/intake.yaml` | Part of `create` / `init`; no standalone Skill |
+| `intake` | Confirm project facts and candidate evidence items in rounds | Project facts or evidence applicability is not settled | `inspect` creates `.continue-harness/intake.yaml` when absent and otherwise reads it; `answer` and `evidence` write it | Part of `create` / `init`; no standalone Skill |
 | `plan` | Print a structured create/init plan | Preview before writing | No | `continue-harness-plan` |
 | `inspect` | Read project facts and capability state | Before an Agent starts a task | No | `continue-harness-inspect` |
 | `doctor` | Run read-only diagnostics | Check config, scripts, inputs, Tokens, Agent readiness | No | `continue-harness-doctor` |
@@ -66,7 +66,7 @@ continue-harness inputs analyze --json
 continue-harness inputs diff --json
 ```
 
-`inspect` compares the input directory with `manifest.yaml`, `analyze` extracts evidence conclusions and same-key conflicts, and `diff` reports whether earlier conclusions still apply after an input change.
+`inspect` compares the input directory with `manifest.yaml`; `analyze` extracts text clues and same-key conflicts; `diff` currently reuses the `inspect` result. File drift checks require a registered `sha256` and do not compare historical analysis conclusions.
 
 ## Tasks
 
@@ -85,7 +85,7 @@ The task ID is a stable identity that connects PRD/RP excerpts, operationIds, im
 continue-harness verify feature
 ```
 
-`verify` accepts six mode names; their definitions and gate behavior are in [Verification modes](./verification-modes.md). A mode maps to entries in `commands` through `verify` in `.continue-harness/project.yaml`; the CLI embeds no test commands of its own.
+`verify` documents six common modes and also accepts other mode names defined in project configuration; their definitions and gate behavior are in [Verification modes](./verification-modes.md). A mode maps to entries in `commands` through `verify` in `.continue-harness/project.yaml`; the CLI embeds no test commands of its own.
 
 ## Diagnostics
 
@@ -122,7 +122,7 @@ continue-harness design tokens discover --json
 continue-harness design tokens diff --json
 ```
 
-`inspect` checks the single source of truth and Token status; `discover` read-only scans style files under `src/` and prints candidates; `diff` is read-only and reports differences only when the project supplies before/after versions.
+`inspect` checks the single source of truth and Token status; `discover` read-only scans style files under `src/` and prints candidates; `diff` currently reuses the `inspect` result and does not compare versions; collaborators must perform that comparison separately.
 
 ## UI System
 

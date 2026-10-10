@@ -91,7 +91,7 @@ Do not create parallel ledgers or add visual-value files unrelated to the task.
 3. When UI/RP exist but Tokens are pending extraction, confirm the input version and visual authority before editing `docs/design/tokens.json`.
 4. `TOKENS.md` explains only; it does not copy a second set of values.
 5. When the user explicitly overrides the UI, record before and after values, source, Token version, affected pages and components, and reason.
-6. Run `continue-harness design tokens diff --json`; it is read-only and reports a diff only when the project supplies before/after versions. Record changes by comparing the values and updating change history.
+6. `continue-harness design tokens diff --json` currently returns the same inspection result as `inspect`; it does not compare versions. Have the Agent compare before/after values separately and update change history when needed.
 7. Do not claim verified visual fidelity when no visual baseline exists.
 8. Legacy extraction establishes current facts only and never rewrites the original styles; mark high-frequency repeated values as inferred candidates, mark multiple variable sets or same-semantics-different-value cases as conflicts, and write the single source of truth only after user confirmation.
 

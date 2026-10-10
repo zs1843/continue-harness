@@ -12,7 +12,7 @@ Update `AGENTS.md` when constraints change. Update `.continue-harness/project.ya
 
 1. Read `AGENTS.md`, `.continue-harness/project.yaml`, and project fact documents.
 2. Run `inspect` and `doctor` (Skills: `continue-harness-inspect`, `continue-harness-doctor`) to check readiness.
-3. Read the PRD/RP/UI/API inputs attached to the current task instead of all inputs.
+3. Read the confirmed inputs needed for the current task instead of all inputs.
 4. Implement within the project's existing directory and dependency boundaries.
 5. Select a `verify` mode by change type (Skill: `continue-harness-verify`); investigate failures, rerun relevant checks after a fix, and pause for confirmation when the safe resolution is unclear.
 6. Update status, decisions, history, and the task snapshot.

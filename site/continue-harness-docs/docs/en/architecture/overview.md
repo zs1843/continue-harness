@@ -33,4 +33,4 @@ Core provides configuration loading, Intake, input registration, task history, c
 
 See the [Pilot record](../showcase/real-project-pilot.md) and repository architecture document for current implementation and limits. See [Input registration](./inputs.md) for how project inputs are selected.
 
-The common collaboration workflow does not require one category of project material. This does not mean arbitrary project shapes can be supported by adding declarations alone. Some configuration values and diagnostic paths are fixed in the implementation; additional support requires code, tests, and documentation, and cannot be inferred from directory names.
+Configured Intake requires a confirmed requirements source; other candidate inputs may be marked not applicable with a reason, and legacy projects without Intake remain compatible. Accepting project-defined facts does not mean arbitrary project shapes can be supported by adding declarations alone. Some configuration values and diagnostic paths are fixed in the implementation; additional support requires code, tests, and documentation, and cannot be inferred from directory names.

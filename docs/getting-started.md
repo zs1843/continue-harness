@@ -37,7 +37,7 @@ continue-harness verify feature
 continue-harness resume --json
 ```
 
-Creation prepares constraint and collaboration records; it does not create business implementation. Intake and task scope determine which input sources and project checks are applicable. Unconfirmed facts remain pending.
+Default creation prepares constraint and collaboration records. Explicitly selected specialized presets may generate project files and install dependencies; consult the plan and execution result for scope. Intake and task scope determine which input sources and project checks are applicable. Unconfirmed facts remain pending.
 
 ## Project ownership
 

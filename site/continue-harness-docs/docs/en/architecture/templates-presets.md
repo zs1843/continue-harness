@@ -14,7 +14,7 @@ The creation or adoption plan lists the files to be written. Existing project fi
 
 ## Creation boundary
 
-Creating a project prepares constraint and collaboration containers. It does not create business pages, domain states, interface implementations, or other project code. Adoption reuses existing facts and documents where possible to avoid duplicate records.
+Default creation prepares constraint and collaboration containers. Explicit specialized presets may generate project files and install dependencies; consult the plan and execution result for scope. Adoption reuses existing facts and documents where possible to avoid duplicate records.
 
 ## Capability boundary
 

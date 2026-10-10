@@ -45,6 +45,6 @@ continue-harness verify feature
 
 完整命令清单见[命令](/reference/commands)。
 
-示例命令仅展示入口，不保证项目已有完整任务、输入或验证配置；未配置的验证模式会返回 `not_configured`，不能解释为通过。
+示例命令仅展示入口，不保证项目已有完整任务、输入或验证配置；完全缺少验证模式定义时命令报错；显式设置 `status: not_configured` 时生成未配置报告，两者都不能解释为通过。
 
 </details>

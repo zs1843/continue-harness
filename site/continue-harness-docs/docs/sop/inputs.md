@@ -49,7 +49,7 @@ continue-harness inputs analyze --json
 
 ## 变更
 
-用 `inputs` Skill 查看已登记文件和结论的变化。
+用 `inputs` Skill 检查已登记文件的当前状态及哈希漂移。
 
 **Skill**：`continue-harness-inputs`
 
@@ -59,7 +59,7 @@ continue-harness inputs analyze --json
 continue-harness inputs diff --json
 ```
 
-`diff` 报告已登记文件和分析结论的变化，用于判断旧结论是否仍可继续使用。
+`diff` 当前复用 `inspect` 的检查结果；manifest 已登记 `sha256` 时，可发现文件哈希漂移。该命令不比较历史分析结论，旧结论是否仍适用需由协作者审查。
 
 ## 可选的视觉取值整理
 

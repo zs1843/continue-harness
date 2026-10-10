@@ -10,7 +10,7 @@
 | `create` | 创建通用项目或指定 preset 的项目 | 新项目从零开始 | 是 | `continue-harness-create` |
 | `init` | 接入已有项目 | 保留项目修改并补充缺失的 Harness 文件 | 是，逐文件创建，不覆盖已有文件 | `continue-harness-init` |
 | `migrate` | 迁移旧 `.fe-harness` 目录 | 升级已有项目状态目录 | 是，冲突时不写 | 仅 CLI |
-| `intake` | 按轮次确认项目事实和候选输入项 | 项目事实或输入适用性尚未确认 | `inspect` 只读；`answer`、`evidence` 写 `.continue-harness/intake.yaml` | 随 `create` / `init` 流程；没有独立 Skill |
+| `intake` | 按轮次确认项目事实和候选输入项 | 项目事实或输入适用性尚未确认 | `inspect` 在记录不存在时创建 `.continue-harness/intake.yaml`，已有记录时只读；`answer`、`evidence` 写该文件 | 随 `create` / `init` 流程；没有独立 Skill |
 | `plan` | 输出 create/init 结构化计划 | 写文件前预览 | 否 | `continue-harness-plan` |
 | `inspect` | 查看项目事实和能力 | Agent 开始任务前 | 否 | `continue-harness-inspect` |
 | `doctor` | 只读诊断 | 排查配置、脚本、输入、Token、Agent readiness | 否 | `continue-harness-doctor` |
@@ -66,7 +66,7 @@ continue-harness inputs analyze --json
 continue-harness inputs diff --json
 ```
 
-`inspect` 比对输入目录与 `manifest.yaml`，`analyze` 抽取证据结论和同 key 冲突，`diff` 报告输入变化后旧结论是否仍可使用。
+`inspect` 比对输入目录与 `manifest.yaml`；`analyze` 抽取文本线索和同 key 冲突；`diff` 当前复用 `inspect` 的检查结果。文件漂移检查依赖 manifest 中登记的 `sha256`，不比较历史分析结论。
 
 ## 任务
 
@@ -85,7 +85,7 @@ continue-harness task snapshot T001 --title "首次需求" --request "完成页�
 continue-harness verify feature
 ```
 
-`verify` 接受 6 个模式名，模式定义和门禁行为见[验证模式](./verification-modes.md)。模式在 `.continue-harness/project.yaml` 的 `verify` 中映射到 `commands`，CLI 不内置具体测试命令。
+`verify` 提供六个常用模式说明，也接受项目配置中定义的其他模式名，模式定义和门禁行为见[验证模式](./verification-modes.md)。模式在 `.continue-harness/project.yaml` 的 `verify` 中映射到 `commands`，CLI 不内置具体测试命令。
 
 ## 诊断
 
@@ -122,7 +122,7 @@ continue-harness design tokens discover --json
 continue-harness design tokens diff --json
 ```
 
-`inspect` 检查唯一真值文件和 Token 状态；`discover` 只读扫描 `src/` 下的样式文件并输出候选值；`diff` 只读，仅当项目提供前后版本时给出差异。
+`inspect` 检查唯一真值文件和 Token 状态；`discover` 只读扫描 `src/` 下的样式文件并输出候选值；`diff` 当前复用 `inspect` 的检查结果，不计算前后版本差异；版本比较由协作者另行完成。
 
 ## UI System
 

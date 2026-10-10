@@ -1,6 +1,6 @@
 # Create a project
 
-Continue Harness creates a workspace for constraints and collaboration, not a language or framework starter. Use `continue-harness-create` with your Agent.
+The default Continue Harness creation workflow prepares a workspace for constraints and collaboration. Use `continue-harness-create` with your Agent.
 
 ## Confirm project facts
 
@@ -15,7 +15,7 @@ After these facts are confirmed, decide which inputs the task needs. Requirement
 - The canonical `AGENTS.md` constraints and thin provider entry points.
 - Project facts, current status, decisions, acceptance records and handoff history scaffolding.
 
-Creation does not generate business code, pick a framework or install application dependencies. It does not mean the project has been implemented or accepted.
+Default creation prepares collaboration records only. An explicitly selected specialized preset may generate project files and install dependencies; consult the plan and execution result for the scope. Creation does not mean the project has been implemented or accepted.
 
 ## Start the first task
 

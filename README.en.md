@@ -6,7 +6,7 @@ Continue Harness is a recoverable project collaboration and quality harness. It 
 
 **Requirement → implementation item → acceptance item → evidence → handoff state**
 
-The workflow confirms project facts through conversation, registers task-relevant evidence, defines acceptance criteria, runs the project's own checks, and saves a recoverable handoff. Creation and adoption provide constraint and collaboration records; they do not generate an application starter.
+The workflow confirms project facts through conversation, registers task-relevant evidence, defines acceptance criteria, runs the project's own checks, and saves a recoverable handoff. Default creation and adoption provide constraint and collaboration records; consult the plan and execution result for generation and dependency installation by an explicitly selected specialized preset.
 
 ## Get started
 

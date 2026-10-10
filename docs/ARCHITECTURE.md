@@ -8,7 +8,7 @@ Continue Harness maintains the chain:
 Requirement → implementation item → acceptance item → evidence → handoff state
 ```
 
-Its common workflow confirms project facts, registers applicable inputs, records task and acceptance links, executes project-declared checks, and preserves logs and snapshots for recovery. Project facts determine which inputs and checks apply; no single input category is mandatory for every project.
+Its common workflow confirms project facts, registers applicable inputs, records task and acceptance links, executes project-declared checks, and preserves logs and snapshots for recovery. Project facts determine which inputs and checks apply; configured Intake requires a confirmed requirements source, while other candidate inputs may be marked not applicable with a reason. Projects without Intake remain compatible.
 
 The existing acceptance ledger is the relationship authority. Reports bind results to task and content fingerprints; snapshots retain reports and context. Resume restores the current task, relevant inputs, decisions, risks, logs, and next actions. This supports traceability and recovery; it does not prove business correctness or detect every change in unregistered external dependencies.
 
@@ -26,12 +26,12 @@ Each target project owns `.continue-harness/project.yaml`. It records confirmed 
 
 ## Verification modes
 
-- Quick: ordered checks with fail-fast behavior.
+- Quick: ordered checks, stopping at the first non-passing result unless `fail_fast: false` is configured.
 - Feature: configured checks plus requirement-to-acceptance closure.
 - Runtime, interaction, and visual: run only when explicitly configured.
-- Audit: collect all configured results and apply the acceptance closure gate.
+- Audit: run this mode’s configured commands and apply the acceptance closure gate; collecting results after failure requires explicit `fail_fast: false`.
 
-An unconfigured check is not a pass. External conditions are recorded as blocked; unresolved acceptance or evidence links prevent a passing closure result.
+A missing mode definition causes an error without a report; explicit `status: not_configured` produces an unconfigured report. Neither means passed. Some process-start and port-permission errors are recognized as blocked; other external conditions require log review. Unresolved acceptance or evidence links prevent a passing closure result.
 
 ## Safety model
 

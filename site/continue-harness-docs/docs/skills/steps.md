@@ -91,7 +91,7 @@ runtime、interaction、visual 等模式按实际项目配置使用，不为所�
 3. 有 UI/RP 但 Token 待提炼时，先确认输入版本和视觉权威，再修改 `docs/design/tokens.json`。
 4. `TOKENS.md` 只解释，不复制第二套数值。
 5. 用户显式覆盖 UI 时记录前后值、来源、Token 版本、影响页面与组件和原因。
-6. 运行 `continue-harness design tokens diff --json`；该命令只读，仅在项目提供前后版本时给出差异，不会写文件。需要记录变更时，由 Agent 比较前后值并更新变更历史。
+6. `continue-harness design tokens diff --json` 当前只返回与 `inspect` 相同的检查结果，不计算版本差异。需要记录变更时，由 Agent 另行比较前后值并更新变更历史。
 7. 未建立视觉基线时不宣称视觉还原已验证。
 8. 存量提取只建立现状事实，不自动重写原样式；高频重复值标记为推断候选，多套变量或相同语义不同值标记冲突，用户确认后才写唯一真值。
 

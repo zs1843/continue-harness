@@ -12,7 +12,7 @@ Continue Harness brings these relationships into a shared workflow. It maintains
 
 | Capability | Current implementation | Boundary |
 | --- | --- | --- |
-| Creation and adoption | Previews plans and prepares constraint and collaboration records | Does not generate business implementation; upgrade and conflict patches are not established |
+| Creation and adoption | Previews plans and prepares constraint and collaboration records | Default workflow prepares collaboration records only; specialized presets may generate project files; upgrade and conflict patches are not established |
 | Intake and inputs | Records project facts, input sources, applicability, and changes | Analysis may require human interpretation |
 | Tasks and recovery | Maintains task IDs, history, snapshots, and handoff context | Record quality depends on timely confirmation and maintenance |
 | Verification and acceptance | Runs project-declared checks and validates requirement-to-acceptance links | Passing commands do not prove business correctness; unresolved items prevent a pass |

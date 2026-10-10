@@ -6,7 +6,7 @@ Last updated: 2026-10-09
 
 The default project workflow is project-neutral. It provides project fact Intake; input registration, applicability, analysis, and change fingerprints; stable task records, history, snapshots, and context recovery; verification using project-declared checks; requirement-to-acceptance closure checks; structured reports and append-only command logs; and Agent workflows for creation, adoption, inspection, task work, recovery, and verification.
 
-Creation provides collaboration and constraint records. It does not scaffold application or business implementation. Optional specialized capabilities are separate and are not prerequisites for the common workflow.
+Default creation provides collaboration and constraint records. Explicitly selected specialized presets may generate project files and install dependencies; consult the plan and execution result for scope. Optional specialized capabilities are separate and are not prerequisites for the common workflow.
 
 ## Current verification
 

@@ -6,7 +6,7 @@
 
 每个接入项目在根目录维护 `.continue-harness/project.yaml`。配置记录项目已确认的基本事实、命令映射、验证模式，以及本项目确实需要的可选能力。输入类型按项目和任务选择；未适用的输入无需创建。
 
-以下最小示例对应通用模式。空的 `commands` 和 `verify` 表示尚未登记项目检查；它们不构成验证通过，运行未配置模式会得到未配置结果。
+以下最小示例对应通用模式。空的 `commands` 和 `verify` 表示尚未登记项目检查；它们不构成验证通过，完全缺少模式定义时，命令报错且不生成报告；显式设置 `status: not_configured` 时才返回未配置报告。
 
 ```yaml
 harness:
@@ -24,7 +24,7 @@ verify: {}
 | --- | --- |
 | `harness.mode`、`harness.package`、`harness.version` | 声明协作模式、Harness 包及版本；`version` 必需，其余按需配置 |
 | `project.name` | 项目名称 |
-| `project.product_type`、`project.platforms`、`stack.adapter`、`stack.package_manager` | 可选项目事实，使用非空字符串记录；Core 不通过固定名称清单限制项目接入 |
+| `project.product_type`、`project.platforms`、`stack.adapter`、`stack.package_manager` | 可选项目事实；`project.platforms` 使用非空字符串组成的数组，其余字段使用非空字符串；Core 不通过固定名称清单限制项目接入 |
 | `commands` | 项目验证命令的名称与实际命令映射；按项目检查配置 |
 | `verify` | 验证模式及其命令映射；按需配置，未配置模式不代表通过 |
 | `sources`、`ui`、`facts` | 仅在项目确认需要相应能力时配置 |

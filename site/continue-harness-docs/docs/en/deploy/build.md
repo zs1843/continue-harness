@@ -36,7 +36,7 @@ pnpm docs:preview
 ## Package
 
 ```bash
-tar -czf continue-harness-docs.tar.gz -C site/continue-harness-docs/docs/.vitepress/dist .
+tar -czf continue-harness-docs.tar.gz -C docs/.vitepress/dist .
 ```
 
 ## Deploy

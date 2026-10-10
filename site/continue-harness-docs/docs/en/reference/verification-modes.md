@@ -1,42 +1,44 @@
 # Verification modes
 
-This page describes the Harness verification modes and their result semantics. See [CLI](./commands.md) for command entry points.
+This page describes common verification modes and result semantics. See [CLI](./commands.md) for entry points. Projects may configure other mode names; only feature and audit apply the acceptance-closure gate.
 
 ## quick
 
-Fast feedback. Runs configured checks in order and stops at the first failure. Returns `not_configured` when no check can run.
+Fast feedback. Runs checks in configured order and stops at the first non-passing result by default. Set `fail_fast: false` explicitly to continue.
 
 ## feature
 
-Feature acceptance. Runs configured checks and applies the requirement-to-acceptance closure gate. Unconfirmed Intake, missing links, or unresolved acceptance items prevent a passing result.
+Runs configured checks and applies the requirement-to-acceptance closure gate. Unconfirmed configured Intake, missing links, or unresolved acceptance items prevent a passing result.
 
 ## runtime
 
-Runtime checks. Runs only runtime checks explicitly configured by the project. Returns `not_configured` when absent; the Harness does not infer how the project runs.
+Runs only explicitly configured project commands and does not infer how the project runs.
 
 ## interaction
 
-Interaction acceptance. Runs only interaction checks defined by the project. An unconfigured mode is not a pass.
+Runs only explicitly configured project commands and does not automatically establish interaction completeness.
 
 ## visual
 
-Visual evidence checks. Runs only when the project configures the check and its baseline evidence. Missing configuration or baselines result in `not_configured`.
+Runs project-configured visual checks. Harness has no general baseline preflight; project commands must check baseline availability and visual results. The current implementation recognizes specific output text as a missing baseline and marks it `not_configured`; recognition is limited. Command success alone does not establish a valid baseline or visual acceptance.
 
 ## audit
 
-Audit runs all configured checks and collects results without stopping at the first failure. It applies the acceptance-closure gate as well.
+Runs commands configured for this mode and applies the acceptance-closure gate; it does not automatically collect other modes. Set `fail_fast: false` explicitly to collect results after a failure. Without it, execution still stops at the first non-passing result by default.
 
 ## Configuration and status
 
-Mode names provide stable entry points; project configuration maps checks to project commands. The Harness does not infer build, test, runtime, or visual tools from project type.
+A mode maps to project commands through `verify` in `.continue-harness/project.yaml`. A missing mode definition causes an error with exit code 1 and no report for that run. An explicit `status: not_configured` produces an unconfigured report. An empty command list is not a valid executable mode configuration.
 
-- `passed`: configured checks succeeded and the closure gate passed.
-- `failed`: a check failed or a closure gap remains.
-- `blocked`: an external condition prevents a check or delivery.
-- `not_configured`: no executable configuration exists for the mode; this is not a pass.
+- `passed`: all commands configured for this run succeeded; feature and audit also require their acceptance gate to pass.
+- `failed`: commands did not all pass, or an applicable closure gate has gaps.
+- `blocked`: an individual check was recognized as environmentally blocked, or acceptance records contain confirmed deferrals or blockers; the overall verification may still be `failed`.
+- `not_configured`: the mode is explicitly marked unconfigured, or visual output matches the missing-baseline recognition rules; this is not a pass.
 
-Feature and audit modes require a parseable acceptance record and traceability from the current task and applicable inputs to acceptance items. Unconfirmed Intake, invalid statuses, missing links, or unresolved items prevent a pass. Confirmed deferrals and external blocks remain visible in reports and cannot be represented as verified.
+Feature and audit check acceptance links for the current task and applicable inputs. Missing acceptance for a bound task, invalid statuses, missing links, or unresolved items prevent a pass. Confirmed deferrals and external blocks remain visible and do not count as verified. Legacy projects without Intake remain compatible; this does not establish confirmed project facts.
 
 ## Execution stability
 
-Configuration and input fingerprints that affect the result are compared before and after execution. If those sources change during verification, the result is not stable evidence of the current state. External restrictions, such as runtime permissions, are recorded as environmental blocks.
+Bound configuration, input, implementation, evidence, and acceptance fingerprints are compared before and after execution. Different states fail the run. The comparison is not a filesystem lock and cannot detect a change reverted during execution.
+
+Environmental-block recognition covers only some process-start and port-permission errors. Other external conditions may still appear as command failures and require review of the raw logs.

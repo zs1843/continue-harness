@@ -6,7 +6,7 @@ This page describes Harness configuration, collaboration records, and verificati
 
 Each adopted project maintains `.continue-harness/project.yaml` at its root. The configuration records confirmed project facts, command mappings, verification modes, and optional capabilities that the project actually needs. Inputs are selected for the project and task; inapplicable input types do not need to be created.
 
-The following minimal example uses generic mode. Empty `commands` and `verify` mean that project checks have not been registered; they do not mean verification passed. An unconfigured mode returns an unconfigured result.
+The following minimal example uses generic mode. Empty `commands` and `verify` mean that project checks have not been registered; they do not mean verification passed. A missing mode definition causes an error without a report; an explicit `status: not_configured` produces an unconfigured report.
 
 ```yaml
 harness:
@@ -24,7 +24,7 @@ The common adoption path requires `harness.version` and `project.name`. `command
 | --- | --- |
 | `harness.mode`, `harness.package`, `harness.version` | Collaboration mode, Harness package and version; `version` is required, the rest are optional |
 | `project.name` | Project name |
-| `project.product_type`, `project.platforms`, `stack.adapter`, `stack.package_manager` | Optional project facts recorded as non-empty strings; Core does not restrict adoption to a fixed list of names |
+| `project.product_type`, `project.platforms`, `stack.adapter`, `stack.package_manager` | Optional project facts; `project.platforms` is an array of non-empty strings, and the other fields are non-empty strings; Core does not restrict adoption to a fixed list of names |
 | `commands` | Names and actual commands for project checks; configure when project checks are known |
 | `verify` | Verification modes and command mappings; configure as needed; an unconfigured mode is not a pass |
 | `sources`, `ui`, `facts` | Configure only when the project confirms the corresponding capability is needed |

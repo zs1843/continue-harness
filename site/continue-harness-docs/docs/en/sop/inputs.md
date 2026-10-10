@@ -12,7 +12,7 @@ This page describes common input formats. Select evidence from confirmed project
 | API | `.continue-harness/inputs/api/` | OpenAPI / Apifox exports |
 | assets | `.continue-harness/inputs/assets/` | Images, icons, fonts, and other assets |
 
-In its second round, `intake` generates the minimum evidence list from the project type and records registration with `intake evidence --id <item> --status confirmed|not_applicable|pending`.
+Intake suggests candidate questions from the project type and records confirmation with `intake evidence --id <item> --status confirmed|not_applicable|pending`. Built-in question sets cover several common categories; unmatched types use the general set. Requirements must be confirmed when Intake is configured; other candidates may be marked not applicable with a reason and are not a universal checklist.
 
 ## Inspect
 
@@ -49,7 +49,7 @@ continue-harness inputs analyze --json
 
 ## Diff
 
-Review changes to registered files and conclusions using the `inputs` Skill.
+Use the `inputs` Skill to inspect the current state and hash drift of registered files.
 
 **Skill**: `continue-harness-inputs`
 
@@ -59,7 +59,7 @@ Review changes to registered files and conclusions using the `inputs` Skill.
 continue-harness inputs diff --json
 ```
 
-`diff` reports changes to registered files and analysis conclusions, so earlier conclusions can be judged still valid or not.
+`diff` currently reuses the `inspect` result and detects file hash drift when the manifest contains a registered `sha256`. It does not compare historical analysis conclusions; collaborators must review whether earlier conclusions still apply.
 
 ## Optional visual-value records
 

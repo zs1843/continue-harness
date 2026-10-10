@@ -45,6 +45,6 @@ continue-harness verify feature
 
 See the [CLI reference](/en/reference/commands) for the complete command list.
 
-These commands illustrate entry points; they do not imply that a project already has task, input, or verification configuration. An unconfigured verification mode returns `not_configured`, not a pass.
+These commands illustrate entry points; they do not imply that a project already has task, input, or verification configuration. A missing mode definition causes an error; an explicit `status: not_configured` produces an unconfigured report. Neither means passed.
 
 </details>
