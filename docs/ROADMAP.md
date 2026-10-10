@@ -1,55 +1,26 @@
 # Roadmap
 
-## Current milestone: requirement-to-acceptance closure
+## Current focus: reliable requirement closure
 
-Focus on requirement → implementation item → acceptance item → evidence → handoff state.
-Project facts, task-specific inputs, evidence integrity and resumable project context are the active scope.
-Project type and toolchain select relevant inputs and checks; UI, APIs and Design Tokens are optional.
-Reuse the input manifest, acceptance ledger, logs and snapshots rather than adding parallel records.
+The active focus is the complete, recoverable chain:
 
-Existing adapters remain available. New profiles, stack templates, UI governance, distribution and upgrade
-expansion are deferred until this core loop is validated. The milestones below describe historical plans,
-not the current implementation priority.
+```text
+Project facts → applicable inputs → requirements → implementation → acceptance → evidence → handoff
+```
 
-## Milestone 0.1: H5 foundation
+Priorities:
 
-The next architecture correction is to move the default from an H5-shaped project generator to a
-generic constraint and evidence harness. Consumer H5 remains an explicit Adapter/Preset used for
-validation, not the Core's default project shape. The target workflow and migration order are
-defined in `docs/GENERIC_HARNESS_DESIGN.md`.
+- Keep Intake limited to facts that affect project constraints and task execution.
+- Select inputs from confirmed project type, scope, and evidence; record non-applicability and unknowns explicitly.
+- Preserve stable links among inputs, tasks, implementation records, acceptance items, and verification evidence.
+- Ensure reports and snapshots restore the actual result, outstanding risks, and next action.
+- Strengthen negative tests so missing, stale, conflicting, or changing evidence cannot produce a false pass.
+- Validate the same workflow in projects with different structures and independently declared checks.
 
-- Keep the default workflow limited to `create/init → inputs → task → verify`; expose Design Token,
-  UI System, OpenAPI, visual baselines, and command-specific Skills only when task evidence requires them.
-- Stabilize configuration, runner, reports, and exit semantics.
-- Complete Doctor checks for Node, package manager, scripts, test isolation, CI entry points, and
-  sensitive-file handling.
-- Keep initialization preflight lightweight; add richer reports or conflict patches only if pilot
-  projects demonstrate the need.
-- Add PRD/UI input conventions, basic project history, and an OpenAPI snapshot check.
-- Validate task-scoped generation from local Apifox OpenAPI JSON in the first pilot; add authenticated
-  online synchronization only after the local contract workflow is stable.
-- Maintain the real minimal uni-app H5 fixture and its focused browser runtime check.
-- Validate `consumer-h5 + web-mobile + uni-app` in two unrelated projects.
-- Validate recursive PRD/HTML-RP coverage extraction and the requirement-closure gate against a
-  multi-level pilot flow.
-- Validate the experimental UI System protocol and TDesign UniApp Adapter against two unrelated real
-  projects; measure first-pass screenshot difference and classify every manual adjustment.
+## Deferred
 
-## Milestone 0.2: Distribution
+Do not expand specialized profiles, adapters, starter content, or optional governance features until pilot evidence shows a concrete need. Existing specialized code is not a requirement for the common workflow and should not shape default project creation.
 
-- Add upgrade dry-run and managed-file metadata.
-- Add GitLab CI templates.
-- Complete package-name/registry selection and tarball installation integration tests.
-- Publish an internal prerelease package after approval.
+## Completion evidence
 
-## Later milestones
-
-- Merchant H5 Product Profile.
-- Admin Web Product Profile.
-- Mini-program platform adapters.
-- React Native platform and stack adapters.
-- API/OpenAPI provider interface.
-- Optional coding-agent plugins.
-
-New profiles and adapters must be driven by verified needs from unrelated projects, not by copying
-domain rules.
+A capability is considered established only when implementation, regression tests, Site guidance, and reproducible evidence agree. Pilot outcomes must be reported as observed, including failures and unverified areas; passing command execution alone does not establish requirement acceptance.

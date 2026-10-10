@@ -4,37 +4,41 @@ import { versionNav } from './versions.mjs';
 
 export const rootNav = [
   { text: '首页', link: '/' },
-  { text: '指南', link: '/guide/overview' },
-  { text: 'Skills', link: '/skills/' },
-  { text: '架构', link: '/architecture/overview' },
-  { text: '参考', link: '/reference/commands' },
-  { text: '案例', link: '/showcase/workflow-example' },
+  { text: '介绍', link: '/background/why-harness' },
+  { text: '开始使用', link: '/guide/getting-started' },
+  {
+    text: '新建 / 接入',
+    items: [
+      { text: '新建项目', link: '/sop/create-project' },
+      { text: '接入已有项目', link: '/sop/init-existing-project' }
+    ]
+  },
+  { text: '参考', link: '/reference/config-and-files' },
   versionNav()
 ];
 
 export const rootSidebar = [
   {
-    text: '简介',
+    text: '介绍',
     items: [
       { text: '为什么需要 Harness', link: '/background/why-harness' },
       { text: '解决的问题', link: '/background/problems' },
-      { text: '设计原则', link: '/background/principles' }
+      { text: '设计原则', link: '/background/principles' },
+      { text: '工作流总览', link: '/guide/overview' }
     ]
   },
   {
-    text: '指南',
+    text: '开始使用',
     items: [
-      { text: '工作流', link: '/guide/overview' },
-      { text: '项目接入', link: '/guide/ai-first' },
-      { text: '创建或接入项目', link: '/guide/getting-started' },
-      { text: '输入与证据', link: '/guide/evidence' },
+      { text: '开始使用', link: '/guide/getting-started' },
+      { text: '需求与输入依据', link: '/guide/evidence' },
       { text: '任务、恢复与快照', link: '/guide/tasks-and-resume' },
       { text: '验证', link: '/guide/verification' },
-      { text: 'Agent 协作', link: '/guide/agent-workflow' }
+      { text: '协作与人工确认', link: '/guide/agent-workflow' }
     ]
   },
   {
-    text: '进阶',
+    text: '新建 / 接入',
     items: [
       { text: '创建新项目', link: '/sop/create-project' },
       { text: '接入已有项目', link: '/sop/init-existing-project' },
@@ -45,19 +49,11 @@ export const rootSidebar = [
     ]
   },
   {
-    text: 'Skills',
-    items: [
-      { text: '安装 Skills', link: '/skills/install' },
-      { text: '内置 Skills', link: '/skills/' },
-      { text: '执行步骤', link: '/skills/steps' }
-    ]
-  },
-  {
-    text: '架构',
+    text: '实现参考',
     items: [
       { text: '架构', link: '/architecture/overview' },
       { text: 'Core', link: '/architecture/core' },
-      { text: '适配器', link: '/architecture/adapters' },
+      { text: '专项实现', link: '/architecture/adapters' },
       { text: 'CLI', link: '/architecture/cli' },
       { text: '输入', link: '/architecture/inputs' },
       { text: 'OpenAPI', link: '/architecture/openapi' },
@@ -67,7 +63,7 @@ export const rootSidebar = [
     ]
   },
   {
-    text: '参考',
+    text: '命令与配置参考',
     items: [
       { text: '命令', link: '/reference/commands' },
       { text: '配置与文件', link: '/reference/config-and-files' },
@@ -76,12 +72,12 @@ export const rootSidebar = [
     ]
   },
   {
-    text: '案例',
+    text: '验证记录与维护',
     items: [
       { text: '只读命令示例', link: '/showcase/workflow-example' },
       { text: '项目案例', link: '/showcase/case-study' },
       { text: '真实项目 Pilot', link: '/showcase/real-project-pilot' },
-      { text: 'demo-h5 证据记录', link: '/showcase/demo-h5-capture' },
+      { text: '历史输入登记示例', link: '/showcase/input-registration-example' },
       { text: '构建与部署', link: '/deploy/build' },
       { text: '文档维护规则', link: '/maintenance/docs-as-contract' }
     ]
@@ -90,11 +86,16 @@ export const rootSidebar = [
 
 export const englishNav = [
   { text: 'Home', link: '/en/' },
-  { text: 'Guide', link: '/en/guide/overview' },
-  { text: 'Skills', link: '/en/skills/' },
-  { text: 'Architecture', link: '/en/architecture/overview' },
-  { text: 'Reference', link: '/en/reference/commands' },
-  { text: 'Examples', link: '/en/showcase/workflow-example' },
+  { text: 'Introduction', link: '/en/background/why-harness' },
+  { text: 'Get started', link: '/en/guide/getting-started' },
+  {
+    text: 'Create / adopt',
+    items: [
+      { text: 'Create a project', link: '/en/sop/create-project' },
+      { text: 'Adopt an existing project', link: '/en/sop/init-existing-project' }
+    ]
+  },
+  { text: 'Reference', link: '/en/reference/config-and-files' },
   versionNav()
 ];
 
@@ -104,23 +105,22 @@ export const englishSidebar = [
     items: [
       { text: 'Why a harness', link: '/en/background/why-harness' },
       { text: 'Problems addressed', link: '/en/background/problems' },
-      { text: 'Design principles', link: '/en/background/principles' }
+      { text: 'Design principles', link: '/en/background/principles' },
+      { text: 'Workflow overview', link: '/en/guide/overview' }
     ]
   },
   {
-    text: 'Guide',
+    text: 'Get started',
     items: [
-      { text: 'Workflow', link: '/en/guide/overview' },
-      { text: 'Project adoption', link: '/en/guide/ai-first' },
-      { text: 'Create or adopt a project', link: '/en/guide/getting-started' },
+      { text: 'Get started', link: '/en/guide/getting-started' },
       { text: 'Inputs and evidence', link: '/en/guide/evidence' },
       { text: 'Tasks, resume, and snapshots', link: '/en/guide/tasks-and-resume' },
       { text: 'Verification', link: '/en/guide/verification' },
-      { text: 'Agent collaboration', link: '/en/guide/agent-workflow' }
+      { text: 'Collaboration and human decisions', link: '/en/guide/agent-workflow' }
     ]
   },
   {
-    text: 'Advanced',
+    text: 'Create / adopt',
     items: [
       { text: 'Create a project', link: '/en/sop/create-project' },
       { text: 'Adopt an existing project', link: '/en/sop/init-existing-project' },
@@ -131,19 +131,11 @@ export const englishSidebar = [
     ]
   },
   {
-    text: 'Skills',
-    items: [
-      { text: 'Install skills', link: '/en/skills/install' },
-      { text: 'Built-in skills', link: '/en/skills/' },
-      { text: 'Execution steps', link: '/en/skills/steps' }
-    ]
-  },
-  {
-    text: 'Architecture',
+    text: 'Implementation reference',
     items: [
       { text: 'Architecture', link: '/en/architecture/overview' },
       { text: 'Core', link: '/en/architecture/core' },
-      { text: 'Adapters', link: '/en/architecture/adapters' },
+      { text: 'Specialized paths', link: '/en/architecture/adapters' },
       { text: 'CLI', link: '/en/architecture/cli' },
       { text: 'Inputs', link: '/en/architecture/inputs' },
       { text: 'OpenAPI', link: '/en/architecture/openapi' },
@@ -153,7 +145,7 @@ export const englishSidebar = [
     ]
   },
   {
-    text: 'Reference',
+    text: 'Commands and configuration',
     items: [
       { text: 'CLI', link: '/en/reference/commands' },
       { text: 'Configuration and files', link: '/en/reference/config-and-files' },
@@ -162,12 +154,12 @@ export const englishSidebar = [
     ]
   },
   {
-    text: 'Examples',
+    text: 'Validation records and maintenance',
     items: [
       { text: 'Read-only command examples', link: '/en/showcase/workflow-example' },
       { text: 'Case study', link: '/en/showcase/case-study' },
       { text: 'Real-project Pilot', link: '/en/showcase/real-project-pilot' },
-      { text: 'demo-h5 evidence record', link: '/en/showcase/demo-h5-capture' },
+      { text: 'Historical input-registration example', link: '/en/showcase/input-registration-example' },
       { text: 'Build and deploy', link: '/en/deploy/build' },
       { text: 'Documentation maintenance', link: '/en/maintenance/docs-as-contract' }
     ]

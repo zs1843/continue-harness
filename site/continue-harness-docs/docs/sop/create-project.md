@@ -1,74 +1,38 @@
 # 创建新项目
 
-本页说明从零创建项目的命令、生成内容和证据补充顺序。目录与路径清单见[项目结构](./project-structure.md)，命令参数见[命令](../reference/commands.md)。
+Continue Harness 创建的是项目约束与协作空间，不是语言或框架脚手架。推荐通过 Agent 使用 `continue-harness-create`。
 
-## 命令
+## 确认项目事实
 
-先用 `plan` Skill 预览写入计划，确认后再创建项目。
+提供项目名称、目标目录、目标、范围和交付物。通过对话确认项目类型、运行环境与技术栈；未知项保持 pending。Agent 会先预览写入内容，再创建项目。
 
-**Skill**：`continue-harness-plan`
-
-**CLI（可选）**：
-
-```bash
-continue-harness plan create my-project --preset consumer-h5 --json
-```
-
-确认计划后用 `create` Skill 生成项目。
-
-**Skill**：`continue-harness-create`
-
-**CLI（可选）**：
-
-```bash
-continue-harness create my-project --preset consumer-h5
-```
-
-离线创建同样由 `continue-harness-create` 完成，只是加上 `--skip-install`。
-
-**Skill**：`continue-harness-create`
-
-**CLI（可选）**：
-
-```bash
-continue-harness create my-project --preset consumer-h5 --skip-install
-```
+基本信息确认后，再确定本次任务所需的输入。需求是必需依据；UI、接口契约、数据定义和部署约束按适用性选择，不要求准备固定清单。
 
 ## 生成内容
 
-显式选择 Consumer H5 preset 后，命令生成：
+- `.continue-harness/` 下的项目配置与 Intake 状态。
+- 用于登记输入来源的清单模板。
+- 唯一约束入口 `AGENTS.md` 及供应商薄适配文件。
+- 项目事实、当前状态、决策、验收记录和交接历史骨架。
 
-- uni-app + Vue 3 + Vite 基础项目。
-- Playwright runtime 和 visual 验证配置。
-- `.continue-harness/project.yaml` 和标准输入目录。
-- `AGENTS.md`、`CLAUDE.md`、Cursor rule。
-- 该 preset 使用的聚合 Skill：`consumer-h5-harness`。
-- docs 下的 PRODUCT、DESIGN、CURRENT_STATUS、PROJECT_MAP、history 和 coverage 文件。
-- src 下的 components、services、repositories、stores、utils 等边界目录。
+创建过程不生成业务代码、不选择框架，也不安装业务工程依赖。创建完成不代表项目实现或验收完成。
 
-不指定 `--preset` 时使用 generic preset，只生成 Harness 事实目录、Agent 入口和验收骨架，不生成业务页面和框架配置。两个 preset 的文件差异见[配置与文件](../reference/config-and-files.md)。
+## 开始首个任务
 
-## 创建与输入的先后顺序
+登记确认后的输入，创建任务，并建立需求 → 实现项 → 验收项 → 证据关联。范围与标准明确后再实现，将项目自身的测试命令接入验证，记录结果并准备交接。
 
-创建命令生成容器和规则，不完成业务。已有材料在创建之后进入项目：
+不同项目形态使用同一协作闭环；具体文件与工具由已确认的项目事实决定。
 
-1. 创建项目和输入目录。
-2. 把材料放入 `.continue-harness/inputs/prd|rp|ui|api|assets/`。
-3. 运行 `continue-harness inputs inspect` 和 `inputs analyze`。
-4. 运行 `continue-harness task create` 建立首个任务。
-
-缺少 PRD、UI 或 API 不阻塞创建；这些材料在对应任务开始前登记即可。
-
-## 默认 Skill
-
-Consumer H5 preset 使用 `consumer-h5-harness`；通用项目使用聚合 Skill `generic-harness`。命令级 Skill 按需安装，从仓库的 `skills/<名称>/` 复制到宿主目录：
+<details>
+<summary>CLI 参考</summary>
 
 ```bash
-cp -R <仓库路径>/skills/continue-harness-api .agents/skills/
+continue-harness plan create my-project --json
+continue-harness create my-project
+cd my-project
+continue-harness intake inspect --json
 ```
 
-CLI 可用时也可运行 `continue-harness skills install --project --name continue-harness-api`。详见[安装 Skills](../skills/install.md)。
+默认只创建约束空间。后续参见[输入与证据](../guide/evidence.md)、[验证与验收](../guide/verification.md)和[安装 Skills](../skills/install.md)。
 
-## 限制
-
-`--skip-install` 跳过依赖安装，生成的项目在安装依赖前无法执行验证命令。
+</details>

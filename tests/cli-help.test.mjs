@@ -81,7 +81,8 @@ test('lists command skills as stable JSON', () => {
   assert.ok(payload.skills.includes('continue-harness-create'));
   assert.ok(payload.skills.includes('continue-harness-verify'));
   assert.ok(payload.skills.includes('continue-harness-api'));
-  assert.ok(payload.skills.includes('consumer-h5-harness'));
+  assert.ok(!payload.skills.includes('generic-harness'));
+  assert.ok(!payload.skills.includes('consumer-h5-harness'));
 });
 
 test('lists experimental UI System adapters as stable JSON', () => {

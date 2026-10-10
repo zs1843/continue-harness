@@ -1,55 +1,48 @@
 # Core
 
-Core lives in `packages/core/` and is the business-neutral runtime of the harness. This page lists its capabilities, boundary, configuration interface, and internal modules.
+Core implements the shared, business-agnostic collaboration workflow in `packages/core/`. It maintains collaboration records and evaluates project-declared checks; it does not own a project's business rules.
 
 ## Capabilities
 
-| Capability | Mechanism |
+| Capability | Responsibility |
 | --- | --- |
-| Configuration loading | Reads `.continue-harness/project.yaml`, parses project, platform, stack, facts, and command mappings, and validates declared values |
-| Verification execution | Maps symbolic commands such as `unit_test` and `coverage_closure` to real shell commands and runs them in fail-fast or audit mode |
-| Diagnostics | Doctor performs read-only checks on Node, pnpm, scripts, page registration, inputs, Tokens, and Agent workflows |
-| Reports | Writes Markdown, JSON, and command logs |
-| Input analysis | Reads the manifest, finds unregistered inputs, extracts text facts, and reports conflicts |
-| resume | Summarizes the current task, input states, latest snapshot, coverage matrix, persistent decisions, and Git changes |
+| Configuration | Reads project facts, command mappings, and verification policy |
+| Intake | Records confirmed facts, unknowns, and applicable input needs |
+| Inputs | Maintains source registration, applicability, and task links |
+| Tasks and history | Tracks stable task identifiers, snapshots, and changes |
+| Context recovery | Summarizes current work, evidence, decisions, risks, and next steps |
+| Verification | Runs only project-declared checks and normalizes outcomes |
+| Acceptance | Checks requirement-to-acceptance links and unresolved states |
+| Reports and logs | Produces structured results and append-only operation records |
 
 ## Boundary
 
-Core does not import adapter modules, but it validates adapter values through configuration enums; adding an adapter requires updating both the Core enums and `schemas/project.schema.json`. The current enums cover generic / consumer-h5, node / web-mobile, and node-esm / uni-app.
+Core does not define project business rules, requirements, domain states, or actual verification commands. Those remain project-owned. The common configuration accepts project-defined product types, runtimes, toolchains, and package managers rather than requiring built-in specialized labels. Doctor runs structural checks only for explicitly configured specialized capabilities; unsupported specialized diagnostics remain unconfigured and do not invalidate general adoption.
 
-Core contains no business pages, business states, API endpoints, brand names, Design Token values, or concrete UI component library implementations. Core can tell that a project declares an API snapshot, but not which business endpoint it is; it can tell that a page registration is missing, but not which cards the page should contain.
-
-## Configuration interface
-
-Core works through project configuration:
+Configuration expresses project facts and maps verification modes to commands. For example:
 
 ```yaml
-project:
-  product_type: generic
+commands:
+  check: "<project-defined check command>"
 verify:
-  feature:
+  quick:
     commands:
-      - unit_test
-      - acceptance
+      - check
 ```
 
-The project declares its own facts and verification commands; when product, platform, or framework-specific checks are needed, the project configuration selects the corresponding adapter.
+This is schematic; each project supplies its actual commands and evidence sources.
 
 ## Modules
 
 | File | Responsibility |
 | --- | --- |
-| `config.mjs` | Project configuration loading and validation |
-| `runner.mjs` | Command execution, fail-fast, status normalization |
+| `config.mjs` | Configuration loading and validation |
+| `runner.mjs` | Command execution and result normalization |
 | `doctor.mjs` | Read-only diagnostics |
-| `init.mjs` | Initialization and creation plans, safe writes |
-| `intake.mjs` | Multi-round project fact confirmation and minimum input checklist |
-| `inputs.mjs` | Input manifest, discovery, and analysis |
+| `init.mjs` | Initialization plans and safe writes |
+| `intake.mjs` | Project fact confirmation |
+| `inputs.mjs` | Input registration, discovery, and analysis |
 | `resume.mjs` | Collaboration-context recovery |
-| `acceptance.mjs` | Acceptance state inspection |
-| `openapi.mjs` | OpenAPI operation checks, type and wrapper generation |
-| `design.mjs` | Design Token inspect, discover, diff |
-| `ui-system.mjs` | UI System Adapter and protocol file checks |
-| `ui-contract.mjs` | UI component inventory scan and Contract file checks |
+| `acceptance.mjs` | Acceptance-state checks |
 | `history.mjs` | Task history and snapshots |
-| `report.mjs` | Report and log output |
+| `report.mjs` | Reports and logs |

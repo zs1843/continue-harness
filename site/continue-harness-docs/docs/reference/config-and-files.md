@@ -1,76 +1,61 @@
 # 配置与文件
 
-本页说明 `.continue-harness/project.yaml` 的键位，以及 CLI 生成的报告和产物路径。目录树见[项目结构](../sop/project-structure.md)。
+本页说明 Harness 项目配置、协作记录和验证产物。目录用途见[项目结构](../sop/project-structure.md)。
 
 ## 项目配置
 
-每个目标项目在根目录拥有一个配置文件：
+每个接入项目在根目录维护 `.continue-harness/project.yaml`。配置记录项目已确认的基本事实、命令映射、验证模式，以及本项目确实需要的可选能力。输入类型按项目和任务选择；未适用的输入无需创建。
 
-```text
-.continue-harness/project.yaml
+以下最小示例对应通用模式。空的 `commands` 和 `verify` 表示尚未登记项目检查；它们不构成验证通过，运行未配置模式会得到未配置结果。
+
+```yaml
+harness:
+  mode: generic
+  version: "0.1.0"
+project:
+  name: "项目名称"
+commands: {}
+verify: {}
 ```
 
-## 通用键
+通用接入必需字段为 `harness.version` 和 `project.name`。`commands` 与 `verify` 可暂缺或为空；未配置的验证模式不会被视为通过。项目检查确认后，再登记实际命令并关联验证模式。项目类型、运行环境、工具链和包管理方式是可选的项目事实，不受内置专项名称的枚举限制。字段用途如下；`harness.mode`、`harness.package`、`sources`、`ui` 和 `facts` 均按项目需要选配：
 
-以下键在所有 preset 中可用：
-
-| 键 | 含义 |
+| 字段 | 用途 |
 | --- | --- |
-| `harness.package`、`harness.version` | 项目声明的 Harness 包和版本 |
+| `harness.mode`、`harness.package`、`harness.version` | 声明协作模式、Harness 包及版本；`version` 必需，其余按需配置 |
 | `project.name` | 项目名称 |
-| `project.product_type` | `generic`、`consumer_h5` 或 `developer_tooling` |
-| `commands` | 命名命令映射，值是实际 shell 命令 |
-| `verify` | 验证模式到 `commands` 名称的映射；未配置的模式写 `status: not_configured` |
-| `sources.api`（可选） | API 输入来源：`provider: openapi` 和 `snapshot` 路径 |
-| `ui.system`（可选） | UI System 选择：`status`、`adapter`、`policy`、`version` |
+| `project.product_type`、`project.platforms`、`stack.adapter`、`stack.package_manager` | 可选项目事实，使用非空字符串记录；Core 不通过固定名称清单限制项目接入 |
+| `commands` | 项目验证命令的名称与实际命令映射；按项目检查配置 |
+| `verify` | 验证模式及其命令映射；按需配置，未配置模式不代表通过 |
+| `sources`、`ui`、`facts` | 仅在项目确认需要相应能力时配置 |
 
-Generic preset 另有 `harness.mode: generic` 和 `intake` 块。`intake` 记录 `phase`、`status` 和 `state`，其中 `state` 指向状态文件：
+项目 Intake 状态记录在 `.continue-harness/intake.yaml`，输入清单记录在 `.continue-harness/inputs/manifest.yaml`。这些记录以项目当前确认的事实为准，不要求所有项目拥有相同字段或输入目录。
 
-```text
-.continue-harness/intake.yaml
-```
+## 协作记录
 
-Consumer H5 preset 在上述通用键之外追加：
-
-| 键 | 含义 |
+| 路径 | 用途 |
 | --- | --- |
-| `project.platforms` | 运行平台，例如 `web_mobile` |
-| `stack.adapter`、`stack.framework`、`stack.language`、`stack.bundler`、`stack.package_manager` | 框架和工具链选择 |
-| `facts.agent_entry` 等 | Agent 入口、模块地图、设计事实、Token、历史和覆盖矩阵的路径 |
+| `AGENTS.md` | 项目约束的唯一权威来源 |
+| `docs/PROJECT.md` | 项目目标、范围、非目标和交付物 |
+| `docs/CURRENT_STATUS.md` | 当前状态、风险和待办 |
+| `docs/DECISIONS.md` | 已确认且持续有效的决策 |
+| `docs/ACCEPTANCE.md` | 验收项、状态及证据关联 |
+| `.continue-harness/inputs/manifest.yaml` | 输入来源、适用性、版本及关联记录 |
+| `.continue-harness/logs/commands.ndjson` | 命令和 Intake 操作的追加日志 |
+| `docs/history/` | 任务快照与可恢复的交接上下文 |
 
-Generic preset 的配置文件没有 `project.platforms`、`stack` 和 `facts` 三组键。API 配置键是 `sources.api`，UI 配置键是 `ui.system`。
+具体文件由接入流程结合项目现状生成或复用；上表说明记录职责，不是每个初始化结果都必须完整具备的文件清单。默认生成项会随模板版本调整，完整范围以当前创建/接入计划为准。
 
-## 关键事实文件
-
-| 文件 | generic preset | Consumer H5 preset | 作用 |
-| --- | --- | --- | --- |
-| `AGENTS.md` | 生成 | 生成 | 项目唯一约束本体 |
-| `docs/PROJECT.md` | 生成 | 不生成 | 项目目标、范围、非目标和交付物 |
-| `docs/PROJECT_MAP.md` | 不生成 | 生成 | 模块地图 |
-| `docs/PRODUCT.md` | 不生成 | 生成 | 产品事实 |
-| `docs/DESIGN.md` | 不生成 | 生成 | 设计事实 |
-| `docs/CURRENT_STATUS.md` | 生成 | 生成 | 当前状态和限制 |
-| `docs/DECISIONS.md` | 生成 | 生成 | 长期决策 |
-| `docs/IMPLEMENTATION_COVERAGE.md` | 不生成 | 生成 | 需求覆盖矩阵 |
-| `docs/ACCEPTANCE.md` | 生成 | 不生成 | `verify feature` 和 `verify audit` 的验收门禁来源；绑定任务时，文件缺失、无表格、缺状态列或存在未收口项都会判为失败 |
-| `.continue-harness/inputs/manifest.yaml` | 生成 | 生成 | 输入登记清单 |
-
-`.continue-harness/intake.yaml` 由 generic preset 预置；Consumer H5 preset 不生成它，运行 `intake answer` 或 `intake evidence` 时才写入。
-
-## 产物路径
+## 验证产物
 
 | 路径 | 内容 |
 | --- | --- |
 | `tmp/continue-harness/report.json` | 最近一次验证的机器可读报告 |
-| `tmp/continue-harness/report.md` | 最近一次验证的 Markdown 报告 |
-| `tmp/continue-harness/logs/` | 每个验证命令的日志 |
-| `.continue-harness/logs/commands.ndjson` | 命令和 Intake 操作的追加日志 |
-| `src/types/api.generated.ts` | 生成的 API 类型 |
-| `src/services/api.generated.ts` | 生成的 API wrapper |
-| `.continue-harness/api/generated.json` | 生成产物的 managed metadata |
+| `tmp/continue-harness/report.md` | 最近一次验证的可读报告 |
+| `tmp/continue-harness/logs/` | 验证命令日志 |
 
-`tmp/continue-harness/` 被 Git 忽略，可作为本地调试和 CI artifact。生成接口文件受 managed metadata 保护，手工修改后再次生成会被拒绝覆盖。
+验证仅执行项目配置中声明的命令。Harness 记录执行结果和关联证据，不替代项目自身对行为正确性的判断。
 
-## 边界
+## 安全边界
 
-密钥、Cookie、Access Token 和 `.env` 内容属于项目自有，不进入模板、快照或报告。`verify` 只读取配置中列出的命令，不推断项目使用的包管理器或测试运行器。
+密钥、Cookie、访问令牌和环境变量文件内容属于项目私有信息，不应写入模板、快照或报告。自动化操作应识别并保留项目已有修改；具体写入或拒绝覆盖的行为以相应命令说明为准。

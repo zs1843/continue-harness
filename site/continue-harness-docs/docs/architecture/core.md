@@ -1,55 +1,48 @@
 # Core
 
-Core 位于 `packages/core/`，是 Harness 的业务无关运行时。本页列出它的能力、边界、配置接口和内部模块。
+Core 位于 `packages/core/`，实现通用的项目协作流程。它维护协作记录并执行项目声明的检查，但不拥有项目业务规则。
 
 ## 能力
 
-| 能力 | 机制 |
+| 能力 | 职责 |
 | --- | --- |
-| 配置加载 | 读取 `.continue-harness/project.yaml`，解析项目、平台、技术栈、facts 和命令映射，并校验声明取值 |
-| 验证执行 | 把 `unit_test`、`coverage_closure` 等符号命令映射到真实 shell 命令，按 fail-fast 或 audit 模式执行 |
-| 诊断 | Doctor 只读检查 Node、pnpm、脚本、页面注册、输入、Token 和 Agent 工作流 |
-| 报告 | 输出 Markdown、JSON 和 command log |
-| 输入分析 | 读取 manifest，发现未登记输入，抽取文本事实并报告冲突 |
-| resume | 汇总当前任务、输入状态、最近快照、覆盖矩阵、持久决策和 Git 改动 |
+| 配置 | 读取项目事实、命令映射和验证策略 |
+| Intake | 记录已确认事实、未知项及适用输入 |
+| 输入 | 维护来源登记、适用性和任务关联 |
+| 任务与历史 | 跟踪稳定任务编号、快照和变更 |
+| 上下文恢复 | 汇总当前工作、证据、决策、风险和下一步 |
+| 验证 | 仅运行项目声明的检查，并规范化结果 |
+| 验收 | 检查需求与验收项的关联及未收口状态 |
+| 报告与日志 | 生成结构化结果和追加式操作记录 |
 
 ## 边界
 
-Core 不 import 适配器模块，但通过配置枚举校验适配器取值；新增适配器需要同步 Core 枚举与 `schemas/project.schema.json`。当前枚举覆盖 generic / consumer-h5、node / web-mobile、node-esm / uni-app。
+Core 不定义项目业务规则、需求、领域状态或实际验证命令；这些由项目维护。通用配置将项目类型、运行环境、工具链和包管理方式作为项目事实接受，不以仓库内置专项名称作为接入前提。Doctor 只对明确配置的专项能力运行对应结构检查；未实现的专项诊断会保持未配置，不据此否定通用接入。
 
-Core 不包含业务页面、业务状态、API endpoint、品牌名、Design Token 值和具体 UI 组件库实现。Core 可以知道项目声明了一个 API snapshot，但不知道这是哪个业务接口；可以知道某个页面注册缺失，但不知道页面应该有哪些卡片。
-
-## 配置接口
-
-Core 通过项目配置工作：
+配置用于记录项目事实并将验证模式映射到命令，例如：
 
 ```yaml
-project:
-  product_type: generic
+commands:
+  check: "<project-defined check command>"
 verify:
-  feature:
+  quick:
     commands:
-      - unit_test
-      - acceptance
+      - check
 ```
 
-项目声明自身事实和验证命令；需要产品、平台或框架专属检查时，由项目配置选择对应适配器。
+此示例仅说明结构；各项目应提供自己的实际命令和证据来源。
 
 ## 模块
 
 | 文件 | 职责 |
 | --- | --- |
-| `config.mjs` | 项目配置加载和校验 |
-| `runner.mjs` | 命令执行、fail-fast、状态归一 |
+| `config.mjs` | 配置读取与校验 |
+| `runner.mjs` | 命令执行与结果规范化 |
 | `doctor.mjs` | 只读诊断 |
-| `init.mjs` | 初始化和创建计划、安全写入 |
-| `intake.mjs` | 多轮项目事实确认和最小输入清单 |
-| `inputs.mjs` | 输入清单、发现和分析 |
-| `resume.mjs` | 恢复当前协作现场 |
+| `init.mjs` | 初始化计划与安全写入 |
+| `intake.mjs` | 项目事实确认 |
+| `inputs.mjs` | 输入登记、发现与分析 |
+| `resume.mjs` | 协作上下文恢复 |
 | `acceptance.mjs` | 验收状态检查 |
-| `openapi.mjs` | OpenAPI operation 检查、类型和 wrapper 生成 |
-| `design.mjs` | Design Token inspect、discover、diff |
-| `ui-system.mjs` | UI System Adapter 和协议文件检查 |
-| `ui-contract.mjs` | UI 组件清单扫描和 Contract 文件检查 |
-| `history.mjs` | 任务历史和快照 |
-| `report.mjs` | 报告和日志输出 |
+| `history.mjs` | 任务历史与快照 |
+| `report.mjs` | 报告与日志 |

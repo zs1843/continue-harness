@@ -1,150 +1,49 @@
-# continue-harness
+# Continue Harness
 
 [中文](README.md) ｜ [English](README.en.md)
 
-`continue-harness` is a technology-neutral project constraint and quality harness. It provides
-traceable project facts, resumable AI handoffs, input and decision management, structured logs,
-automated verification, acceptance closure, and auditable reports.
+Continue Harness is a recoverable project collaboration and quality harness. It maintains a traceable delivery chain:
 
-The repository currently includes these optional adapters:
+**Requirement → implementation item → acceptance item → evidence → handoff state**
 
-- Product profile: `consumer-h5`
-- Platform adapter: `web-mobile`
-- Stack adapter: `uni-app`
+The workflow confirms project facts through conversation, registers task-relevant evidence, defines acceptance criteria, runs the project's own checks, and saves a recoverable handoff. Creation and adoption provide constraint and collaboration records; they do not generate an application starter.
 
-These adapters are enabled only by an explicit preset. The default project is not bound to a language,
-framework, or technology stack.
+## Get started
 
-## Installation
+Start through Agent conversation, and invoke an operation Skill when the current stage needs one:
 
-Version `0.1.0` is not published to npm yet, and `@company` is still a placeholder scope. Install dependencies from the source repository:
+> Adopt Continue Harness in this project. Restore existing context first. If no project record exists, confirm the project goal, scope, deliverables, and runtime conditions through conversation before creating or adopting the constraint workspace. Select evidence for the current task, define acceptance criteria, map the project's existing checks, and save verification evidence and a recoverable handoff. Preserve project-owned files and conventions.
 
-```bash
-git clone https://github.com/zs1843/continue-harness.git
-cd continue-harness
-pnpm install
-node packages/cli/bin/continue-harness.mjs version
-```
+New and existing projects use the same general collaboration workflow. Invoke an existing operation Skill for the current stage; no aggregate project Skill is required. The CLI is available for automation and troubleshooting.
 
-Requirements: Node.js 20 or later, and pnpm 10.12.1 or a compatible version. The commands below use `continue-harness` as the installed CLI name; when running directly from the source repository, replace it with `node packages/cli/bin/continue-harness.mjs`.
+Version `0.1.0` is not published to npm. See the repository package configuration for the CLI installation source and runtime requirements.
 
-## Quick start
-
-### Create a project
+### CLI entry points
 
 ```bash
-continue-harness plan create project-core --json
-continue-harness create project-core
-cd project-core
+continue-harness plan create my-project --json
+continue-harness create my-project
+cd my-project
 continue-harness intake inspect --json
-continue-harness intake answer --type backend --json
 continue-harness inspect --json
 continue-harness doctor
 ```
 
-`create` generates only a constraint container by default; it does not create business code or
-technology-specific dependencies. After confirming the project type, use `intake answer` to generate
-the minimum evidence checklist and enable adapters only when needed.
+For an existing project, run `continue-harness plan init --json` to inspect planned writes, then run `continue-harness init`.
 
-### Adopt an existing project
-
-```bash
-continue-harness init --dry-run
-continue-harness plan init --json
-continue-harness init
-continue-harness doctor
-```
-
-`init` preflights the project, creates missing files, and preserves files already owned by the project. A real conflict prevents all writes.
-
-### Register inputs and verify a task
-
-```bash
-continue-harness inputs inspect --json
-continue-harness inputs analyze --json
-continue-harness task create --title "Implement the first scoped change"
-continue-harness verify feature
-```
-
-## Commands
-
-```bash
-continue-harness create my-h5 --dry-run
-continue-harness create my-h5
-continue-harness init --dry-run
-continue-harness init
-continue-harness migrate --dry-run
-continue-harness inspect --json
-continue-harness plan init --json
-continue-harness plan create my-h5 --json
-continue-harness doctor
-continue-harness verify quick
-continue-harness verify feature
-continue-harness verify visual
-continue-harness verify audit
-continue-harness inputs inspect --json
-continue-harness design tokens inspect --json
-continue-harness ui systems list --json
-continue-harness ui systems install tdesign-uniapp --dry-run --json
-continue-harness task create --title "首次需求"
-continue-harness skills list --json
-continue-harness skills install --project
-continue-harness skills install --global
-continue-harness version
-continue-harness -v
-continue-harness --version
-```
-
-`create --preset consumer-h5` generates the uni-app, Vue 3, Vite, and Playwright H5 project contents.
-`init` connects an existing project without overwriting project-owned files. AI agents should restore
-context and Intake first, then register evidence, create tasks, and select verification from project
-configuration.
-
-Command-specific Skills remain available through explicit installation when a task needs them.
-
-`AGENTS.md` is the only project constraint body. Generated `CLAUDE.md` imports it, Cursor receives a
-thin always-applied rule pointing to it, and Codex/Cursor use `.agents/skills` while Claude Code uses
-`.claude/skills`. Install workflows for supported providers with:
-
-```bash
-continue-harness skills install --project --provider all --name consumer-h5-harness
-continue-harness skills install --global --provider claude
-continue-harness skills install --global --provider cursor
-```
-
-## Architecture
-
-```text
-Core
-  + Product Profile
-  + Platform Adapter
-  + Stack Adapter
-  + Project-owned configuration
-```
-
-Core does not contain product pages, domain states, API endpoints, brand values, or design tokens.
-It also does not import a concrete UI library. Optional UI System Adapters map semantic components and
-project-owned semantic tokens to a selected library; see `docs/UI_SYSTEMS.md`.
-
-## Documentation site
-
-A deployable VitePress documentation site lives under `site/continue-harness-docs/`. It explains the
-background, SOP, module design, Agent workflow, verification strategy, and static deployment path.
+See the [CLI reference](site/continue-harness-docs/docs/en/reference/commands.md) for registering inputs, running tasks, verification and handoff. Current capabilities and Pilot evidence are in the [case study](site/continue-harness-docs/docs/en/showcase/case-study.md) and [real-project Pilot](site/continue-harness-docs/docs/en/showcase/real-project-pilot.md).
 
 Online documentation: [https://ai.zs1843.cn](https://ai.zs1843.cn)
 
-For concrete behavior and current limits, see the [project case study](site/continue-harness-docs/docs/showcase/case-study.md)
-and [reproducible CLI example](site/continue-harness-docs/docs/showcase/workflow-example.md).
+## Project records
 
-```bash
-cd site/continue-harness-docs
-pnpm install
-pnpm docs:build
-```
+- `.continue-harness/project.yaml`: project facts and command mappings.
+- `.continue-harness/intake.yaml`: basic facts and input applicability.
+- `.continue-harness/inputs/manifest.yaml`: evidence sources, versions and task links.
+- `docs/ACCEPTANCE.md`: links among requirements, implementation, acceptance and evidence.
+- `tmp/continue-harness/`: latest verification report and command logs.
+- `docs/history/tasks/`: task snapshots and handoff state.
 
-## Status
+The project owns business decisions and acceptance criteria. Harness checks registered links, file state and verification results; it cannot replace business review or automatically prove that requirements have been fully decomposed.
 
-This repository is an initial `0.1.0` implementation. Core and CLI packages can be packed for
-registry verification, but the placeholder `@company` scope must be replaced or configured before
-publishing. Publishing, upgrades, API contract adapters, and additional project profiles remain
-explicit release decisions.
+See the [Site package](site/continue-harness-docs/package.json) for local documentation build instructions.

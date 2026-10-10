@@ -22,7 +22,9 @@ Resume includes Intake facts, PROJECT, CURRENT_STATUS and DECISIONS documents, t
 
 ## Save handoff state
 
-Before a snapshot, check input and acceptance links and verify the current task. The snapshot contains:
+All of the following conditions must hold before creating a snapshot: input inspection is `passed`; the current task's acceptance status is neither `needs_confirmation` nor `not_configured`; configured Intake is `confirmed`; a verification report exists for this task and its task ID and context fingerprint match current state; and bound state did not change during verification. The report itself may contain a failed result; the snapshot preserves that result, but a failed report is not acceptance. Sensitive-content detection also stops snapshot creation.
+
+When these gates are met, the snapshot contains:
 
 - Task notes and a project-file hash inventory.
 - A copy of the verification report and its task/version association.

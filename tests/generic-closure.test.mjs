@@ -7,7 +7,7 @@ import { spawnSync } from 'node:child_process';
 import YAML from 'yaml';
 import { writeReport } from '../packages/core/src/report.mjs';
 import { buildResumeState } from '../packages/core/src/resume.mjs';
-import { evidenceDefinition, intakeEvidenceStatus } from '../packages/core/src/intake.mjs';
+import { evidenceDefinition, intakeEvidenceStatus, BASIC_INFO_FIELDS, pendingIntakeQuestions } from '../packages/core/src/intake.mjs';
 
 import {
   createTaskSnapshot,
@@ -93,13 +93,90 @@ test('project-specific inputs are accepted and unregistered custom files are det
   assert.ok((await inspectInputs(cwd)).discovered.some((item) => item.type === 'data_contract'));
 });
 
+const CONFIRMED_PROJECT = { type: 'backend', goal: 'deliver service', runtime: 'container', toolchain: 'Node.js' };
+
 test('project type suggests evidence without requiring UI, API or domain conventions', () => {
   for (const type of ['frontend', 'backend', 'client', 'data', 'infrastructure', 'mixed']) {
     assert.deepEqual(evidenceDefinition(type).filter((item) => item.required).map((item) => item.id), ['requirements']);
   }
-  assert.equal(intakeEvidenceStatus({ evidence: [{ status: 'confirmed' }] }).complete, false);
-  assert.equal(intakeEvidenceStatus({ evidence: [{ status: 'not_applicable' }] }).complete, false);
-  assert.equal(intakeEvidenceStatus({ evidence: [{ status: 'not_applicable', note: 'No UI changes' }] }).complete, true);
+  const base = { project: CONFIRMED_PROJECT };
+  assert.equal(intakeEvidenceStatus({ ...base, evidence: [{ status: 'confirmed' }] }).complete, false);
+  assert.equal(intakeEvidenceStatus({ ...base, evidence: [{ status: 'not_applicable' }] }).complete, false);
+  assert.equal(intakeEvidenceStatus({ ...base, evidence: [{ status: 'not_applicable', note: 'No UI changes' }] }).complete, false);
+});
+
+test('intake refuses to confirm while any project fact is still pending', () => {
+  const evidence = [{ id: 'requirements', required: true, status: 'confirmed', source: 'docs/requirements.md' }];
+  const pending = { type: 'pending', goal: 'pending', runtime: 'pending', toolchain: 'pending' };
+  const status = intakeEvidenceStatus({ project: pending, evidence });
+  assert.equal(status.complete, false);
+  assert.deepEqual(status.basic_info, BASIC_INFO_FIELDS);
+  // The counter-example from the audit: satisfied evidence must not paper over pending facts.
+  assert.deepEqual(pendingIntakeQuestions({ project: pending, evidence }).map((item) => item.id),
+    ['project_type', 'goal', 'runtime', 'toolchain']);
+
+  // One unresolved fact is enough to block confirmation, and blank/reopened values are not answers.
+  const almost = intakeEvidenceStatus({ project: { ...CONFIRMED_PROJECT, toolchain: 'pending' }, evidence });
+  assert.equal(almost.complete, false);
+  assert.deepEqual(almost.basic_info, ['toolchain']);
+  assert.equal(intakeEvidenceStatus({ project: { ...CONFIRMED_PROJECT, toolchain: '   ' }, evidence }).complete, false);
+  assert.equal(intakeEvidenceStatus({ project: { ...CONFIRMED_PROJECT, goal: 'needs_confirmation' }, evidence }).complete, false);
+  assert.equal(intakeEvidenceStatus({ project: CONFIRMED_PROJECT, evidence }).complete, true);
+});
+
+test('intake rejects empty evidence, invalid statuses and a forged stored confirmation', async () => {
+  const cwd = await projectFixture();
+  assert.equal(intakeEvidenceStatus({ project: CONFIRMED_PROJECT, evidence: [] }).complete, false);
+  const evidence = [{ id: 'requirements', required: true, status: 'confirmed', source: 'req.md' },
+    { id: 'custom', status: 'invented' }];
+  assert.equal(intakeEvidenceStatus({ project: CONFIRMED_PROJECT, evidence }).complete, false);
+  await writeFile(resolve(cwd, '.continue-harness/intake.yaml'), YAML.stringify({
+    status: 'confirmed', project: { ...CONFIRMED_PROJECT, goal: 'pending' }, evidence: evidence.slice(0, 1),
+  }));
+  const state = await buildResumeState(cwd, { taskId: 'T001' });
+  assert.equal(state.intake.status, 'awaiting_answers');
+  assert.equal(state.next_actions[0].action, 'intake inspect');
+  await assert.rejects(createTaskSnapshot(cwd, { taskId: 'T001' }), /Intake/);
+  const repository = resolve(import.meta.dirname, '..');
+  const config = YAML.parse(await readFile(resolve(repository, '.continue-harness/project.yaml'), 'utf8'));
+  config.commands = { check: `${process.execPath} --version` };
+  config.verify = { audit: { commands: ['check'] } };
+  await writeFile(resolve(cwd, '.continue-harness/project.yaml'), YAML.stringify(config));
+  const run = spawnSync(process.execPath, [resolve(repository, 'packages/cli/bin/continue-harness.mjs'), 'verify', 'audit', '--json'], { cwd, encoding: 'utf8' });
+  assert.equal(run.status, 1);
+  assert.ok(JSON.parse(run.stdout).results.some((item) => item.name === 'intake' && item.status === 'failed'));
+});
+
+test('every active input needs an acceptance row regardless of its type', async () => {
+  const cwd = await mkdtemp(resolve(tmpdir(), 'continue-harness-coverage-'));
+  await mkdir(resolve(cwd, '.continue-harness/inputs/data_contract'), { recursive: true });
+  await mkdir(resolve(cwd, 'docs'), { recursive: true });
+  await writeFile(resolve(cwd, '.continue-harness/inputs/data_contract/schema.csv'), 'id,name\n');
+  await writeFile(resolve(cwd, '.continue-harness/inputs/manifest.yaml'), YAML.stringify({
+    inputs: [{
+      id: 'DATA-T001',
+      path: '.continue-harness/inputs/data_contract/schema.csv',
+      status: 'active',
+      task_id: 'T001',
+      type: 'data_contract',
+    }],
+  }));
+  await writeFile(resolve(cwd, 'docs/ACCEPTANCE.md'), [
+    '# 验收标准',
+    '',
+    '| 编号 | 任务 | 需求 | 实现项 | 验收标准 | 状态 | 证据 |',
+    '| --- | --- | --- | --- | --- | --- | --- |',
+    '',
+  ].join('\n'));
+  const inspection = await inspectAcceptance(cwd, { taskId: 'T001' });
+  const uncovered = inspection.rows.find((row) => row.requirement === 'DATA-T001');
+  assert.ok(uncovered, 'custom input type must produce a coverage row');
+  assert.ok(uncovered.issues.includes('uncovered_requirement'));
+  assert.equal(inspection.status, 'needs_confirmation');
+  const manifest = YAML.parse(await readFile(resolve(cwd, '.continue-harness/inputs/manifest.yaml'), 'utf8'));
+  delete manifest.inputs[0].task_id;
+  await writeFile(resolve(cwd, '.continue-harness/inputs/manifest.yaml'), YAML.stringify(manifest));
+  assert.ok((await inspectAcceptance(cwd, { taskId: 'T001' })).rows.some((row) => row.requirement === 'DATA-T001'));
 });
 
 test('verified status alone is insufficient and changed requirement hashes invalidate acceptance', async () => {
@@ -134,6 +211,8 @@ test('snapshot keeps its report and context after the latest report is replaced'
   assert.equal(saved.report.status, 'passed');
   const context = JSON.parse(await readFile(resolve(cwd, result.path, 'context.json'), 'utf8'));
   assert.equal(context.acceptance.rows[0].requirement, 'PRD-T001');
+  const files = JSON.parse(await readFile(resolve(cwd, result.path, 'files.json'), 'utf8'));
+  assert.ok(files.files.every((file) => !Object.hasOwn(file, 'ui')));
 });
 
 test('CLI binds a real verification report to the selected task and blocks missing acceptance', async () => {
@@ -154,6 +233,48 @@ test('CLI binds a real verification report to the selected task and blocks missi
   await writeFile(resolve(cwd, 'docs/ACCEPTANCE.md'), '# No criteria yet');
   const missing = spawnSync(process.execPath, [cli, 'verify', 'feature', '--task', 'T001'], { cwd, encoding: 'utf8' });
   assert.equal(missing.status, 1, missing.stderr);
+});
+
+test('verification reports bind the verify commands, not just the inputs', async () => {
+  const cwd = await projectFixture();
+  const config = {
+    harness: { version: '0.1.0' },
+    project: { name: 'fixture', product_type: 'generic' },
+    commands: { check: `${process.execPath} --version` },
+    verify: { feature: { commands: ['check'] } },
+  };
+  await writeFile(resolve(cwd, '.continue-harness/project.yaml'), YAML.stringify(config));
+  await writeReport(cwd, { mode: 'feature', status: 'passed', task_id: 'T001', results: [] });
+  assert.equal((await buildResumeState(cwd, { taskId: 'T001' })).verification.applicable, true);
+  const bound = JSON.parse(await readFile(resolve(cwd, 'tmp/continue-harness/report.json'), 'utf8'));
+  assert.equal(bound.context.verify.verify.feature.commands[0], 'check');
+  // Editing the verification commands changes what the report covers, so it stops being valid.
+  await writeFile(resolve(cwd, '.continue-harness/project.yaml'), YAML.stringify({
+    ...config,
+    commands: { check: `${process.execPath} --version --help` },
+  }));
+  assert.equal((await buildResumeState(cwd, { taskId: 'T001' })).verification.applicable, false);
+});
+
+test('a report whose state changed during verification cannot pass or back a snapshot', async () => {
+  const cwd = await projectFixture();
+  const repository = resolve(import.meta.dirname, '..');
+  const config = YAML.parse(await readFile(resolve(repository, '.continue-harness/project.yaml'), 'utf8'));
+  // The verification command mutates an acceptance evidence file while it runs.
+  config.commands = { mutate: `${process.execPath} -e "require('fs').appendFileSync('evidence.txt',' drift')"` };
+  config.verify = { feature: { commands: ['mutate'] } };
+  await writeFile(resolve(cwd, '.continue-harness/project.yaml'), YAML.stringify(config));
+  await writeFile(resolve(cwd, '.continue-harness/inputs/prd/modules/T001/metadata.yaml'), 'id: T001\ntitle: Delivery\n');
+  const cli = resolve(repository, 'packages/cli/bin/continue-harness.mjs');
+  const result = spawnSync(process.execPath, [cli, 'verify', 'feature', '--task', 'T001', '--json'], { cwd, encoding: 'utf8' });
+  assert.equal(result.status, 1, result.stderr + result.stdout);
+  const report = JSON.parse(result.stdout);
+  assert.equal(report.status, 'failed');
+  assert.equal(report.context.changed_during_verification, true);
+  assert.notEqual(report.context.before_fingerprint, report.context.fingerprint);
+  assert.ok(report.results.some((item) => item.name === 'evidence_stability' && item.status === 'failed'));
+  assert.equal((await buildResumeState(cwd, { taskId: 'T001' })).verification.applicable, false);
+  await assert.rejects(createTaskSnapshot(cwd, { taskId: 'T001' }), /验证期间/);
 });
 
 test('changed evidence invalidates reports and unresolved deferrals do not pass', async () => {

@@ -1,98 +1,50 @@
 # 真实项目 Pilot
 
-> 本页结果对应此前 Pilot 执行记录，尚未按本次新增的验收关联及任务/版本绑定门禁重新验证。旧项目需补齐现有验收表并重新执行验证，不能据此宣称通过当前门禁。
+> 最近复验：2026-10-09。使用本地 Harness 源码运行；两个项目均未改写验收记录。
 
-> 验证时间：2026-10-08；Harness CLI：`0.1.0`。
+本页验证 Intake、输入登记、任务查询、历史记录、上下文恢复、诊断、Audit 和快照门禁。它不代表业务交付已经验收。
 
-本页记录两个真实项目各 1 个 `T001` Pilot 的执行命令与结果，用于验证 Harness 与具体框架解耦。官网和后台的业务验收不在本轮范围内；能力边界见本页末尾。
+## 复验结果
 
-## 验证对象
+| 检查 | HeTun-Site | Workbench-Admin |
+| --- | --- | --- |
+| Intake | confirmed | confirmed |
+| 输入检查与分析 | passed | passed |
+| 任务查询、历史与上下文恢复 | passed；恢复结果包含当前失败报告 | passed；恢复结果包含当前失败报告 |
+| 项目已配置的检查 | 均通过 | 均通过 |
+| Doctor | failed：环境文件忽略规则缺失；Agent 约束未说明输入清单流程 | failed：环境文件忽略规则缺失；Agent 约束未说明输入清单流程 |
+| 验收关联 | needs_confirmation，5 项未闭环 | needs_confirmation，5 项未闭环 |
+| Audit | **failed** | **failed** |
+| 新快照 | 被未闭环验收阻止 | 被未闭环验收阻止 |
 
-| 项目 | 项目类型 | 技术栈 | Pilot 任务 |
-| --- | --- | --- | --- |
-| HeTun-Site | 前端官网 | React、TypeScript、Vite、Tailwind，混合历史 HTML | `T001` |
-| Workbench-Admin | 前端后台 | Vue 2、Vue CLI、Webpack、Element UI、Jest、Yarn | `T001` |
+验收表的既有记录缺少机器可核验的任务、需求、实现和证据关联，并存在未覆盖需求。旧记录中的 `verified` 状态不足以单独通过门禁。没有修改 Pilot 项目的验收状态，也没有为得到通过结果而补造证据。
 
-## 执行命令
+## 复验流程
 
-每个项目在自己的仓库中执行以下命令；完整工作流见[工作流](/guide/overview)。
+两项目均执行以下流程；命令的完整参数、退出码和原始输出见本地证据包。
 
-**Skill**：`continue-harness-inspect`、`continue-harness-doctor`、`continue-harness-inputs`、`continue-harness-task`、`continue-harness-verify`（`intake`、`resume` 由 `generic-harness` 覆盖，consumer-h5 项目为 `consumer-h5-harness`）
-
-**CLI（可选）**：
-
-```bash
-continue-harness inspect --json
-continue-harness doctor --json
-continue-harness intake inspect --json
-continue-harness inputs inspect --json
-continue-harness inputs analyze --json
-continue-harness resume --task T001 --json
-continue-harness verify audit --json
-continue-harness task history T001 --json
+```text
+intake inspect
+inputs inspect → inputs analyze
+task inspect → task history → resume
+doctor
+verify audit --task T001
+task snapshot T001
 ```
 
-## 结果
+两次 Audit 的项目自有检查均通过，但验收关联未闭环，因此整体状态保持 `failed`。快照命令据此拒绝生成新快照。上下文恢复命令本身成功，并明确呈现了失败状态。
 
-| 环节 | HeTun-Site | Workbench-Admin |
-| --- | --- | --- |
-| Intake | `confirmed` | `confirmed` |
-| 输入登记 | 1 个真实 PRD，`passed` | 1 个真实 PRD，`passed` |
-| 占位输入拦截 | 通过负向验证 | 通过负向验证 |
-| 验收解析 | `closed_with_risks` | `closed_with_risks` |
-| Audit | `passed`：构建、Pilot smoke、验收均通过 | `passed`：Pilot lint、单测、开发构建、验收均通过 |
-| 上下文恢复 | 成功 | 成功 |
-| 交接快照 | 成功 | 成功 |
+## 可复核证据
 
-依赖安装后的复跑结果如下：HeTun-Site 的 `pnpm install`、`npm run build` 和 `npm run verify:pilot` 均成功；Vite 仍提示 chunk 体积超过 500 kB，但不阻塞本次 Pilot。Workbench-Admin 的 `npm run lint:pilot`、单测 28/28 和 `npm run build:pilot` 均成功；`build:pilot` 显式使用旧版 Webpack 所需的 OpenSSL 兼容参数，原始全量 Lint 的历史格式债务仍单独保留。
+公开摘要：[Pilot 结果与报告哈希](/evidence/pilot-2026-10-09.json)。原始命令输出、报告、项目命令日志及本次使用的 Harness 源码副本保存在仓库内的 `.continue-harness/evidence/pilot-rerun-2026-10-09-source-current/`，不随 Site 发布。项目源码以各自 Git 提交号标识；Harness 源码副本和 SHA-256 清单可用于核对运行版本。
 
-两个项目的最终 Harness `Audit` 均为 `passed`。两个快照记录了真实 PRD、确认输入、验收状态、验证结果和持久决策；`.env.*` 被排除，普通业务文件名不会触发敏感误报。
+| 项目 | 源码提交 | Audit | 报告 SHA-256 |
+| --- | --- | --- | --- |
+| HeTun-Site | `cf053e1b40b515f4716e1685c0731c6b776c1f8b` | failed | `6a2bd7dbddecf304bccfe04ea63cc19a203b3e25a4b70160f9377f801b6af1d0` |
+| Workbench-Admin | `22da4ad755a2682377540f791684bea257c30740` | failed | `1d795fa0e68f12a16b12428c95322e6f19156c6f429599f44280c9cc1ccd4d20` |
 
-## Pilot 通过标准
+## 结论边界
 
-Harness 在同时满足以下条件时判定 Pilot 通过：
+本次验证了任务、输入、日志、上下文恢复和报告绑定在两个不同项目结构中可执行；也确认当前验收门禁会拒绝缺少关联的记录。它没有证明两个 Pilot 已完成业务验收或生成新快照。旧的 `passed` 结论来自较早的门禁运行，不能代表本次结果。
 
-- Intake 事实和第二轮证据均有明确状态与来源。
-- 输入检查会拒绝 Harness 占位文档。
-- 任务编号、输入哈希、命令日志和验证报告可以互相追溯。
-- `resume` 能恢复任务、输入、验收、风险、验证和下一步动作。
-- 未收口的验收会阻断完成结论；延期和外部阻塞保留原因。
-- 快照不包含敏感内容，普通文件名不触发误报。
-- 两个不同技术栈的项目得到一致的协议行为。
-
-本轮在两个不同技术栈的项目上各完成 1 个 T001 Pilot，均达到 `passed`。后续业务需求需要创建新任务，并补充权限、API、视觉或部署证据。
-
-## 能力边界
-
-### 已验证能力
-
-| 能力 | 证据 | 当前结论 |
-| --- | --- | --- |
-| 跨技术栈接入 | HeTun-Site（React/Vite）和 Workbench-Admin（Vue 2/Vue CLI）使用同一套 generic Harness 协议 | 2 个样本：Core 不依赖某个业务框架，命令和工程门禁由项目配置提供 |
-| 多轮 Intake | 两个项目均完成基本信息确认、输入登记和非适用项确认 | Harness 先问项目事实，再生成按类型裁剪的输入问题 |
-| 输入与任务绑定 | 真实 PRD、来源、版本、哈希和任务 ID 写入 manifest 与快照 | 占位输入会被拒绝，原始证据不被 Harness 改写 |
-| 工程验证与验收 | 两个项目 Audit 均为 `passed`；未收口验收会让 Audit 失败 | 构建、测试、Lint 或 smoke 命令可由项目配置接入；验收状态独立参与结论 |
-| 上下文恢复与交接 | 两个项目均生成 T001 不可变快照，包含输入、决策、风险和最近验证结果 | 新 Agent 可以从任务历史恢复，不依赖上一轮对话 |
-| 日志与安全 | 命令日志、报告和快照互相引用；`.env.*` 被排除，普通业务文件名不再误报 | 执行过程有日志可查，敏感内容进入快照的风险较低 |
-| 回归保护 | Harness 根项目 `pnpm test` 为 79/79，Site 构建通过 | Core/CLI 的流程行为有自动化测试保护 |
-
-### 尚未验证
-
-- 尚未用足够多的语言、平台和部署环境证明普适性。
-- 尚未量化交付速度、返工率、缺陷率或 Agent 成本改善。
-- 尚未验证 Harness 能替代产品负责人对业务、权限、API、视觉和发布结果的确认。
-- 两个 Pilot 的 `passed` 对应 T001 工程门禁和验收边界，不代表两个产品全部完成。
-- 历史项目仍可能存在格式债务、旧依赖、性能警告和业务范围缺口，这些需要在后续任务中继续登记和验收。
-
-本轮在 2 个项目、各 1 个任务上验证了协作、验证、恢复与交接流程；不支持“自动完成任意项目”或“提升研发效率”。
-
-## 维护方式
-
-Harness 行为变化时同步更新：
-
-1. CLI/Core 自动化测试。
-2. 本页 Pilot 命令和结果表。
-3. [验证](../guide/verification.md) 与 [验证与快照](../sop/verification-and-snapshot.md)。
-4. 中英文页面和 Site 导航。
-
-不要直接编辑 `.vitepress/.temp` 或 `.vitepress/dist`；它们是构建产物。
+下一步应由项目负责人确认并补齐原有验收记录的关联证据，再复跑 Audit；Harness 不代替项目负责人确认事实。

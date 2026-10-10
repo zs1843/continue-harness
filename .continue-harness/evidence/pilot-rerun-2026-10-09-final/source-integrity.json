@@ -1,0 +1,29 @@
+{
+  "harness_head": "18379cbd4a6007c120c9f20c567e3bebd445862a",
+  "harness_worktree": true,
+  "source_file_set_digest": "778eed48e4f3e6225f41646345e02a39c16d930e4d7c124548e385aa6f4febb5",
+  "source_hashes": {
+    "packages/cli/bin/continue-harness.mjs": "7e24784719403c6f04cd8e8cdf4d653d0faedfc92a7c658fcfc1fc478cd9bd7c",
+    "packages/cli/bin/fe-harness.mjs": "7536250f55813aefbc23bbf3f81782fb6afa1b440186bda036d544112a9eb76b",
+    "packages/core/src/acceptance.mjs": "676b30653741d557251f4113b72f91a9375f74b03992e6eda523d8dc1cda21b9",
+    "packages/core/src/config.mjs": "76f1a114c9bb8ea50b56d483aa5e19651c2544641c5fe3f916630358a9a6ad29",
+    "packages/core/src/design.mjs": "28075bbab50e9de477d46e2f9aa7a5d2cf23b7aa67654a1f4543f42337ca4ed4",
+    "packages/core/src/doctor.mjs": "4c8f0b0263f1eb030b10bc83fd2063fa323fa5bbae342ce39b3b9a94744e7644",
+    "packages/core/src/history.mjs": "6dd9bfc41cc67a1d54b5d79e5d8b94ea75522bed757a5b7684ac3b04e4a6f6cf",
+    "packages/core/src/index.mjs": "3d102c4ccd1a943486ad674c74c306ff7409136005b1b2d515866aaf3c56f63c",
+    "packages/core/src/init.mjs": "97e89ae5138595629d14d80fccf2a81e5a4a513bcc5ced9303cc3038ac580d1a",
+    "packages/core/src/inputs.mjs": "d30120f0c4a4a11fbbccaf13a70cbf9c2259973153017ed73ba5df585e923474",
+    "packages/core/src/intake.mjs": "8b9117bf9ce39dfe3d3bc7ae15a739e770927305d4e968868ab63ae7d789e618",
+    "packages/core/src/openapi.mjs": "22d4b23a5b89d98880f518ef77aaa820449ab20266552d85d8211c975fca6030",
+    "packages/core/src/paths.mjs": "a2c8c701ed485f0a314c718ccdafae33d8856defce8e683da939edaaec8e4133",
+    "packages/core/src/project.mjs": "953ba063b1fc61f14c5784de74040f5f66ad46f0665772e541691e460aecb0d7",
+    "packages/core/src/report.mjs": "1022b0a351b064b36d8adba24ea1f3457dc9e0a9202f0ca3ca5e2de1e126f19d",
+    "packages/core/src/resume.mjs": "e1ebd331824b481267f857f8d1c589edb1dfd4b70e5132e2eb8daa3b1791f738",
+    "packages/core/src/runner.mjs": "d60974500bc1cc224be1fbe6ccfede781dbcddf44d5b1e2a32779e1cbb4d7ea6",
+    "packages/core/src/status.mjs": "fabe01961749fd945ed257e9f7bd393c63e3cc31bee0702951e30e3c04d71a1b",
+    "packages/core/src/ui-contract.mjs": "fccd1ac23e8cf2c78b61c369fc6a707a8f308e100ef930a3bdebc0b90b88fe5d",
+    "packages/core/src/ui-system.mjs": "ff7298fc03e001ccd0dbd0960493a3811238e0c088f49899651ad38fd0462d84",
+    "packages/core/src/verification-context.mjs": "c4e4e2008b4e59a7cf01699832dfb4b408351acf38acecc9705212d3e4e79554"
+  },
+  "snapshot_directory": "harness-source"
+}

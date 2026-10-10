@@ -1,98 +1,50 @@
-# Real-project Pilot
+# Real-project Pilots
 
-> These results describe the earlier Pilot run. They have not been rerun against the stricter acceptance links and task/version-bound report checks. Backfill the existing ledger and rerun verification before claiming passage through the current gate.
+> Latest rerun: 2026-10-09, using the local Harness source. Neither project’s acceptance records were rewritten.
 
-> Verification date: 2026-10-08. Harness CLI: `0.1.0`.
-
-This page records the commands and results of one `T001` Pilot in each of two real projects, used to verify that the Harness is decoupled from a specific framework. Business acceptance for the website and the administration project is outside this round; capability boundaries are at the end of this page.
-
-## Projects
-
-| Project | Shape | Stack | Pilot task |
-| --- | --- | --- | --- |
-| HeTun-Site | Frontend website | React, TypeScript, Vite, Tailwind, legacy HTML | `T001` |
-| Workbench-Admin | Frontend administration | Vue 2, Vue CLI, Webpack, Element UI, Jest, Yarn | `T001` |
-
-## Commands
-
-The following commands were executed in each project's own repository. The full workflow is in [Workflow](/en/guide/overview).
-
-**Skill**: `continue-harness-inspect`, `continue-harness-doctor`, `continue-harness-inputs`, `continue-harness-task`, `continue-harness-verify` (`generic-harness` covers `intake` and `resume`; `consumer-h5-harness` in a consumer-h5 project)
-
-**CLI (optional)**:
-
-```bash
-continue-harness inspect --json
-continue-harness doctor --json
-continue-harness intake inspect --json
-continue-harness inputs inspect --json
-continue-harness inputs analyze --json
-continue-harness resume --task T001 --json
-continue-harness verify audit --json
-continue-harness task history T001 --json
-```
+This page exercises Intake, input registration, task inspection, history, context recovery, diagnostics, Audit, and the snapshot gate. It does not establish business-delivery acceptance.
 
 ## Results
 
-| Stage | HeTun-Site | Workbench-Admin |
+| Check | HeTun-Site | Workbench-Admin |
 | --- | --- | --- |
-| Intake | `confirmed` | `confirmed` |
-| Inputs | One real PRD, `passed` | One real PRD, `passed` |
-| Placeholder rejection | Negative test passed | Negative test passed |
-| Acceptance | `closed_with_risks` | `closed_with_risks` |
-| Audit | `passed`: build, pilot smoke, and acceptance passed | `passed`: pilot lint, unit tests, dev build, and acceptance passed |
-| Context recovery | Passed | Passed |
-| Handoff snapshot | Passed | Passed |
+| Intake | confirmed | confirmed |
+| Input inspection and analysis | passed | passed |
+| Task inspection, history, and context recovery | passed; recovery includes the current failed report | passed; recovery includes the current failed report |
+| Project-configured checks | All passed | All passed |
+| Doctor | failed: environment-file ignore rule missing; Agent constraints omit the input-registry workflow | failed: environment-file ignore rule missing; Agent constraints omit the input-registry workflow |
+| Acceptance links | needs_confirmation; 5 unresolved records | needs_confirmation; 5 unresolved records |
+| Audit | **failed** | **failed** |
+| New snapshot | Blocked by unresolved acceptance | Blocked by unresolved acceptance |
 
-After installing dependencies, HeTun-Site completed `pnpm install`, `npm run build`, and `npm run verify:pilot`; Vite still reports a chunk-size warning, which does not block this Pilot. Workbench-Admin passed `npm run lint:pilot`, all 28 unit tests, and `npm run build:pilot`; the build command explicitly supplies the OpenSSL compatibility flag required by its legacy Webpack. The original full lint command's historical formatting debt remains recorded separately.
+Existing acceptance rows lack machine-checkable task, requirement, implementation, and evidence links, and an uncovered requirement remains. A stored `verified` status alone does not satisfy the gate. No Pilot acceptance status was changed, and no evidence was invented to obtain a pass.
 
-Both final Harness audits are `passed`. Both snapshots contain the real PRD, confirmed inputs, acceptance status, verification results, and durable decisions. `.env.*` files are excluded, and harmless business filenames do not trigger a sensitive-file false positive.
+## Rerun workflow
 
-## Pilot completion criteria
+The following workflow was run in both projects. The local evidence package records the complete arguments, exit codes, and raw output.
 
-The Harness calls a Pilot complete when all of the following hold:
+```text
+intake inspect
+inputs inspect → inputs analyze
+task inspect → task history → resume
+doctor
+verify audit --task T001
+task snapshot T001
+```
 
-- Intake facts and second-round evidence have explicit statuses and sources.
-- Input checks reject Harness placeholder documents.
-- Task IDs, input hashes, command logs, and verification reports are traceable to each other.
-- `resume` restores the task, inputs, acceptance, risks, verification, and next actions.
-- Unresolved acceptance blocks a completion conclusion; deferrals and external blockers retain reasons.
-- Snapshots exclude sensitive content without rejecting harmless filenames.
-- Two projects with different stacks produce consistent protocol behavior.
+Project-configured checks passed in both runs, but the overall Audit remains `failed` because acceptance links are incomplete. The snapshot command correctly refused to create a new snapshot. Context recovery itself succeeded and reported the failed state.
 
-This round completed one T001 Pilot in each of two projects with different stacks, both reaching `passed`. Future business work needs new tasks plus the matching permission, API, visual, or deployment evidence.
+## Reviewable evidence
 
-## Capability boundaries
+Public summary: [Pilot results and report hashes](/evidence/pilot-2026-10-09.json). Raw command output, reports, project command logs, and a copy of the Harness source used for this run are retained in `.continue-harness/evidence/pilot-rerun-2026-10-09-source-current/` and are not published with the Site. The package records full commands, exit codes, and source hashes for review. Each project is identified by its Git revision.
 
-### Verified capabilities
+| Project | Source revision | Audit | Report SHA-256 |
+| --- | --- | --- | --- |
+| HeTun-Site | `cf053e1b40b515f4716e1685c0731c6b776c1f8b` | failed | `6a2bd7dbddecf304bccfe04ea63cc19a203b3e25a4b70160f9377f801b6af1d0` |
+| Workbench-Admin | `22da4ad755a2682377540f791684bea257c30740` | failed | `1d795fa0e68f12a16b12428c95322e6f19156c6f429599f44280c9cc1ccd4d20` |
 
-| Capability | Evidence | Current conclusion |
-| --- | --- | --- |
-| Cross-stack onboarding | HeTun-Site (React/Vite) and Workbench-Admin (Vue 2/Vue CLI) used the same generic Harness protocol | 2 samples: Core is not coupled to one business framework, and project configuration supplies commands and engineering gates |
-| Multi-round Intake | Both projects completed basic facts, input registration, and non-applicable evidence decisions | The Harness asks for project facts first, then narrows input questions by project type |
-| Traceable inputs | Real PRDs, sources, versions, hashes, and task IDs are recorded in the manifest and snapshots | Placeholder inputs are rejected and original evidence is not rewritten by the Harness |
-| Engineering verification and acceptance | Both project audits are `passed`; unresolved acceptance makes an audit fail | Build, test, lint, or smoke commands come from project configuration, while acceptance status independently affects the result |
-| Context recovery and handoff | Both projects generated immutable T001 snapshots containing inputs, decisions, risks, and latest verification | A new Agent can recover from task history instead of relying on the previous conversation |
-| Logs and security | Command logs, reports, and snapshots reference each other; `.env.*` files are excluded and harmless filenames no longer trigger false positives | Execution remains traceable with a lower risk of sensitive content entering snapshots |
-| Regression protection | Harness root `pnpm test` passed 79/79 and the Site build passed | Core/CLI flow behavior has automated regression coverage |
+## Conclusion boundary
 
-### Not yet verified
+The rerun confirms that task, input, log, context-recovery, and report-binding commands execute in two different project structures. It also confirms that the acceptance gate rejects records without required links. It does not show that either Pilot has completed business acceptance or produced a new snapshot. Earlier `passed` results came from an older gate run and do not describe this rerun.
 
-- Broad applicability across enough languages, platforms, and deployment environments.
-- Quantified improvement in delivery speed, rework rate, defect rate, or Agent cost.
-- Replacement of product-owner confirmation for business, permission, API, visual, and release outcomes.
-- A `passed` Pilot maps to the T001 engineering gates and acceptance boundaries, not to every product requirement.
-- Historical formatting debt, legacy dependencies, performance warnings, and business-scope gaps may remain and need registration and acceptance in later tasks.
-
-This round verified collaboration, verification, recovery, and handoff flows on 2 projects with one task each; it does not support "automatically completing arbitrary projects" or "improving engineering efficiency."
-
-## Maintenance
-
-When Harness behavior changes, update together:
-
-1. Core/CLI automated tests.
-2. The Pilot commands and result table on this page.
-3. [Verification](../guide/verification.md) and [Verification and snapshots](../sop/verification-and-snapshot.md).
-4. Both language pages and Site navigation.
-
-Do not edit `.vitepress/.temp` or `.vitepress/dist`; they are build artifacts.
+The next step is for project owners to confirm and add evidence links to the existing acceptance records, then rerun Audit. The Harness does not confirm project facts on their behalf.

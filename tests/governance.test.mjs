@@ -55,6 +55,24 @@ test('input analysis extracts facts and reports PRD UI conflicts', async () => {
   assert.ok(analysis.issues.some((issue) => issue.code === 'INPUT_FACT_CONFLICT'));
 });
 
+test('custom input types remain neutral instead of being classified as business evidence', async () => {
+  const cwd = await mkdtemp(resolve(tmpdir(), 'continue-harness-custom-input-'));
+  await mkdir(resolve(cwd, '.continue-harness/inputs/system-map'), { recursive: true });
+  await writeFile(resolve(cwd, '.continue-harness/inputs/system-map/map.md'), 'status: complete\n');
+  await writeFile(resolve(cwd, '.continue-harness/inputs/manifest.yaml'), [
+    'inputs:',
+    '  - id: MAP-01',
+    '    type: system-map',
+    '    path: .continue-harness/inputs/system-map/map.md',
+    '    status: active',
+    '',
+  ].join('\n'));
+  const analysis = await analyzeInputs(cwd);
+  assert.equal(analysis.status, 'passed');
+  assert.equal(analysis.facts[0].dimension, 'input:system-map');
+  assert.deepEqual(analysis.priority, {});
+});
+
 test('design token inspection reports pending extraction for empty tokens', async () => {
   const cwd = await mkdtemp(resolve(tmpdir(), 'continue-harness-tokens-'));
   await mkdir(resolve(cwd, 'docs/design'), { recursive: true });

@@ -3,7 +3,7 @@
   "$id": "https://example.invalid/continue-harness/project.schema.json",
   "title": "continue-harness project configuration",
   "type": "object",
-  "required": ["harness", "project", "commands", "verify"],
+  "required": ["harness", "project"],
   "properties": {
     "harness": {
       "type": "object",
@@ -20,21 +20,19 @@
         "name": { "type": "string", "minLength": 1 },
         "product_type": {
           "type": "string",
-          "enum": ["generic", "consumer_h5", "developer_tooling"]
+          "minLength": 1
         },
         "platforms": {
           "type": "array",
-          "minItems": 1,
-          "items": { "type": "string", "enum": ["web_mobile", "node"] }
+          "items": { "type": "string", "minLength": 1 }
         }
       }
     },
     "stack": {
       "type": "object",
-      "required": ["adapter"],
       "properties": {
-        "adapter": { "type": "string", "enum": ["uni-app", "node-esm"] },
-        "package_manager": { "type": "string", "enum": ["pnpm", "npm", "yarn"] }
+        "adapter": { "type": "string", "minLength": 1 },
+        "package_manager": { "type": "string", "minLength": 1 }
       }
     },
     "ui": {

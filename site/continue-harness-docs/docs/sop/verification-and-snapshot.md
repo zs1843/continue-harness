@@ -1,6 +1,6 @@
 # 验证与快照
 
-本页说明按改动选择验证模式、验收门禁的生效条件，以及快照的创建和内容。模式定义见[验证模式](../reference/verification-modes.md)，命令参数见[命令](../reference/commands.md)。
+本页说明按改动选择验证模式、验收门禁的判定规则，以及快照的创建和内容。模式定义见[验证模式](../reference/verification-modes.md)，命令参数见[命令](../reference/commands.md)。
 
 ## 选择模式
 
@@ -18,9 +18,9 @@ continue-harness verify feature
 
 ## 验收门禁
 
-`verify feature` 和 `verify audit` 追加读取 `docs/ACCEPTANCE.md`。只有该文件存在、含 Markdown 表格且表头有状态列时门禁才生效：未收口项记为失败，延期或外部阻塞项记为 `blocked`。
+feature、audit 检查当前任务的验收关联；绑定任务但没有验收记录、引用不完整或存在未收口项时失败。延期和阻塞也不能当作通过。Intake 已配置但未确认，或验证前后绑定状态变化，同样会阻断完成结论。
 
-验证绑定了任务时（显式 `--task`，或缺省时取最近任务），`docs/ACCEPTANCE.md` 不存在、没有表格、表头缺少状态列或存在未收口项时，`verify feature` 与 `verify audit` 一律失败；只有完全没有任务绑定时才不参与失败判定。Consumer H5 preset 不生成 `docs/ACCEPTANCE.md`，它把需求闭环检查登记为 `commands.coverage_closure` 并放进 `verify.feature`，因此该项目类型需要自行提供验收表，否则绑定任务后验证不会通过。
+具体字段、覆盖粒度及报告有效性以[验证与验收](../guide/verification.md)为准，状态判定见[验证模式](../reference/verification-modes.md)。
 
 ## 报告
 
@@ -38,6 +38,8 @@ continue-harness verify feature
 continue-harness task snapshot T001 --title "任务名称" --request "本次用户要求" --json
 ```
 
+创建快照要求输入检查为 `passed`，验收状态不是 `needs_confirmation` 或 `not_configured`；已配置的 Intake 必须为 `confirmed`。此外，必须已有当前任务的验证报告，且任务编号和上下文指纹仍匹配，验证期间绑定状态未变化。报告可以记录失败结果，快照会如实保留；它不因此成为验收通过。敏感内容扫描发现问题时也会停止创建。
+
 快照记录：
 
 - 任务说明。
@@ -48,4 +50,4 @@ continue-harness task snapshot T001 --title "任务名称" --request "本次用�
 
 ## 限制
 
-快照不保存 `.env`、密钥、Cookie 或 Access Token。`not_configured` 表示能力缺失，不能当作验证通过。
+快照排除 `.env*` 等敏感文件名，并扫描部分常见凭据格式；这不是完整的秘密检测，交接前仍需检查项目文档及证据中是否包含敏感内容。`not_configured` 表示能力缺失，不能当作验证通过。

@@ -1,76 +1,61 @@
 # Configuration and files
 
-This page describes the keys of `.continue-harness/project.yaml` and the report and artifact paths the CLI writes. The directory tree is in [Project structure](../sop/project-structure.md).
+This page describes Harness configuration, collaboration records, and verification artifacts. See [Project structure](../sop/project-structure.md) for directory purposes.
 
 ## Project configuration
 
-Every target project owns one configuration file at its root:
+Each adopted project maintains `.continue-harness/project.yaml` at its root. The configuration records confirmed project facts, command mappings, verification modes, and optional capabilities that the project actually needs. Inputs are selected for the project and task; inapplicable input types do not need to be created.
 
-```text
-.continue-harness/project.yaml
+The following minimal example uses generic mode. Empty `commands` and `verify` mean that project checks have not been registered; they do not mean verification passed. An unconfigured mode returns an unconfigured result.
+
+```yaml
+harness:
+  mode: generic
+  version: "0.1.0"
+project:
+  name: "Project name"
+commands: {}
+verify: {}
 ```
 
-## Shared keys
+The common adoption path requires `harness.version` and `project.name`. `commands` and `verify` may be absent or empty; an unconfigured verification mode is not a pass. Once project checks are confirmed, register the actual commands and map them to verification modes. Project type, runtime, toolchain, and package-manager values are optional project facts and are not restricted to built-in specialized labels. The table describes each field; `harness.mode`, `harness.package`, `sources`, `ui`, and `facts` are optional and should be added only when relevant:
 
-These keys are available in every preset:
-
-| Key | Meaning |
+| Field | Purpose |
 | --- | --- |
-| `harness.package`, `harness.version` | Harness package and version declared by the project |
+| `harness.mode`, `harness.package`, `harness.version` | Collaboration mode, Harness package and version; `version` is required, the rest are optional |
 | `project.name` | Project name |
-| `project.product_type` | `generic`, `consumer_h5`, or `developer_tooling` |
-| `commands` | Named command map; values are actual shell commands |
-| `verify` | Mode-to-command-name map; an unconfigured mode is written as `status: not_configured` |
-| `sources.api` (optional) | API evidence source: `provider: openapi` and a `snapshot` path |
-| `ui.system` (optional) | UI System selection: `status`, `adapter`, `policy`, `version` |
+| `project.product_type`, `project.platforms`, `stack.adapter`, `stack.package_manager` | Optional project facts recorded as non-empty strings; Core does not restrict adoption to a fixed list of names |
+| `commands` | Names and actual commands for project checks; configure when project checks are known |
+| `verify` | Verification modes and command mappings; configure as needed; an unconfigured mode is not a pass |
+| `sources`, `ui`, `facts` | Configure only when the project confirms the corresponding capability is needed |
 
-The Generic preset adds `harness.mode: generic` and an `intake` block. The block records `phase`, `status`, and `state`, where `state` points to the state file:
+Intake state is recorded in `.continue-harness/intake.yaml`; the input manifest is `.continue-harness/inputs/manifest.yaml`. These records follow confirmed project facts and do not require every project to have the same fields or input directories.
 
-```text
-.continue-harness/intake.yaml
-```
+## Collaboration records
 
-The Consumer H5 preset adds these on top of the shared keys:
-
-| Key | Meaning |
+| Path | Purpose |
 | --- | --- |
-| `project.platforms` | Runtime platform, for example `web_mobile` |
-| `stack.adapter`, `stack.framework`, `stack.language`, `stack.bundler`, `stack.package_manager` | Framework and toolchain selection |
-| `facts.agent_entry` and related keys | Paths to the Agent entry, module map, design facts, Tokens, history, and coverage matrix |
+| `AGENTS.md` | Single authority for project constraints |
+| `docs/PROJECT.md` | Project goals, scope, non-goals, and deliverables |
+| `docs/CURRENT_STATUS.md` | Current status, risks, and open work |
+| `docs/DECISIONS.md` | Confirmed decisions that remain in effect |
+| `docs/ACCEPTANCE.md` | Acceptance items, statuses, and evidence links |
+| `.continue-harness/inputs/manifest.yaml` | Input sources, applicability, versions, and links |
+| `.continue-harness/logs/commands.ndjson` | Append-only log of commands and Intake actions |
+| `docs/history/` | Task snapshots and recoverable handoff context |
 
-The Generic preset configuration carries none of `project.platforms`, `stack`, or `facts`. The API configuration key is `sources.api` and the UI configuration key is `ui.system`.
+The adoption workflow creates or reuses records according to the project’s existing state. The table describes record responsibilities, not a required complete file list. Default generated files may change with template versions; consult the current create/adoption plan for the exact scope.
 
-## Key fact files
-
-| File | Generic preset | Consumer H5 preset | Purpose |
-| --- | --- | --- | --- |
-| `AGENTS.md` | Generated | Generated | Single canonical constraint source |
-| `docs/PROJECT.md` | Generated | Not generated | Project goal, scope, non-goals, and deliverables |
-| `docs/PROJECT_MAP.md` | Not generated | Generated | Module map |
-| `docs/PRODUCT.md` | Not generated | Generated | Product facts |
-| `docs/DESIGN.md` | Not generated | Generated | Design facts |
-| `docs/CURRENT_STATUS.md` | Generated | Generated | Current status and limits |
-| `docs/DECISIONS.md` | Generated | Generated | Long-term decisions |
-| `docs/IMPLEMENTATION_COVERAGE.md` | Not generated | Generated | Requirement coverage matrix |
-| `docs/ACCEPTANCE.md` | Generated | Not generated | Acceptance gate source for `verify feature` and `verify audit`; with a bound task, a missing file, no table, a missing status column, or unresolved rows all fail |
-| `.continue-harness/inputs/manifest.yaml` | Generated | Generated | Input registration manifest |
-
-The Generic preset ships `.continue-harness/intake.yaml`; the Consumer H5 preset does not, and the file appears only after `intake answer` or `intake evidence`.
-
-## Artifact paths
+## Verification artifacts
 
 | Path | Content |
 | --- | --- |
-| `tmp/continue-harness/report.json` | Machine-readable report of the latest verification |
-| `tmp/continue-harness/report.md` | Markdown report of the latest verification |
-| `tmp/continue-harness/logs/` | Per-command verification logs |
-| `.continue-harness/logs/commands.ndjson` | Append-only log of commands and Intake actions |
-| `src/types/api.generated.ts` | Generated API types |
-| `src/services/api.generated.ts` | Generated API wrappers |
-| `.continue-harness/api/generated.json` | Managed metadata for generated artifacts |
+| `tmp/continue-harness/report.json` | Machine-readable report from the latest verification |
+| `tmp/continue-harness/report.md` | Human-readable report from the latest verification |
+| `tmp/continue-harness/logs/` | Verification command logs |
 
-`tmp/continue-harness/` is Git-ignored and can serve as a local debugging and CI artifact. Generated interface files carry managed metadata, and regeneration after a manual edit is refused.
+Verification runs only commands declared by the project. The Harness records results and evidence links; it does not replace project-specific judgments about correctness.
 
-## Boundaries
+## Security boundary
 
-Secrets, Cookies, Access Tokens, and `.env` contents stay project-owned and never enter templates, snapshots, or reports. `verify` runs only the commands listed in the configuration and infers no package manager or test runner.
+Credentials, cookies, access tokens, and environment-file contents are project-private and must not be written to templates, snapshots, or reports. Automated operations must detect and preserve project-owned changes; exact write or refusal behavior is defined by each command.

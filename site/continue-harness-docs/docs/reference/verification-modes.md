@@ -1,55 +1,42 @@
 # 验证模式
 
-本页定义 6 个验证模式的名称、行为和未配置时的结果。命令入口见[命令](./commands.md)。
+本页说明 Harness 提供的验证模式及其结果语义。命令入口见[命令](./commands.md)。
 
 ## quick
 
-fail-fast 快速反馈。按 `verify.quick.commands` 的顺序执行，首个非通过步骤立即停止。模式未定义命令时返回 `not_configured`。
-
-默认用 `continue-harness-verify` Skill 执行本模式；CLI 可选：`continue-harness verify quick`。
+快速反馈模式，按配置顺序执行检查，并在首个失败结果处停止。没有可执行检查时返回 `not_configured`。
 
 ## feature
 
-功能完成门禁。执行 `verify.feature.commands`，并在满足条件时追加验收门禁，见下文「验收门禁」。
-
-默认用 `continue-harness-verify` Skill 执行本模式；CLI 可选：`continue-harness verify feature`。
+功能验收模式，执行已配置检查并应用需求到验收项的闭环门禁。Intake 未确认、关联缺失或存在未收口验收项时，不能报告为通过。
 
 ## runtime
 
-浏览器或运行时检查。Consumer H5 映射到 `dev_ready` 和 `runtime`，后者用 Playwright 检查页面响应、核心内容、console error 和 page error。
-
-默认用 `continue-harness-verify` Skill 执行本模式；CLI 可选：`continue-harness verify runtime`。
+运行时检查模式。仅执行项目显式配置的运行时检查；未配置时返回 `not_configured`，不推断项目运行方式。
 
 ## interaction
 
-关键交互检查。Consumer H5 中标记为 `not_configured`；`not_configured` 表示该能力没有配置，不表示通过。
-
-默认用 `continue-harness-verify` Skill 执行本模式；CLI 可选：`continue-harness verify interaction`。
+交互验收模式。仅执行项目已定义的交互检查；未配置不代表通过。
 
 ## visual
 
-截图基线对比。缺少 baseline 时该模式整体返回 `not_configured`，不会把未配置的截图检查记为通过。
-
-默认用 `continue-harness-verify` Skill 执行本模式；CLI 可选：`continue-harness verify visual`。
+视觉证据检查模式。只有在项目配置了相应检查和基准证据时才执行；缺少配置或基准时返回 `not_configured`。
 
 ## audit
 
-收集全部配置的检查结果，`fail_fast` 为 `false`，通常用于发布前、交接前或诊断复杂问题。`audit` 同样执行验收门禁。
+审计模式，执行所有已配置检查并收集结果，不因首项失败而提前结束。审计同样应用验收闭环门禁。
 
-默认用 `continue-harness-verify` Skill 执行本模式；CLI 可选：`continue-harness verify audit`。
+## 配置与状态
 
-## 配置映射
+模式名称是稳定入口，具体检查由项目配置映射到项目命令。Harness 不根据项目类型推断构建、测试、运行时或视觉工具。
 
-模式是符号名。CLI 从 `.continue-harness/project.yaml` 读取 `verify.<mode>`，再把其中的命令名解析为 `commands` 里的实际命令，因此同一套模式可以对应不同包管理器和测试运行器。
+- `passed`：已配置检查执行成功，且闭环门禁通过。
+- `failed`：检查失败，或存在需要解决的闭环缺口。
+- `blocked`：外部条件阻止检查或交付。
+- `not_configured`：该模式没有可执行配置；不能当作通过。
 
-模式在 `verify` 中完全缺失时命令报错；模式定义为 `status: not_configured` 时返回 `not_configured` 且不执行任何步骤。
+功能和审计模式要求验收记录可解析，并且当前任务及适用输入能够追溯到验收项。未确认的 Intake、无效验收状态、缺少关联或未解决项都会阻止通过。已确认延期或外部阻塞也会在报告中保留，不能伪装为已验证。
 
-## 验收门禁
+## 执行稳定性
 
-`feature` 和 `audit` 会额外读取 `docs/ACCEPTANCE.md`。仅当该文件存在、含 Markdown 表格且表头有状态列时验收门禁才生效：存在未收口项时追加失败项；验收项已标记延期或外部阻塞时追加 `blocked` 项。
-
-验证绑定了任务时（显式 `--task`，或缺省时取最近任务），`docs/ACCEPTANCE.md` 不存在、没有表格、表头缺少状态列或存在未收口项时，验收项一律判为失败。只有完全没有任务绑定时，`not_configured` 才不参与失败判定。
-
-## 环境阻塞
-
-命令因端口监听被拒（`listen EPERM`、`EACCES ... listen`）而失败时，结果归类为 `blocked` 环境阻塞，不计为项目业务失败。
+执行前后会比较影响验证结论的配置与输入指纹。如果验证期间这些依据发生变化，结果不能作为当前状态的稳定证据。端口或运行环境权限等外部限制会记录为环境阻塞。

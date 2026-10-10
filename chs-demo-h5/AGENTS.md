@@ -9,11 +9,10 @@
 1. `.continue-harness/project.yaml`
 2. `docs/PROJECT_MAP.md`
 3. `docs/CURRENT_STATUS.md`
-4. `.agents/skills/consumer-h5-harness/SKILL.md`
-5. 有业务任务时再读取输入清单、`docs/PRODUCT.md` 和对应 PRD/RP
-6. 有 UI 任务时再读取 `docs/DESIGN.md`、Design Token、UI 输入和视觉调整记录
-7. 有 API 任务时再读取 API 输入和任务 operationId 选择
-8. 只有发生长期约束冲突或架构决策时才读取 `docs/DECISIONS.md`
+4. 有业务任务时再读取输入清单、`docs/PRODUCT.md` 和对应 PRD/RP
+5. 有 UI 任务时再读取 `docs/DESIGN.md`、Design Token、UI 输入和视觉调整记录
+6. 有 API 任务时再读取 API 输入和任务 operationId 选择
+7. 只有发生长期约束冲突或架构决策时才读取 `docs/DECISIONS.md`
 
 接口任务先根据 PRD 确认需要的 operationId，再以登记的 OpenAPI JSON 作为字段契约执行
 `continue-harness api inspect/generate --task <任务号>`。不得根据 PRD 擅自改写接口字段，也不得

@@ -1,0 +1,305 @@
+{
+  "mode": "audit",
+  "results": [
+    {
+      "command": "npm run lint:pilot",
+      "durationMs": 2289,
+      "exitCode": 0,
+      "status": "passed",
+      "stderr": "",
+      "stdout": "\n> vue-admin-template@4.4.0 lint:pilot\n> node scripts/harness-lint.mjs\n\n",
+      "name": "lint_pilot",
+      "display_name": "通过"
+    },
+    {
+      "command": "npm run test:unit",
+      "durationMs": 4044,
+      "exitCode": 0,
+      "status": "passed",
+      "stderr": "PASS tests/unit/utils/validate.spec.js\nPASS tests/unit/components/SvgIcon.spec.js\nPASS tests/unit/components/Hamburger.spec.js\nPASS tests/unit/utils/param2Obj.spec.js\nPASS tests/unit/utils/parseTime.spec.js\nPASS tests/unit/utils/formatTime.spec.js\nPASS tests/unit/components/Breadcrumb.spec.js\n\nTest Suites: 7 passed, 7 total\nTests:       28 passed, 28 total\nSnapshots:   0 total\nTime:        1.569s\nRan all test suites.\n",
+      "stdout": "\n> vue-admin-template@4.4.0 test:unit\n> jest --clearCache && vue-cli-service test:unit\n\nCleared /private/var/folders/jl/_r_47mxd7nd7p09_qdy2qf8w0000gn/T/jest_dx\n",
+      "name": "unit_test",
+      "display_name": "通过"
+    },
+    {
+      "command": "npm run build:pilot",
+      "durationMs": 16252,
+      "exitCode": 0,
+      "status": "passed",
+      "stderr": "-  Building for production...\n",
+      "stdout": "\n> vue-admin-template@4.4.0 build:pilot\n> NODE_OPTIONS=--openssl-legacy-provider npm run build:dev\n\n\n> vue-admin-template@4.4.0 build:dev\n> cross-env NODE_ENV=dev vue-cli-service build\n\n[dotenv][DEBUG] did not match key and value when parsing line 1: # just a flag\n[dotenv][DEBUG] did not match key and value when parsing line 3: \n[dotenv][DEBUG] did not match key and value when parsing line 4: # base api\n[dotenv][DEBUG] did not match key and value when parsing line 6: \n[dotenv][DEBUG] did not match key and value when parsing line 7: \n\n DONE  Compiled successfully in 15097ms3:32:38 PM\n\n  File                                      Size             Gzipped\n\n  dist/jsWebControl-1.0.0.min.js            247.42 KiB       74.56 KiB\n  dist/active/js/lib/jquery.min.js          93.71 KiB        32.62 KiB\n  dist/js/37.1791531143324.js               3732.15 KiB      747.13 KiB\n  dist/js/app.1791531143324.js              2465.91 KiB      217.27 KiB\n  dist/dll/js/plugin.1660028814001.js       1521.04 KiB      432.76 KiB\n  dist/dll/js/ui.1660028814001.js           780.09 KiB       201.03 KiB\n  dist/js/chunk-vendors~._node_modules_@    585.04 KiB       97.59 KiB\n  .1791531143324.js\n  dist/js/43.1791531143324.js               506.88 KiB       41.81 KiB\n  dist/js/39.1791531143324.js               492.37 KiB       33.46 KiB\n  dist/dll/js/vue.1660028814001.js          413.49 KiB       109.50 KiB\n  dist/js/41.1791531143324.js               320.71 KiB       14.93 KiB\n  dist/js/38.1791531143324.js               316.08 KiB       14.20 KiB\n  dist/active/js/lib/layui/layui.js         284.07 KiB       91.88 KiB\n  dist/js/45.1791531143324.js               278.95 KiB       20.74 KiB\n  dist/js/59.1791531143324.js               268.55 KiB       47.65 KiB\n  dist/js/40.1791531143324.js               254.33 KiB       14.28 KiB\n  dist/js/128.1791531143324.js              237.45 KiB       17.66 KiB\n  dist/js/108.1791531143324.js              236.69 KiB       19.76 KiB\n  dist/js/53.1791531143324.js               233.00 KiB       18.25 KiB\n  dist/js/80.1791531143324.js               223.74 KiB       24.21 KiB\n  dist/js/13.1791531143324.js               221.05 KiB       20.03 KiB\n  dist/js/42.1791531143324.js               216.07 KiB       11.31 KiB\n  dist/js/51.1791531143324.js               211.99 KiB       21.89 KiB\n  dist/js/63.1791531143324.js               210.35 KiB       24.34 KiB\n  dist/js/54.1791531143324.js               204.98 KiB       21.41 KiB\n  dist/js/52.1791531143324.js               200.26 KiB       23.03 KiB\n  dist/js/5.1791531143324.js                190.05 KiB       45.23 KiB\n  dist/js/9.1791531143324.js                183.90 KiB       46.52 KiB\n  dist/js/47.1791531143324.js               178.83 KiB       16.62 KiB\n  dist/js/44.1791531143324.js               172.75 KiB       8.46 KiB\n  dist/js/10.1791531143324.js               164.02 KiB       15.60 KiB\n  dist/js/48.1791531143324.js               155.44 KiB       12.43 KiB\n  dist/js/46.1791531143324.js               154.72 KiB       11.72 KiB\n  dist/js/55.1791531143324.js               153.18 KiB       12.74 KiB\n  dist/js/62.1791531143324.js               151.15 KiB       16.15 KiB\n  dist/js/50.1791531143324.js               150.89 KiB       11.21 KiB\n  dist/js/49.1791531143324.js               145.40 KiB       10.88 KiB\n  dist/js/58.1791531143324.js               137.49 KiB       25.72 KiB\n  dist/js/87.1791531143324.js               136.88 KiB       10.92 KiB\n  dist/js/11.1791531143324.js               131.13 KiB       10.60 KiB\n  dist/js/188.1791531143324.js              131.01 KiB       13.36 KiB\n  dist/js/75.1791531143324.js               130.69 KiB       17.10 KiB\n  dist/js/17.1791531143324.js               127.27 KiB       15.71 KiB\n  dist/js/57.1791531143324.js               123.18 KiB       11.08 KiB\n  dist/js/232.1791531143324.js              122.15 KiB       13.97 KiB\n  dist/js/24.1791531143324.js               114.75 KiB       12.80 KiB\n  dist/js/185.1791531143324.js              113.38 KiB       12.33 KiB\n  dist/js/61.1791531143324.js               111.36 KiB       9.37 KiB\n  dist/js/115.1791531143324.js              110.56 KiB       12.46 KiB\n  dist/js/101.1791531143324.js              109.64 KiB       12.85 KiB\n  dist/js/22.1791531143324.js               109.20 KiB       9.29 KiB\n  dist/js/68.1791531143324.js               102.44 KiB       9.12 KiB\n  dist/js/88.1791531143324.js               100.52 KiB       10.81 KiB\n  dist/js/60.1791531143324.js               96.01 KiB        8.81 KiB\n  dist/js/70.1791531143324.js               95.86 KiB        10.52 KiB\n  dist/js/72.1791531143324.js               95.61 KiB        8.65 KiB\n  dist/js/121.1791531143324.js              94.46 KiB        11.83 KiB\n  dist/js/64.1791531143324.js               92.87 KiB        9.65 KiB\n  dist/js/190.1791531143324.js              92.21 KiB        9.82 KiB\n  dist/js/71.1791531143324.js               92.05 KiB        6.95 KiB\n  dist/js/69.1791531143324.js               91.07 KiB        8.98 KiB\n  dist/js/66.1791531143324.js               91.06 KiB        9.36 KiB\n  dist/js/12.1791531143324.js               90.91 KiB        7.91 KiB\n  dist/js/73.1791531143324.js               89.36 KiB        7.53 KiB\n  dist/js/56.1791531143324.js               89.04 KiB        7.26 KiB\n  dist/js/96.1791531143324.js               86.43 KiB        9.87 KiB\n  dist/js/86.1791531143324.js               85.97 KiB        7.01 KiB\n  dist/js/303.1791531143324.js              85.61 KiB        8.99 KiB\n  dist/js/221.1791531143324.js              80.33 KiB        10.68 KiB\n  dist/js/25.1791531143324.js               79.54 KiB        9.60 KiB\n  dist/js/skins/ui/tinymce-5/skin.js        78.67 KiB        12.03 KiB\n  dist/public/js/skins/ui/tinymce-5/skin    78.67 KiB        12.03 KiB\n  .js\n  dist/js/skins/ui/tinymce-5-dark/skin.j    78.54 KiB        12.04 KiB\n  s\n  dist/public/js/skins/ui/tinymce-5-dark    78.54 KiB        12.04 KiB\n  /skin.js\n  dist/js/207.1791531143324.js              77.85 KiB        9.46 KiB\n  dist/js/212.1791531143324.js              77.17 KiB        9.87 KiB\n  dist/js/174.1791531143324.js              76.68 KiB        10.31 KiB\n  dist/js/1.1791531143324.js                76.33 KiB        16.06 KiB\n  dist/js/skins/ui/oxide/skin.js            76.08 KiB        11.68 KiB\n  dist/public/js/skins/ui/oxide/skin.js     76.08 KiB        11.68 KiB\n  dist/js/skins/ui/oxide-dark/skin.js       76.05 KiB        11.68 KiB\n  dist/public/js/skins/ui/oxide-dark/ski    76.05 KiB        11.68 KiB\n  n.js\n  dist/js/196.1791531143324.js              74.93 KiB        9.23 KiB\n  dist/js/98.1791531143324.js               74.92 KiB        8.39 KiB\n  dist/js/100.1791531143324.js              74.82 KiB        8.80 KiB\n  dist/js/74.1791531143324.js               74.28 KiB        9.25 KiB\n  dist/js/85.1791531143324.js               74.02 KiB        8.09 KiB\n  dist/js/67.1791531143324.js               73.64 KiB        8.29 KiB\n  dist/js/81.1791531143324.js               73.55 KiB        8.82 KiB\n  dist/js/278.1791531143324.js              71.77 KiB        5.64 KiB\n  dist/js/293.1791531143324.js              71.67 KiB        5.63 KiB\n  dist/js/19.1791531143324.js               71.23 KiB        13.66 KiB\n  dist/js/32.1791531143324.js               69.73 KiB        7.83 KiB\n  dist/js/178.1791531143324.js              69.10 KiB        7.91 KiB\n  dist/js/143.1791531143324.js              69.02 KiB        8.38 KiB\n  dist/js/208.1791531143324.js              68.89 KiB        8.27 KiB\n  dist/js/93.1791531143324.js               68.68 KiB        8.69 KiB\n  dist/js/141.1791531143324.js              68.68 KiB        8.89 KiB\n  dist/js/202.1791531143324.js              68.17 KiB        8.47 KiB\n  dist/js/164.1791531143324.js              68.05 KiB        8.78 KiB\n  dist/js/177.1791531143324.js              67.68 KiB        6.97 KiB\n  dist/js/222.1791531143324.js              67.37 KiB        8.60 KiB\n  dist/js/3.1791531143324.js                67.37 KiB        8.33 KiB\n  dist/js/79.1791531143324.js               67.18 KiB        8.14 KiB\n  dist/js/107.1791531143324.js              67.15 KiB        9.15 KiB\n  dist/js/172.1791531143324.js              66.82 KiB        8.19 KiB\n  dist/js/203.1791531143324.js              66.51 KiB        8.14 KiB\n  dist/js/135.1791531143324.js              66.36 KiB        8.26 KiB\n  dist/js/228.1791531143324.js              66.09 KiB        8.29 KiB\n  dist/js/20.1791531143324.js               65.41 KiB        7.48 KiB\n  dist/js/211.1791531143324.js              65.03 KiB        7.96 KiB\n  dist/js/171.1791531143324.js              65.01 KiB        8.19 KiB\n  dist/js/91.1791531143324.js               64.81 KiB        6.42 KiB\n  dist/js/201.1791531143324.js              63.95 KiB        7.88 KiB\n  dist/js/210.1791531143324.js              63.93 KiB        8.00 KiB\n  dist/js/249.1791531143324.js              63.71 KiB        8.14 KiB\n  dist/js/94.1791531143324.js               63.46 KiB        7.50 KiB\n  dist/js/204.1791531143324.js              62.70 KiB        7.94 KiB\n  dist/js/205.1791531143324.js              62.51 KiB        7.80 KiB\n  dist/js/153.1791531143324.js              62.27 KiB        8.00 KiB\n  dist/js/133.1791531143324.js              61.90 KiB        7.81 KiB\n  dist/js/105.1791531143324.js              61.47 KiB        6.89 KiB\n  dist/js/106.1791531143324.js              61.45 KiB        6.86 KiB\n  dist/js/296.1791531143324.js              60.88 KiB        7.75 KiB\n  dist/js/187.1791531143324.js              60.79 KiB        8.05 KiB\n  dist/js/254.1791531143324.js              60.69 KiB        8.27 KiB\n  dist/js/65.1791531143324.js               60.64 KiB        5.54 KiB\n  dist/js/83.1791531143324.js               60.57 KiB        7.07 KiB\n  dist/js/165.1791531143324.js              60.38 KiB        6.31 KiB\n  dist/js/14.1791531143324.js               59.68 KiB        5.54 KiB\n  dist/js/155.1791531143324.js              59.49 KiB        7.71 KiB\n  dist/js/226.1791531143324.js              58.88 KiB        7.53 KiB\n  dist/js/92.1791531143324.js               58.81 KiB        6.88 KiB\n  dist/js/200.1791531143324.js              58.71 KiB        7.55 KiB\n  dist/js/132.1791531143324.js              58.15 KiB        7.15 KiB\n  dist/js/215.1791531143324.js              57.96 KiB        7.18 KiB\n  dist/js/199.1791531143324.js              57.68 KiB        7.56 KiB\n  dist/js/77.1791531143324.js               57.65 KiB        7.32 KiB\n  dist/js/117.1791531143324.js              57.63 KiB        7.78 KiB\n  dist/js/170.1791531143324.js              57.54 KiB        7.58 KiB\n  dist/js/2.1791531143324.js                57.50 KiB        12.32 KiB\n  dist/js/219.1791531143324.js              57.44 KiB        7.47 KiB\n  dist/js/154.1791531143324.js              57.25 KiB        7.42 KiB\n  dist/js/97.1791531143324.js               56.85 KiB        11.25 KiB\n  dist/js/277.1791531143324.js              56.59 KiB        6.98 KiB\n  dist/js/169.1791531143324.js              56.40 KiB        7.48 KiB\n  dist/js/104.1791531143324.js              56.18 KiB        6.33 KiB\n  dist/js/151.1791531143324.js              55.79 KiB        6.98 KiB\n  dist/js/84.1791531143324.js               55.40 KiB        6.37 KiB\n  dist/js/189.1791531143324.js              55.08 KiB        7.58 KiB\n  dist/js/114.1791531143324.js              55.01 KiB        7.04 KiB\n  dist/js/268.1791531143324.js              54.90 KiB        5.08 KiB\n  dist/js/272.1791531143324.js              54.45 KiB        6.56 KiB\n  dist/js/292.1791531143324.js              54.01 KiB        4.47 KiB\n  dist/js/31.1791531143324.js               53.85 KiB        6.65 KiB\n  dist/js/182.1791531143324.js              53.76 KiB        6.94 KiB\n  dist/js/127.1791531143324.js              53.71 KiB        6.98 KiB\n  dist/js/99.1791531143324.js               53.54 KiB        6.25 KiB\n  dist/js/195.1791531143324.js              53.11 KiB        6.55 KiB\n  dist/js/181.1791531143324.js              53.08 KiB        6.74 KiB\n  dist/js/145.1791531143324.js              53.00 KiB        6.71 KiB\n  dist/js/30.1791531143324.js               52.93 KiB        6.76 KiB\n  dist/js/186.1791531143324.js              52.59 KiB        6.70 KiB\n  dist/js/95.1791531143324.js               52.53 KiB        5.68 KiB\n  dist/js/233.1791531143324.js              52.19 KiB        7.61 KiB\n  dist/js/240.1791531143324.js              51.96 KiB        7.02 KiB\n  dist/js/236.1791531143324.js              51.82 KiB        5.97 KiB\n  dist/js/276.1791531143324.js              51.65 KiB        6.32 KiB\n  dist/js/217.1791531143324.js              51.62 KiB        6.40 KiB\n  dist/js/183.1791531143324.js              51.57 KiB        6.32 KiB\n  dist/js/110.1791531143324.js              51.50 KiB        7.01 KiB\n  dist/js/112.1791531143324.js              51.01 KiB        7.48 KiB\n  dist/js/89.1791531143324.js               50.84 KiB        8.23 KiB\n  dist/js/168.1791531143324.js              50.75 KiB        6.25 KiB\n  dist/js/140.1791531143324.js              50.64 KiB        6.23 KiB\n  dist/js/122.1791531143324.js              50.54 KiB        6.71 KiB\n  dist/js/131.1791531143324.js              50.48 KiB        6.49 KiB\n  dist/js/230.1791531143324.js              50.32 KiB        6.78 KiB\n  dist/js/15.1791531143324.js               50.22 KiB        4.49 KiB\n  dist/js/156.1791531143324.js              49.55 KiB        6.59 KiB\n  dist/js/102.1791531143324.js              49.17 KiB        6.74 KiB\n  dist/js/197.1791531143324.js              49.07 KiB        6.79 KiB\n  dist/js/160.1791531143324.js              49.01 KiB        6.24 KiB\n  dist/js/76.1791531143324.js               48.94 KiB        5.41 KiB\n  dist/js/144.1791531143324.js              48.71 KiB        6.42 KiB\n  dist/js/176.1791531143324.js              48.57 KiB        6.41 KiB\n  dist/js/118.1791531143324.js              48.53 KiB        6.23 KiB\n  dist/js/209.1791531143324.js              48.35 KiB        6.25 KiB\n  dist/js/123.1791531143324.js              48.28 KiB        6.39 KiB\n  dist/js/175.1791531143324.js              48.11 KiB        6.19 KiB\n  dist/js/137.1791531143324.js              48.04 KiB        6.87 KiB\n  dist/js/227.1791531143324.js              47.41 KiB        6.21 KiB\n  dist/js/82.1791531143324.js               47.36 KiB        5.05 KiB\n  dist/js/158.1791531143324.js              47.25 KiB        6.05 KiB\n  dist/js/163.1791531143324.js              47.16 KiB        6.04 KiB\n  dist/js/78.1791531143324.js               46.82 KiB        6.96 KiB\n  dist/js/124.1791531143324.js              46.82 KiB        6.41 KiB\n  dist/js/167.1791531143324.js              46.73 KiB        6.41 KiB\n  dist/js/184.1791531143324.js              46.54 KiB        5.48 KiB\n  dist/js/113.1791531143324.js              46.34 KiB        6.30 KiB\n  dist/js/4.1791531143324.js                46.18 KiB        6.64 KiB\n  dist/js/192.1791531143324.js              46.08 KiB        5.78 KiB\n  dist/js/241.1791531143324.js              46.00 KiB        6.11 KiB\n  dist/js/21.1791531143324.js               45.73 KiB        4.60 KiB\n  dist/js/231.1791531143324.js              45.64 KiB        6.28 KiB\n  dist/js/244.1791531143324.js              45.57 KiB        5.75 KiB\n  dist/js/142.1791531143324.js              45.20 KiB        6.47 KiB\n  dist/js/229.1791531143324.js              45.20 KiB        6.17 KiB\n  dist/js/159.1791531143324.js              45.13 KiB        6.11 KiB\n  dist/js/134.1791531143324.js              44.88 KiB        5.94 KiB\n  dist/js/224.1791531143324.js              44.01 KiB        5.77 KiB\n  dist/js/161.1791531143324.js              43.91 KiB        6.16 KiB\n  dist/js/216.1791531143324.js              43.67 KiB        4.80 KiB\n  dist/js/152.1791531143324.js              43.50 KiB        5.56 KiB\n  dist/js/198.1791531143324.js              43.50 KiB        5.38 KiB\n  dist/js/257.1791531143324.js              43.44 KiB        5.69 KiB\n  dist/js/33.1791531143324.js               43.42 KiB        6.07 KiB\n  dist/js/289.1791531143324.js              43.12 KiB        4.76 KiB\n  dist/js/194.1791531143324.js              43.06 KiB        5.37 KiB\n  dist/js/225.1791531143324.js              43.00 KiB        5.88 KiB\n  dist/js/166.1791531143324.js              42.97 KiB        5.75 KiB\n  dist/js/7.1791531143324.js                42.96 KiB        5.63 KiB\n  dist/js/6.1791531143324.js                42.58 KiB        5.18 KiB\n  dist/js/245.1791531143324.js              42.56 KiB        5.66 KiB\n  dist/js/191.1791531143324.js              42.35 KiB        5.21 KiB\n  dist/js/116.1791531143324.js              41.92 KiB        5.65 KiB\n  dist/js/0.1791531143324.js                41.83 KiB        7.37 KiB\n  dist/js/306.1791531143324.js              41.57 KiB        6.20 KiB\n  dist/js/206.1791531143324.js              41.28 KiB        5.29 KiB\n  dist/js/325.1791531143324.js              41.18 KiB        5.50 KiB\n  dist/js/109.1791531143324.js              40.99 KiB        5.63 KiB\n  dist/js/243.1791531143324.js              40.99 KiB        5.63 KiB\n  dist/js/138.1791531143324.js              40.94 KiB        5.70 KiB\n  dist/js/238.1791531143324.js              40.78 KiB        5.34 KiB\n  dist/js/242.1791531143324.js              40.76 KiB        5.25 KiB\n  dist/js/136.1791531143324.js              40.74 KiB        5.15 KiB\n  dist/js/321.1791531143324.js              40.73 KiB        6.02 KiB\n  dist/js/263.1791531143324.js              40.47 KiB        5.29 KiB\n  dist/js/247.1791531143324.js              40.39 KiB        5.66 KiB\n  dist/js/246.1791531143324.js              40.31 KiB        5.66 KiB\n  dist/js/23.1791531143324.js               40.19 KiB        5.48 KiB\n  dist/js/264.1791531143324.js              40.15 KiB        5.32 KiB\n  dist/js/304.1791531143324.js              40.11 KiB        5.35 KiB\n  dist/js/29.1791531143324.js               39.94 KiB        5.47 KiB\n  dist/js/126.1791531143324.js              39.86 KiB        5.16 KiB\n  dist/js/103.1791531143324.js              39.67 KiB        4.59 KiB\n  dist/js/27.1791531143324.js               39.59 KiB        4.11 KiB\n  dist/js/130.1791531143324.js              39.51 KiB        5.10 KiB\n  dist/js/248.1791531143324.js              39.46 KiB        5.24 KiB\n  dist/js/323.1791531143324.js              39.38 KiB        5.72 KiB\n  dist/js/26.1791531143324.js               39.16 KiB        5.13 KiB\n  dist/js/125.1791531143324.js              39.11 KiB        5.20 KiB\n  dist/js/255.1791531143324.js              38.91 KiB        5.26 KiB\n  dist/js/18.1791531143324.js               38.76 KiB        8.57 KiB\n  dist/js/28.1791531143324.js               38.63 KiB        4.42 KiB\n  dist/js/139.1791531143324.js              38.59 KiB        5.05 KiB\n  dist/js/150.1791531143324.js              37.92 KiB        5.20 KiB\n  dist/js/288.1791531143324.js              37.83 KiB        4.18 KiB\n  dist/js/265.1791531143324.js              37.75 KiB        5.03 KiB\n  dist/js/299.1791531143324.js              37.69 KiB        7.15 KiB\n  dist/js/119.1791531143324.js              37.48 KiB        5.22 KiB\n  dist/js/250.1791531143324.js              37.47 KiB        4.92 KiB\n  dist/js/274.1791531143324.js              36.88 KiB        4.77 KiB\n  dist/js/251.1791531143324.js              36.85 KiB        5.21 KiB\n  dist/js/16.1791531143324.js               36.58 KiB        3.65 KiB\n  dist/js/218.1791531143324.js              36.54 KiB        4.90 KiB\n  dist/js/173.1791531143324.js              36.47 KiB        4.42 KiB\n  dist/js/34.1791531143324.js               36.23 KiB        5.50 KiB\n  dist/js/239.1791531143324.js              36.03 KiB        4.90 KiB\n  dist/js/308.1791531143324.js              36.01 KiB        5.16 KiB\n  dist/js/223.1791531143324.js              35.79 KiB        5.17 KiB\n  dist/js/234.1791531143324.js              35.77 KiB        4.98 KiB\n  dist/js/147.1791531143324.js              35.61 KiB        4.88 KiB\n  dist/js/180.1791531143324.js              35.47 KiB        4.82 KiB\n  dist/js/256.1791531143324.js              35.39 KiB        4.94 KiB\n  dist/js/149.1791531143324.js              35.29 KiB        4.94 KiB\n  dist/js/214.1791531143324.js              34.14 KiB        4.12 KiB\n  dist/js/235.1791531143324.js              33.99 KiB        4.36 KiB\n  dist/js/324.1791531143324.js              33.89 KiB        4.79 KiB\n  dist/js/213.1791531143324.js              33.74 KiB        4.03 KiB\n  dist/js/179.1791531143324.js              33.60 KiB        4.09 KiB\n  dist/js/120.1791531143324.js              33.56 KiB        4.42 KiB\n  dist/js/148.1791531143324.js              33.55 KiB        4.76 KiB\n  dist/js/259.1791531143324.js              33.09 KiB        4.31 KiB\n  dist/js/316.1791531143324.js              32.98 KiB        5.41 KiB\n  dist/js/297.1791531143324.js              32.92 KiB        4.74 KiB\n  dist/js/260.1791531143324.js              32.78 KiB        3.98 KiB\n  dist/js/90.1791531143324.js               32.63 KiB        4.64 KiB\n  dist/js/287.1791531143324.js              32.61 KiB        3.72 KiB\n  dist/js/295.1791531143324.js              32.59 KiB        3.98 KiB\n  dist/js/318.1791531143324.js              32.05 KiB        4.86 KiB\n  dist/js/315.1791531143324.js              30.93 KiB        5.04 KiB\n  dist/js/258.1791531143324.js              30.28 KiB        4.05 KiB\n  dist/js/220.1791531143324.js              30.20 KiB        3.96 KiB\n  dist/js/261.1791531143324.js              30.07 KiB        3.39 KiB\n  dist/js/294.1791531143324.js              30.01 KiB        4.09 KiB\n  dist/js/282.1791531143324.js              29.85 KiB        3.87 KiB\n  dist/js/286.1791531143324.js              29.75 KiB        3.82 KiB\n  dist/js/111.1791531143324.js              29.71 KiB        3.44 KiB\n  dist/js/193.1791531143324.js              29.65 KiB        3.84 KiB\n  dist/js/322.1791531143324.js              29.63 KiB        4.52 KiB\n  dist/js/237.1791531143324.js              29.54 KiB        4.19 KiB\n  dist/js/320.1791531143324.js              29.50 KiB        4.67 KiB\n  dist/js/280.1791531143324.js              28.52 KiB        3.56 KiB\n  dist/js/317.1791531143324.js              28.31 KiB        4.46 KiB\n  dist/js/146.1791531143324.js              28.25 KiB        3.65 KiB\n  dist/js/307.1791531143324.js              28.05 KiB        3.62 KiB\n  dist/js/253.1791531143324.js              27.73 KiB        3.55 KiB\n  dist/js/162.1791531143324.js              27.67 KiB        3.49 KiB\n  dist/js/129.1791531143324.js              27.64 KiB        3.42 KiB\n  dist/js/271.1791531143324.js              27.50 KiB        3.40 KiB\n  dist/js/267.1791531143324.js              27.45 KiB        3.29 KiB\n  dist/js/279.1791531143324.js              27.40 KiB        3.36 KiB\n  dist/js/157.1791531143324.js              27.17 KiB        3.40 KiB\n  dist/js/252.1791531143324.js              26.89 KiB        3.24 KiB\n  dist/js/269.1791531143324.js              26.66 KiB        3.42 KiB\n  dist/js/284.1791531143324.js              26.31 KiB        3.48 KiB\n  dist/js/281.1791531143324.js              26.29 KiB        3.36 KiB\n  dist/js/298.1791531143324.js              25.16 KiB        2.93 KiB\n  dist/js/300.1791531143324.js              25.04 KiB        2.90 KiB\n  dist/js/262.1791531143324.js              24.99 KiB        3.54 KiB\n  dist/js/266.1791531143324.js              24.82 KiB        3.33 KiB\n  dist/js/302.1791531143324.js              24.53 KiB        3.21 KiB\n  dist/js/305.1791531143324.js              24.34 KiB        4.14 KiB\n  dist/js/285.1791531143324.js              24.31 KiB        3.12 KiB\n  dist/js/291.1791531143324.js              24.21 KiB        3.06 KiB\n  dist/js/275.1791531143324.js              24.07 KiB        2.79 KiB\n  dist/js/270.1791531143324.js              24.01 KiB        2.92 KiB\n  dist/js/283.1791531143324.js              23.45 KiB        2.89 KiB\n  dist/js/273.1791531143324.js              23.39 KiB        3.05 KiB\n  dist/js/301.1791531143324.js              23.39 KiB        2.67 KiB\n  dist/js/290.1791531143324.js              23.36 KiB        2.88 KiB\n  dist/active/js/lib/layui/tableEdit.js     23.33 KiB        5.93 KiB\n  dist/js/skins/ui/tinymce-5/content.js     23.06 KiB        5.67 KiB\n  dist/public/js/skins/ui/tinymce-5/cont    23.06 KiB        5.67 KiB\n  ent.js\n  dist/js/skins/ui/oxide/content.js         23.06 KiB        5.67 KiB\n  dist/public/js/skins/ui/oxide/content.    23.06 KiB        5.67 KiB\n  js\n  dist/js/skins/ui/tinymce-5-dark/conten    23.02 KiB        5.66 KiB\n  t.inline.js\n  dist/public/js/skins/ui/tinymce-5-dark    23.02 KiB        5.66 KiB\n  /content.inline.js\n  dist/js/skins/ui/tinymce-5/content.inl    23.02 KiB        5.66 KiB\n  ine.js\n  dist/public/js/skins/ui/tinymce-5/cont    23.02 KiB        5.66 KiB\n  ent.inline.js\n  dist/js/skins/ui/oxide/content.inline.    23.01 KiB        5.66 KiB\n  js\n  dist/public/js/skins/ui/oxide/content.    23.01 KiB        5.66 KiB\n  inline.js\n  dist/js/skins/ui/oxide-dark/content.in    23.01 KiB        5.66 KiB\n  line.js\n  dist/public/js/skins/ui/oxide-dark/con    23.01 KiB        5.66 KiB\n  tent.inline.js\n  dist/js/skins/ui/tinymce-5-dark/conten    22.68 KiB        5.63 KiB\n  t.js\n  dist/public/js/skins/ui/tinymce-5-dark    22.68 KiB        5.63 KiB\n  /content.js\n  dist/js/skins/ui/oxide-dark/content.js    22.67 KiB        5.62 KiB\n  dist/public/js/skins/ui/oxide-dark/con    22.67 KiB        5.62 KiB\n  tent.js\n  dist/js/319.1791531143324.js              22.10 KiB        3.85 KiB\n  dist/js/309.1791531143324.js              21.98 KiB        3.82 KiB\n  dist/js/313.1791531143324.js              21.78 KiB        3.41 KiB\n  dist/js/langs/zh_CN.js                    18.90 KiB        6.14 KiB\n  dist/public/js/langs/zh_CN.js             18.90 KiB        6.14 KiB\n  dist/js/310.1791531143324.js              18.87 KiB        2.94 KiB\n  dist/js/312.1791531143324.js              18.51 KiB        2.13 KiB\n  dist/js/8.1791531143324.js                18.51 KiB        5.62 KiB\n  dist/js/311.1791531143324.js              17.38 KiB        1.98 KiB\n  dist/js/331.1791531143324.js              17.09 KiB        2.73 KiB\n  dist/js/314.1791531143324.js              15.88 KiB        2.50 KiB\n  dist/js/334.1791531143324.js              13.22 KiB        1.99 KiB\n  dist/js/332.1791531143324.js              12.78 KiB        1.92 KiB\n  dist/js/326.1791531143324.js              12.34 KiB        1.46 KiB\n  dist/js/327.1791531143324.js              12.31 KiB        1.46 KiB\n  dist/js/333.1791531143324.js              12.30 KiB        1.67 KiB\n  dist/js/328.1791531143324.js              12.28 KiB        1.46 KiB\n  dist/js/329.1791531143324.js              12.28 KiB        1.45 KiB\n  dist/js/330.1791531143324.js              12.28 KiB        1.46 KiB\n  dist/js/335.1791531143324.js              11.42 KiB        1.58 KiB\n  dist/active/js/index.js                   10.56 KiB        3.38 KiB\n  dist/js/338.1791531143324.js              7.11 KiB         1.17 KiB\n  dist/js/336.1791531143324.js              7.08 KiB         1.14 KiB\n  dist/js/340.1791531143324.js              7.07 KiB         1.17 KiB\n  dist/js/341.1791531143324.js              7.04 KiB         1.17 KiB\n  dist/js/337.1791531143324.js              7.00 KiB         1.17 KiB\n  dist/js/339.1791531143324.js              6.85 KiB         1.13 KiB\n  dist/js/342.1791531143324.js              6.84 KiB         1.13 KiB\n  dist/js/35.1791531143324.js               2.70 KiB         1.60 KiB\n  dist/js/36.1791531143324.js               2.61 KiB         0.75 KiB\n  dist/active/js/lib/common.js              2.25 KiB         0.78 KiB\n  dist/js/skins/content/document/content    1.32 KiB         0.58 KiB\n  .js\n  dist/public/js/skins/content/document/    1.32 KiB         0.58 KiB\n  content.js\n  dist/js/skins/content/tinymce-5-dark/c    1.30 KiB         0.55 KiB\n  ontent.js\n  dist/public/js/skins/content/tinymce-5    1.30 KiB         0.55 KiB\n  -dark/content.js\n  dist/js/skins/content/dark/content.js     1.29 KiB         0.54 KiB\n  dist/public/js/skins/content/dark/cont    1.29 KiB         0.54 KiB\n  ent.js\n  dist/js/skins/content/writer/content.j    1.24 KiB         0.53 KiB\n  s\n  dist/public/js/skins/content/writer/co    1.24 KiB         0.53 KiB\n  ntent.js\n  dist/js/skins/content/tinymce-5/conten    1.22 KiB         0.52 KiB\n  t.js\n  dist/public/js/skins/content/tinymce-5    1.22 KiB         0.52 KiB\n  /content.js\n  dist/js/skins/content/default/content.    1.22 KiB         0.52 KiB\n  js\n  dist/public/js/skins/content/default/c    1.22 KiB         0.52 KiB\n  ontent.js\n  dist/js/skins/ui/tinymce-5-dark/skin.s    0.60 KiB         0.33 KiB\n  hadowdom.js\n  dist/public/js/skins/ui/tinymce-5-dark    0.60 KiB         0.33 KiB\n  /skin.shadowdom.js\n  dist/js/skins/ui/tinymce-5/skin.shadow    0.60 KiB         0.33 KiB\n  dom.js\n  dist/public/js/skins/ui/tinymce-5/skin    0.60 KiB         0.33 KiB\n  .shadowdom.js\n  dist/js/skins/ui/oxide/skin.shadowdom.    0.59 KiB         0.33 KiB\n  js\n  dist/public/js/skins/ui/oxide/skin.sha    0.59 KiB         0.33 KiB\n  dowdom.js\n  dist/js/skins/ui/oxide-dark/skin.shado    0.59 KiB         0.33 KiB\n  wdom.js\n  dist/public/js/skins/ui/oxide-dark/ski    0.59 KiB         0.33 KiB\n  n.shadowdom.js\n  dist/js/skins/ui/tinymce-5/skin.css       92.61 KiB        13.03 KiB\n  dist/public/js/skins/ui/tinymce-5/skin    92.61 KiB        13.03 KiB\n  .css\n  dist/js/skins/ui/tinymce-5-dark/skin.c    92.46 KiB        13.06 KiB\n  ss\n  dist/public/js/skins/ui/tinymce-5-dark    92.46 KiB        13.06 KiB\n  /skin.css\n  dist/js/skins/ui/oxide/skin.css           89.76 KiB        12.48 KiB\n  dist/public/js/skins/ui/oxide/skin.css    89.76 KiB        12.48 KiB\n  dist/js/skins/ui/oxide-dark/skin.css      89.69 KiB        12.47 KiB\n  dist/public/js/skins/ui/oxide-dark/ski    89.69 KiB        12.47 KiB\n  n.css\n  dist/active/js/lib/layui/css/layui.css    80.33 KiB        14.06 KiB\n  dist/js/skins/ui/tinymce-5/skin.min.cs    78.54 KiB        11.94 KiB\n  s\n  dist/public/js/skins/ui/tinymce-5/skin    78.54 KiB        11.94 KiB\n  .min.css\n  dist/js/skins/ui/tinymce-5-dark/skin.m    78.40 KiB        11.96 KiB\n  in.css\n  dist/public/js/skins/ui/tinymce-5-dark    78.40 KiB        11.96 KiB\n  /skin.min.css\n  dist/active/css/animate.css               77.60 KiB        4.41 KiB\n  dist/js/skins/ui/oxide/skin.min.css       75.95 KiB        11.60 KiB\n  dist/public/js/skins/ui/oxide/skin.min    75.95 KiB        11.60 KiB\n  .css\n  dist/js/skins/ui/oxide-dark/skin.min.c    75.93 KiB        11.60 KiB\n  ss\n  dist/public/js/skins/ui/oxide-dark/ski    75.93 KiB        11.60 KiB\n  n.min.css\n  dist/js/skins/ui/oxide/content.css        25.49 KiB        5.96 KiB\n  dist/js/skins/ui/tinymce-5/content.css    25.49 KiB        5.96 KiB\n  dist/public/js/skins/ui/oxide/content.    25.49 KiB        5.96 KiB\n  css\n  dist/public/js/skins/ui/tinymce-5/cont    25.49 KiB        5.96 KiB\n  ent.css\n  dist/js/skins/ui/oxide-dark/content.in    25.42 KiB        5.94 KiB\n  line.css\n  dist/js/skins/ui/oxide/content.inline.    25.42 KiB        5.94 KiB\n  css\n  dist/js/skins/ui/tinymce-5-dark/conten    25.42 KiB        5.94 KiB\n  t.inline.css\n  dist/js/skins/ui/tinymce-5/content.inl    25.42 KiB        5.94 KiB\n  ine.css\n  dist/public/js/skins/ui/oxide-dark/con    25.42 KiB        5.94 KiB\n  tent.inline.css\n  dist/public/js/skins/ui/oxide/content.    25.42 KiB        5.94 KiB\n  inline.css\n  dist/public/js/skins/ui/tinymce-5-dark    25.42 KiB        5.94 KiB\n  /content.inline.css\n  dist/public/js/skins/ui/tinymce-5/cont    25.42 KiB        5.94 KiB\n  ent.inline.css\n  dist/js/skins/ui/oxide-dark/content.cs    24.99 KiB        5.88 KiB\n  s\n  dist/js/skins/ui/tinymce-5-dark/conten    24.99 KiB        5.88 KiB\n  t.css\n  dist/public/js/skins/ui/oxide-dark/con    24.99 KiB        5.88 KiB\n  tent.css\n  dist/public/js/skins/ui/tinymce-5-dark    24.99 KiB        5.88 KiB\n  /content.css\n  dist/js/skins/ui/oxide/content.min.css    22.94 KiB        5.61 KiB\n  dist/js/skins/ui/tinymce-5/content.min    22.94 KiB        5.61 KiB\n  .css\n  dist/public/js/skins/ui/oxide/content.    22.94 KiB        5.61 KiB\n  min.css\n  dist/public/js/skins/ui/tinymce-5/cont    22.94 KiB        5.61 KiB\n  ent.min.css\n  dist/js/skins/ui/oxide-dark/content.in    22.88 KiB        5.59 KiB\n  line.min.css\n  dist/js/skins/ui/oxide/content.inline.    22.88 KiB        5.59 KiB\n  min.css\n  dist/js/skins/ui/tinymce-5-dark/conten    22.88 KiB        5.59 KiB\n  t.inline.min.css\n  dist/js/skins/ui/tinymce-5/content.inl    22.88 KiB        5.59 KiB\n  ine.min.css\n  dist/public/js/skins/ui/oxide-dark/con    22.88 KiB        5.59 KiB\n  tent.inline.min.css\n  dist/public/js/skins/ui/oxide/content.    22.88 KiB        5.59 KiB\n  inline.min.css\n  dist/public/js/skins/ui/tinymce-5-dark    22.88 KiB        5.59 KiB\n  /content.inline.min.css\n  dist/public/js/skins/ui/tinymce-5/cont    22.88 KiB        5.59 KiB\n  ent.inline.min.css\n  dist/js/skins/ui/oxide-dark/content.mi    22.56 KiB        5.55 KiB\n  n.css\n  dist/js/skins/ui/tinymce-5-dark/conten    22.56 KiB        5.55 KiB\n  t.min.css\n  dist/public/js/skins/ui/oxide-dark/con    22.56 KiB        5.55 KiB\n  tent.min.css\n  dist/public/js/skins/ui/tinymce-5-dark    22.56 KiB        5.55 KiB\n  /content.min.css\n  dist/active/js/lib/layui/css/modules/l    13.99 KiB        2.72 KiB\n  ayer/default/layer.css\n  dist/active/js/lib/layui/css/modules/l    7.60 KiB         1.73 KiB\n  aydate/default/laydate.css\n  dist/active/css/style.css                 5.09 KiB         1.05 KiB\n  dist/js/skins/content/document/content    1.78 KiB         0.64 KiB\n  .css\n  dist/public/js/skins/content/document/    1.78 KiB         0.64 KiB\n  content.css\n  dist/js/skins/content/tinymce-5-dark/c    1.73 KiB         0.61 KiB\n  ontent.css\n  dist/public/js/skins/content/tinymce-5    1.73 KiB         0.61 KiB\n  -dark/content.css\n  dist/js/skins/content/dark/content.css    1.73 KiB         0.60 KiB\n  dist/public/js/skins/content/dark/cont    1.73 KiB         0.60 KiB\n  ent.css\n  dist/active/js/lib/layui/css/modules/c    1.70 KiB         0.53 KiB\n  ode.css\n  dist/js/skins/content/writer/content.c    1.67 KiB         0.58 KiB\n  ss\n  dist/public/js/skins/content/writer/co    1.67 KiB         0.58 KiB\n  ntent.css\n  dist/js/skins/content/default/content.    1.65 KiB         0.58 KiB\n  css\n  dist/js/skins/content/tinymce-5/conten    1.65 KiB         0.58 KiB\n  t.css\n  dist/public/js/skins/content/default/c    1.65 KiB         0.58 KiB\n  ontent.css\n  dist/public/js/skins/content/tinymce-5    1.65 KiB         0.58 KiB\n  /content.css\n  dist/js/skins/content/document/content    1.22 KiB         0.52 KiB\n  .min.css\n  dist/public/js/skins/content/document/    1.22 KiB         0.52 KiB\n  content.min.css\n  dist/js/skins/content/tinymce-5-dark/c    1.19 KiB         0.49 KiB\n  ontent.min.css\n  dist/public/js/skins/content/tinymce-5    1.19 KiB         0.49 KiB\n  -dark/content.min.css\n  dist/js/skins/content/dark/content.min    1.19 KiB         0.49 KiB\n  .css\n  dist/public/js/skins/content/dark/cont    1.19 KiB         0.49 KiB\n  ent.min.css\n  dist/js/skins/content/writer/content.m    1.14 KiB         0.47 KiB\n  in.css\n  dist/public/js/skins/content/writer/co    1.14 KiB         0.47 KiB\n  ntent.min.css\n  dist/js/skins/content/default/content.    1.12 KiB         0.46 KiB\n  min.css\n  dist/js/skins/content/tinymce-5/conten    1.12 KiB         0.46 KiB\n  t.min.css\n  dist/public/js/skins/content/default/c    1.12 KiB         0.46 KiB\n  ontent.min.css\n  dist/public/js/skins/content/tinymce-5    1.12 KiB         0.46 KiB\n  /content.min.css\n  dist/js/skins/ui/oxide-dark/skin.shado    0.58 KiB         0.28 KiB\n  wdom.css\n  dist/js/skins/ui/oxide/skin.shadowdom.    0.58 KiB         0.28 KiB\n  css\n  dist/js/skins/ui/tinymce-5-dark/skin.s    0.58 KiB         0.28 KiB\n  hadowdom.css\n  dist/js/skins/ui/tinymce-5/skin.shadow    0.58 KiB         0.28 KiB\n  dom.css\n  dist/public/js/skins/ui/oxide-dark/ski    0.58 KiB         0.28 KiB\n  n.shadowdom.css\n  dist/public/js/skins/ui/oxide/skin.sha    0.58 KiB         0.28 KiB\n  dowdom.css\n  dist/public/js/skins/ui/tinymce-5-dark    0.58 KiB         0.28 KiB\n  /skin.shadowdom.css\n  dist/public/js/skins/ui/tinymce-5/skin    0.58 KiB         0.28 KiB\n  .shadowdom.css\n  dist/js/skins/ui/oxide-dark/skin.shado    0.50 KiB         0.26 KiB\n  wdom.min.css\n  dist/js/skins/ui/oxide/skin.shadowdom.    0.50 KiB         0.26 KiB\n  min.css\n  dist/js/skins/ui/tinymce-5-dark/skin.s    0.50 KiB         0.26 KiB\n  hadowdom.min.css\n  dist/js/skins/ui/tinymce-5/skin.shadow    0.50 KiB         0.26 KiB\n  dom.min.css\n  dist/public/js/skins/ui/oxide-dark/ski    0.50 KiB         0.26 KiB\n  n.shadowdom.min.css\n  dist/public/js/skins/ui/oxide/skin.sha    0.50 KiB         0.26 KiB\n  dowdom.min.css\n  dist/public/js/skins/ui/tinymce-5-dark    0.50 KiB         0.26 KiB\n  /skin.shadowdom.min.css\n  dist/public/js/skins/ui/tinymce-5/skin    0.50 KiB         0.26 KiB\n  .shadowdom.min.css\n\n  Images and other types of assets omitted.\n\n DONE  Build complete. The dist directory is ready to be deployed.\n INFO  Check out deployment instructions at https://cli.vuejs.org/guide/deployment.html\n      \n",
+      "name": "build",
+      "display_name": "通过"
+    },
+    {
+      "name": "acceptance",
+      "command": "docs/ACCEPTANCE.md",
+      "durationMs": 0,
+      "status": "failed",
+      "stderr": "存在 5 个未收口验收项",
+      "stdout": "",
+      "display_name": "失败"
+    }
+  ],
+  "status": "failed",
+  "task_id": "T001",
+  "context": {
+    "task_id": "T001",
+    "project": {
+      "name": "Workbench-Admin",
+      "type": "frontend",
+      "goal": "维护企业管理后台，保障业务页面、权限、数据操作和发布流程可追溯",
+      "runtime": "浏览器访问，按 dev、test、uat、prod 环境构建部署，交接给前端开发和业务维护人员",
+      "toolchain": "Vue 2、JavaScript、Vue CLI、Webpack、Element UI、Jest；使用 Yarn"
+    },
+    "intake": {
+      "status": "confirmed",
+      "evidence": [
+        {
+          "id": "requirements",
+          "required": true,
+          "question": "需求范围、非目标和验收标准是什么？",
+          "status": "confirmed",
+          "source": "docs/PROJECT.md",
+          "version": "pilot-2",
+          "note": "T001 真实需求已写入任务 PRD"
+        },
+        {
+          "id": "ui",
+          "required": false,
+          "question": "本次任务是否涉及 UI、视觉或交互输入？",
+          "status": "not_applicable",
+          "source": null,
+          "version": null,
+          "note": "T001 基线任务不依赖该类外部输入"
+        },
+        {
+          "id": "api",
+          "required": false,
+          "question": "本次任务是否依赖接口契约或后端数据？",
+          "status": "not_applicable",
+          "source": null,
+          "version": null,
+          "note": "T001 基线任务不依赖该类外部输入"
+        },
+        {
+          "id": "assets",
+          "required": false,
+          "question": "本次任务是否依赖品牌、图片、字体或其他素材？",
+          "status": "not_applicable",
+          "source": null,
+          "version": null,
+          "note": "T001 基线任务不依赖该类外部输入"
+        },
+        {
+          "id": "rp",
+          "required": false,
+          "question": "是否存在原型或页面流程输入？",
+          "status": "not_applicable",
+          "source": null,
+          "version": null,
+          "note": "T001 基线任务不依赖该类外部输入"
+        }
+      ]
+    },
+    "verify": {
+      "commands": {
+        "lint": "npm run lint",
+        "lint_pilot": "npm run lint:pilot",
+        "unit_test": "npm run test:unit",
+        "build": "npm run build:pilot"
+      },
+      "verify": {
+        "quick": {
+          "commands": [
+            "lint",
+            "unit_test"
+          ]
+        },
+        "audit": {
+          "fail_fast": false,
+          "commands": [
+            "lint_pilot",
+            "unit_test",
+            "build"
+          ]
+        }
+      }
+    },
+    "inputs": [
+      {
+        "id": "PRD-T001",
+        "sha256": "6646727c8ea766907842176773c65222f629eaffd92610d5294fccd12d4eef3f",
+        "changed": false
+      }
+    ],
+    "acceptance": [
+      {
+        "id": "AC-001",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "明确 dev/test/uat/prod 构建目标和配置来源",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": ""
+      },
+      {
+        "id": "AC-002",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "Pilot 工程门禁可重复执行",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": ""
+      },
+      {
+        "id": "AC-003",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "明确权限、路由和关键数据操作的后续验收边界",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": ""
+      },
+      {
+        "id": "AC-004",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "为 T001 生成不含敏感文件内容的不可变交接快照",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": ""
+      },
+      {
+        "id": "PRD-T001",
+        "task": "T001",
+        "requirement": "PRD-T001",
+        "status": "pending",
+        "evidence": "",
+        "implementation": ""
+      }
+    ],
+    "implementations": {
+      "": null
+    },
+    "evidence": {
+      "": null
+    },
+    "before_fingerprint": "f3c6881f1d7939ecd1b07828a4f375836ba8e1c72c391f78de83d43033008c03",
+    "changed_during_verification": false,
+    "fingerprint": "f3c6881f1d7939ecd1b07828a4f375836ba8e1c72c391f78de83d43033008c03"
+  },
+  "acceptance": {
+    "exists": true,
+    "path": "docs/ACCEPTANCE.md",
+    "rows": [
+      {
+        "id": "AC-001",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "明确 dev/test/uat/prod 构建目标和配置来源",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": "",
+        "issues": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_implementation",
+          "missing_evidence"
+        ]
+      },
+      {
+        "id": "AC-002",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "Pilot 工程门禁可重复执行",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": "",
+        "issues": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_implementation",
+          "missing_evidence"
+        ]
+      },
+      {
+        "id": "AC-003",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "明确权限、路由和关键数据操作的后续验收边界",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": "",
+        "issues": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_implementation",
+          "missing_evidence"
+        ]
+      },
+      {
+        "id": "AC-004",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "为 T001 生成不含敏感文件内容的不可变交接快照",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": "",
+        "issues": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_implementation",
+          "missing_evidence"
+        ]
+      },
+      {
+        "id": "PRD-T001",
+        "task": "T001",
+        "requirement": "PRD-T001",
+        "status": "pending",
+        "evidence": "",
+        "implementation": "",
+        "issues": [
+          "uncovered_requirement"
+        ]
+      }
+    ],
+    "unresolved": 5,
+    "status": "needs_confirmation"
+  },
+  "generatedAt": "2026-10-09T07:32:39.264Z",
+  "harnessVersion": "0.1.0"
+}

@@ -1,55 +1,42 @@
 # Verification modes
 
-This page defines the names, behavior, and unconfigured results of the six verification modes. The command entry point is [CLI](./commands.md).
+This page describes the Harness verification modes and their result semantics. See [CLI](./commands.md) for command entry points.
 
 ## quick
 
-Fail-fast feedback. Runs the commands listed in `verify.quick` in order and stops at the first non-passing step. A mode with no commands returns `not_configured`.
-
-The `continue-harness-verify` Skill runs this mode by default; the CLI is optional: `continue-harness verify quick`.
+Fast feedback. Runs configured checks in order and stops at the first failure. Returns `not_configured` when no check can run.
 
 ## feature
 
-Completed-feature gate. Runs `verify.feature.commands` and appends the acceptance gate when its condition holds; see Acceptance gate below.
-
-The `continue-harness-verify` Skill runs this mode by default; the CLI is optional: `continue-harness verify feature`.
+Feature acceptance. Runs configured checks and applies the requirement-to-acceptance closure gate. Unconfirmed Intake, missing links, or unresolved acceptance items prevent a passing result.
 
 ## runtime
 
-Browser or runtime checks. Consumer H5 maps it to `dev_ready` and `runtime`, the latter using Playwright to check page response, core content, console errors, and page errors.
-
-The `continue-harness-verify` Skill runs this mode by default; the CLI is optional: `continue-harness verify runtime`.
+Runtime checks. Runs only runtime checks explicitly configured by the project. Returns `not_configured` when absent; the Harness does not infer how the project runs.
 
 ## interaction
 
-Critical interaction checks. Consumer H5 marks it `not_configured`; `not_configured` means the capability is absent, not that it passed.
-
-The `continue-harness-verify` Skill runs this mode by default; the CLI is optional: `continue-harness verify interaction`.
+Interaction acceptance. Runs only interaction checks defined by the project. An unconfigured mode is not a pass.
 
 ## visual
 
-Screenshot baseline comparison. Without a baseline the whole mode returns `not_configured`, so an unconfigured screenshot check is never recorded as passed.
-
-The `continue-harness-verify` Skill runs this mode by default; the CLI is optional: `continue-harness verify visual`.
+Visual evidence checks. Runs only when the project configures the check and its baseline evidence. Missing configuration or baselines result in `not_configured`.
 
 ## audit
 
-Collects results from every configured check with `fail_fast` set to `false`, for pre-release, handoff, or complex diagnosis. `audit` also runs the acceptance gate.
+Audit runs all configured checks and collects results without stopping at the first failure. It applies the acceptance-closure gate as well.
 
-The `continue-harness-verify` Skill runs this mode by default; the CLI is optional: `continue-harness verify audit`.
+## Configuration and status
 
-## Configuration mapping
+Mode names provide stable entry points; project configuration maps checks to project commands. The Harness does not infer build, test, runtime, or visual tools from project type.
 
-Modes are symbolic names. The CLI reads `verify.<mode>` from `.continue-harness/project.yaml` and resolves each command name against `commands`, so one mode set can serve different package managers and test runners.
+- `passed`: configured checks succeeded and the closure gate passed.
+- `failed`: a check failed or a closure gap remains.
+- `blocked`: an external condition prevents a check or delivery.
+- `not_configured`: no executable configuration exists for the mode; this is not a pass.
 
-A mode absent from `verify` makes the command fail; a mode defined as `status: not_configured` returns `not_configured` and runs no steps.
+Feature and audit modes require a parseable acceptance record and traceability from the current task and applicable inputs to acceptance items. Unconfirmed Intake, invalid statuses, missing links, or unresolved items prevent a pass. Confirmed deferrals and external blocks remain visible in reports and cannot be represented as verified.
 
-## Acceptance gate
+## Execution stability
 
-`feature` and `audit` additionally read `docs/ACCEPTANCE.md`. The gate is active only when that file exists, contains a Markdown table, and the header has a status column: unresolved rows append a failure, and rows marked deferred or externally blocked append a `blocked` entry.
-
-When verification is bound to a task (an explicit `--task`, or the most recent task by default), a missing `docs/ACCEPTANCE.md`, a file without a table, a header without a status column, or any unresolved row all fail the acceptance entry. `not_configured` skips the failure decision only when no task is bound.
-
-## Environment blocks
-
-When a command fails because port listening is denied (`listen EPERM`, `EACCES ... listen`), the result is classified as `blocked` rather than a project failure.
+Configuration and input fingerprints that affect the result are compared before and after execution. If those sources change during verification, the result is not stable evidence of the current state. External restrictions, such as runtime permissions, are recorded as environmental blocks.

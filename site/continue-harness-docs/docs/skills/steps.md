@@ -1,74 +1,17 @@
 # 执行步骤
 
-本页按 Skill 列出执行步骤。聚合工作流 Skill 给出完整流程，命令级 Skill 给出主要步骤。
+本页按操作 Skill 列出执行步骤。项目约束仍以 `AGENTS.md` 为准；不要求安装聚合项目 Skill。
 
-## 聚合工作流 Skill
-
-### generic-harness
-
-通用项目流程，默认安装。先确认项目基本信息，再结合技术栈和任务范围选择输入，按项目配置调用 CLI 完成检查、验证与交接。专项输入只在确认适用后启用。
-
-#### 读取顺序
-
-1. `.continue-harness/project.yaml`
-2. `.continue-harness/intake.yaml`
-3. `AGENTS.md`
-4. `docs/PROJECT.md`、`docs/CURRENT_STATUS.md`、`docs/ACCEPTANCE.md`
-5. `docs/DECISIONS.md`、当前任务、有效输入、快照和日志
-
-#### 职责边界
-
-`inputs/` 保存原始证据，`logs/` 保存追加式执行轨迹，`docs/history/` 保存不可变交接快照，`docs/DECISIONS.md` 保存长期决策。同一份内容不在这些目录之间复制。
-
-#### 交接要求
-
-每轮结束记录目标、依据、变更、验证、失败重试、风险和下一步。只有确认后的事实进入 canonical 上下文。
-
-#### Intake 与验收
-
-Intake 第二轮逐项确认输入：必需项要有来源，非适用项标记 `not_applicable`，不用占位文档冒充证据。任务交接前完成验收状态收口，并保留最近一次验证报告。
-
-### consumer-h5-harness
-
-Consumer H5 完整流程，在 `--preset consumer-h5` 时安装。以下 15 步对应 Skill 的自动工作流。
-
-1. 恢复上下文：接手已有任务时先运行 `continue-harness resume --json`，没有可恢复任务时运行 `continue-harness inspect --json`。
-2. 项目有效性不确定时运行 `continue-harness doctor`。
-3. 读取输入清单：`continue-harness inputs inspect --json`。刚创建且输入为空时，展示五类输入目录并暂停业务实现。
-4. 按业务、交互和 Token 三套优先级分析输入。
-5. 从 PRD/RP 建立页面与流程清单，递归追踪全部可达节点，输出页面拆分、路由注册和分层方案；同步维护 `.continue-harness/models/page-flow.yaml` 与 `layout-specs.yaml`。
-6. 检查 `docs/design/tokens.json`；有 UI/RP 输入且 Token 为空或 `pending_extraction` 时先提炼或更新。
-7. 编码前更新中文覆盖矩阵 `docs/IMPLEMENTATION_COVERAGE.md`。
-8. 运行 `continue-harness plan init --json` 或 `continue-harness plan create <name> --json`。
-9. 实现项目代码，不覆盖项目自有内容。
-10. 按变更类型运行验证，对应关系见下表。
-11. 修复范围内失败，最多重试两轮。
-12. 更新 `docs/CURRENT_STATUS.md`、`docs/DECISIONS.md`、`docs/history/PRD_HISTORY.md`、`docs/history/CHANGE_HISTORY.md` 和 `docs/CHANGELOG.md`。
-13. 对照 PRD/RP 重新遍历入口和全部跳转；有遗漏继续实现，有阻塞集中追问。视觉微调按 token、component、layout、responsive、page_exception 写入 `.continue-harness/ui/adjustments.yaml`。
-14. 闭包后创建不可变任务快照：`continue-harness task snapshot <任务编号> --json`。
-15. 报告实际实现、实际验证、明确延期和剩余风险，并在末尾给出可执行的编号后续操作。
-
-| 变更类型 | 验证命令 |
-| --- | --- |
-| 逻辑 | `pnpm harness:quick` |
-| 完成功能 | `pnpm harness:feature` |
-| 运行时 | `pnpm harness:runtime` |
-| 交互 | `pnpm harness:interaction` |
-| UI、样式、布局 | `pnpm harness:visual` |
-| 配置或跨模块 | `pnpm harness:audit` |
-
-视觉验证未配置基线时报告未配置。构建通过、页面可打开、E2E 通过或截图通过都不等于产品验收完成。
-
-## 命令级 Skill
+## 操作 Skill
 
 ### continue-harness-create
 
 需要组织多轮对话时参见项目 Intake 问答。
 
-1. 确认项目名、目标目录、目标、项目类型、技术栈和交付范围。未知项保留 pending。
+1. 确认项目名、目标目录、目标、交付范围及会影响协作或验证的项目事实。需要确认运行环境或工具链时如实记录；未知项保持 pending，不据此启用专项能力。
 2. 检查 CLI 可用性。当前包未发布，不执行占位 scope 的 npm 安装；使用用户提供的本地仓库或已验证安装来源，按宿主权限执行安装。
 3. 运行 `continue-harness plan create <name> --output <dir> --json`，检查目标目录，再执行创建。默认只生成项目约束；专项 preset 仅在用户明确选择时使用。
-4. 通过 Intake 确认项目事实；根据项目类型、技术栈和当前任务选择必要输入。类型对应的问题只是候选清单，UI、API、Design Token 不自动成为必需项。
+4. 通过 Intake 确认项目事实；根据已确认事实和当前任务选择必要输入。内置类型问题只是候选清单，UI、API、Design Token 不自动成为必需项。
 5. 在 manifest 中登记已确认的原始依据及类型、来源、版本或哈希和任务编号。对话中的需求经用户确认后保存为项目文件再登记；无需要求用户准备一套固定格式文档。
 6. 创建任务，先在 `docs/ACCEPTANCE.md` 写明需求编号、实现项和验收标准，再实现。执行项目配置的检查，使用 `verify feature --task <id>` 或 `verify audit --task <id>`。
 7. 保存状态、决策、执行日志和任务快照。延期、阻塞与验证通过分别报告。
@@ -77,8 +20,8 @@ Consumer H5 完整流程，在 `--preset consumer-h5` 时安装。以下 15 步�
 
 ### continue-harness-init
 
-1. 读取项目约束、说明、代码结构和现有验证方式，确认项目目标、类型、技术栈及本次任务。
-2. 运行 `continue-harness plan init --json`。保留项目自有内容，处理真实冲突后执行 `continue-harness init`。
+1. 读取项目约束、说明、代码结构和现有验证方式，确认项目目标、项目形态及本次任务；只记录会影响协作或验证的运行环境和工具链事实。
+2. 运行 `continue-harness plan init --json`。确认逐文件计划后执行 `continue-harness init`；已有文件会保留，缺失文件会逐个创建。
 3. 执行 Intake。根据已确认事实选择必要依据，记录来源、适用原因和版本；不适用项记录原因，不创建占位输入。
 4. 运行 `inspect`、`doctor` 和 `inputs inspect`；将项目现有命令映射到验证配置。
 5. 恢复当前任务、有效需求、决策、验收状态和下一步。新增任务先确认验收标准，再实施。
@@ -90,7 +33,7 @@ UI、设计系统、API 生成等只在当前任务明确需要时启用。接�
 
 1. 在项目根目录运行 `continue-harness inspect --json`。
 2. 将 JSON 稳定编码翻译为结论，不修改项目。
-3. 分别报告项目与技术栈、事实文档、输入、唯一 Token 真值、验证模式和 Agent 工作流。
+3. 分别报告项目事实、相关文档、适用输入、已配置验证方式和 Agent 工作流；只有项目实际启用相关视觉能力时才报告视觉依据。
 4. 对未配置项只提出补齐建议，不描述为失败或已完成。
 5. 需要具体诊断时转 `continue-harness-doctor`。
 
@@ -98,9 +41,9 @@ UI、设计系统、API 生成等只在当前任务明确需要时启用。接�
 
 - 新项目：`continue-harness plan create <name> --output <完整目标目录> --json`。
 - 已有项目：`continue-harness plan init --json`。
-- 解释 `create`、`managed_unchanged`、`project_owned_modified`、`template_update_available` 和 `true_conflict`。
+- 解释计划中的 `create`、`managed_unchanged` 和 `project_owned_modified`；后者表示保留现有文件，不阻止创建其他缺失文件。
 - `--output` 是完整项目目录，不是父目录。
-- 计划阶段不安装依赖、不写文件；有真实冲突时列出精确文件和决策点。
+- 计划阶段不安装依赖、不写文件；列出待创建、未修改和已被项目修改的文件。
 
 ### continue-harness-doctor
 
@@ -121,7 +64,7 @@ runtime、interaction、visual 等模式按实际项目配置使用，不为所�
 
 ### continue-harness-inputs
 
-1. 读取 Intake 的项目目标、类型、技术栈和当前任务，确定实现与验收需要哪些依据。
+1. 读取 Intake 的项目目标、项目形态和当前任务，确定实现与验收需要哪些依据。
 2. 项目类型提供候选问题；按对话结论选择输入并说明适用原因。非适用项标记 not_applicable 并记录原因。自定义输入使用小写类型名，例如 data_contract 或 deployment。
 3. 在 inputs/manifest.yaml 登记 id、type、path、status、task_id、source 和版本或 sha256。保留原始依据。
 4. 运行 `inputs inspect --json`、`inputs diff --json`；变化后的输入须重新确认，关联验收须重新验证。

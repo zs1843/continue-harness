@@ -1,67 +1,21 @@
-# 模板与 Preset
+# 项目记录模板
 
-Templates 和 Presets 都是业务中立文件来源：Templates 供 `init` 接入已有项目，Presets 供 `create` 创建新项目。本页列出实际文件清单和写入边界。
+创建和接入流程使用模板准备项目约束与协作记录。默认内容用于记录项目事实、输入来源、任务、验收、日志和交接，不包含预设的业务实现。
 
-## Templates
+## 记录类别
 
-`init` 按 `templates/` 到目标路径的固定映射补齐缺失文件：
+- 项目约束与 Agent 协作入口。
+- 项目目标、当前状态与长期决策。
+- Intake 状态及输入登记清单。
+- 任务历史、验收项和交接快照。
+- 命令执行记录与验证报告。
 
-| 模板 | 目标路径 |
-| --- | --- |
-| `templates/AGENTS.md` | `AGENTS.md` |
-| `templates/CLAUDE.md` | `CLAUDE.md` |
-| `templates/CURSOR_RULE.mdc` | `.cursor/rules/continue-harness.mdc` |
-| `templates/PROJECT_MAP.md` | `docs/PROJECT_MAP.md` |
-| `templates/DESIGN.md` | `docs/DESIGN.md` |
-| `templates/PRODUCT.md` | `docs/PRODUCT.md` |
-| `templates/CURRENT_STATUS.md` | `docs/CURRENT_STATUS.md` |
-| `templates/DECISIONS.md` | `docs/DECISIONS.md` |
-| `templates/CHANGELOG.md` | `docs/CHANGELOG.md` |
-| `templates/INPUTS.md` | `.continue-harness/inputs/README.md` |
-| `templates/INPUT_MANIFEST.yaml` | `.continue-harness/inputs/manifest.yaml` |
-| `templates/PRD_INPUT.md` | `.continue-harness/inputs/prd/README.md` |
-| `templates/RP_INPUT.md` | `.continue-harness/inputs/rp/README.md` |
-| `templates/UI_INPUT.md` | `.continue-harness/inputs/ui/README.md` |
-| `templates/API_INPUT.md` | `.continue-harness/inputs/api/README.md` |
-| `templates/ASSETS_INPUT.md` | `.continue-harness/inputs/assets/README.md` |
-| `templates/API_SELECTION.yaml` | `.continue-harness/api/selection.yaml` |
-| `templates/SNAPSHOTS.md` | `.continue-harness/snapshots/README.md` |
-| `templates/PRD_HISTORY.md` | `docs/history/PRD_HISTORY.md` |
-| `templates/CHANGE_HISTORY.md` | `docs/history/CHANGE_HISTORY.md` |
-| `templates/IMPLEMENTATION_COVERAGE.md` | `docs/IMPLEMENTATION_COVERAGE.md` |
-| `templates/TOKENS.json` | `docs/design/tokens.json` |
-| `templates/TOKENS.md` | `docs/design/TOKENS.md` |
-| `templates/COMPONENTS.md` | `docs/design/COMPONENTS.md` |
-| `templates/UI-CONTRACT-ADOPTION.md` | `docs/UI-CONTRACT-ADOPTION.md` |
-| `templates/UI-COMPONENT-INVENTORY.md` | `docs/UI-COMPONENT-INVENTORY.md` |
-| `templates/UI-COMPONENT-BOUNDARIES.md` | `docs/UI-COMPONENT-BOUNDARIES.md` |
-| `templates/UI-CONTRACT-EVIDENCE.md` | `docs/ui-contract-evidence/README.md` |
-| `templates/PAGE_FLOW_MODEL.yaml` | `.continue-harness/models/page-flow.yaml` |
-| `templates/LAYOUT_SPECS.yaml` | `.continue-harness/models/layout-specs.yaml` |
-| `templates/UI_ADJUSTMENTS.yaml` | `.continue-harness/ui/adjustments.yaml` |
-| `templates/project.yaml` | `.continue-harness/project.yaml` |
+实际写入内容由创建或接入计划列明。已有项目中的文件先检查归属和冲突；项目自有内容不会被默认覆盖。可选记录只在项目事实和任务范围表明需要时纳入。
 
-## Presets
+## 创建边界
 
-`presets/generic/` 是默认 preset，创建只包含通用约束、输入、任务、日志、上下文和验收容器的项目：
+新项目创建流程准备约束和协作容器，不创建业务页面、业务状态、接口实现或其他项目代码。接入已有项目时优先使用已有事实和文档，避免制造重复记录。
 
-- `AGENTS.md`、`CLAUDE.md`、`.cursor/rules/continue-harness.mdc`
-- `docs/PROJECT.md`、`docs/CURRENT_STATUS.md`、`docs/DECISIONS.md`、`docs/ACCEPTANCE.md`、`docs/history/README.md`
-- `.continue-harness/project.yaml`、`.continue-harness/intake.yaml`
-- `.continue-harness/inputs/README.md`、`.continue-harness/inputs/manifest.yaml`
-- `.continue-harness/logs/README.md`
-- `.gitignore`
+## 能力边界
 
-`presets/consumer-h5/` 是显式选择的专项 preset，在通用容器之外创建可运行的 minimal uni-app H5 工程：
-
-- `package.json`、`tsconfig.json`、`vite.config.mjs`、`index.html`
-- `src/App.vue`、`src/main.ts`、`src/manifest.json`
-- `src/pages.json`、`src/pages/index/index.vue`
-- `src/services/http.ts`、`src/components/BaseButton.vue`、`src/styles/tokens.scss`
-- `playwright.config.mjs`、`tests/e2e/dev-ready.mjs`、`tests/e2e/runtime.spec.mjs`、`tests/e2e/visual.spec.mjs`、`tests/structure.test.mjs`、`tests/coverage-closure.mjs`
-- `.continue-harness/` 配置、模型、输入和快照目录
-- `docs/` 项目文档
-
-## 边界
-
-Preset 只创建容器、目录和工程能力，不放业务示例页：真实项目应从 PRD/RP/UI/API 输入生成业务页面，输入为空时项目保持等待输入。`init` 在写入前预检，不覆盖项目已维护文件。
+模板描述信息职责，不是固定目录清单或完整项目结构。计划和执行结果是目标路径与实际生成内容的权威来源。记录容器存在也不代表其中事实已确认或验收证据已齐备。

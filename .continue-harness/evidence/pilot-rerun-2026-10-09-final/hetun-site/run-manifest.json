@@ -1,0 +1,157 @@
+{
+  "pilot": "HeTun-Site",
+  "pilot_head": "cf053e1b40b515f4716e1685c0731c6b776c1f8b",
+  "pilot_worktree_status": [
+    "M .continue-harness/logs/commands.ndjson"
+  ],
+  "harness_head": "18379cbd4a6007c120c9f20c567e3bebd445862a",
+  "harness_worktree": true,
+  "cli": "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+  "commands": [
+    {
+      "name": "intake-inspect",
+      "cwd": "/Users/mova/project/HeTun-Site",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "intake",
+        "inspect",
+        "--json"
+      ],
+      "exit_code": 0,
+      "signal": null
+    },
+    {
+      "name": "inputs-inspect",
+      "cwd": "/Users/mova/project/HeTun-Site",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "inputs",
+        "inspect",
+        "--json"
+      ],
+      "exit_code": 0,
+      "signal": null
+    },
+    {
+      "name": "inputs-analyze",
+      "cwd": "/Users/mova/project/HeTun-Site",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "inputs",
+        "analyze",
+        "--json"
+      ],
+      "exit_code": 0,
+      "signal": null
+    },
+    {
+      "name": "task-inspect",
+      "cwd": "/Users/mova/project/HeTun-Site",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "task",
+        "inspect",
+        "T001",
+        "--json"
+      ],
+      "exit_code": 0,
+      "signal": null
+    },
+    {
+      "name": "task-history",
+      "cwd": "/Users/mova/project/HeTun-Site",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "task",
+        "history",
+        "T001",
+        "--json"
+      ],
+      "exit_code": 0,
+      "signal": null
+    },
+    {
+      "name": "resume",
+      "cwd": "/Users/mova/project/HeTun-Site",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "resume",
+        "--task",
+        "T001",
+        "--json"
+      ],
+      "exit_code": 0,
+      "signal": null
+    },
+    {
+      "name": "doctor",
+      "cwd": "/Users/mova/project/HeTun-Site",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "doctor",
+        "--json"
+      ],
+      "exit_code": 1,
+      "signal": null
+    },
+    {
+      "name": "verify-audit",
+      "cwd": "/Users/mova/project/HeTun-Site",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "verify",
+        "audit",
+        "--task",
+        "T001",
+        "--json"
+      ],
+      "exit_code": 1,
+      "signal": null
+    },
+    {
+      "name": "task-snapshot",
+      "cwd": "/Users/mova/project/HeTun-Site",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "task",
+        "snapshot",
+        "T001",
+        "--title",
+        "建立官网项目可运行基线并明确页面入口",
+        "--request",
+        "复跑 Harness Pilot：验证需求到验收的可追溯闭环并保留失败事实",
+        "--json"
+      ],
+      "exit_code": 1,
+      "signal": null
+    }
+  ],
+  "report_sha256": "8d1fbee98be6eec8b5c6a9d38bfeef4566f55da761d7202b5bc73ef74ce52b2e",
+  "report_status": "failed",
+  "logs": [
+    {
+      "path": "pilot-logs/acceptance.log",
+      "bytes": 30,
+      "sha256": "9951192774a697641b7f28717f0781f843e2199a7419c460172ac36c72384e48"
+    },
+    {
+      "path": "pilot-logs/build.log",
+      "bytes": 2845,
+      "sha256": "03d7f8f3ed49756f7a55850ede424776387643d38839609124d3ed885de316cd"
+    },
+    {
+      "path": "pilot-logs/verify_pilot.log",
+      "bytes": 147,
+      "sha256": "33fd3c2f8a66c65e45ab86d742b67248d5b3bf4bdee8a70c5d42e11cc85849a2"
+    }
+  ]
+}

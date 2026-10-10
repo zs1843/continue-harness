@@ -43,16 +43,22 @@ test('rejects an undefined command reference', () => {
   );
 });
 
-test('rejects unsupported consumer project selections', () => {
-  assert.throws(
-    () =>
-      validateProjectConfig({
-        ...config,
-        project: { ...config.project, platforms: ['desktop'] },
-        stack: { adapter: 'unknown' },
-      }),
-    /不支持的平台.*stack\.adapter/s,
-  );
+test('accepts project-defined product, runtime, toolchain and package manager labels', () => {
+  const extensible = {
+    harness: { version: '0.1.0' },
+    project: { name: 'arbitrary-project', product_type: 'research-service', platforms: ['edge-runtime'] },
+    stack: { adapter: 'custom-toolchain', package_manager: 'workspace-manager' },
+  };
+  assert.equal(validateProjectConfig(extensible), extensible);
+});
+
+test('accepts a constraint-only project without stack, commands or verification modes', () => {
+  const minimal = { harness: { version: '0.1.0', mode: 'generic' }, project: { name: 'docs-only' } };
+  assert.equal(validateProjectConfig(minimal), minimal);
+  assert.ok(!schema.required.includes('commands'));
+  assert.ok(!schema.required.includes('verify'));
+  assert.equal(schema.properties.project.properties.product_type.enum, undefined);
+  assert.equal(schema.properties.stack.properties.adapter.enum, undefined);
 });
 
 test('rejects empty command values during configuration validation', () => {

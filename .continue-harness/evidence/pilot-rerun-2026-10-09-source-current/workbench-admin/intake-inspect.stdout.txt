@@ -1,0 +1,64 @@
+{
+  "path": ".continue-harness/intake.yaml",
+  "exists": true,
+  "version": 1,
+  "phase": "evidence",
+  "status": "confirmed",
+  "project": {
+    "name": "Workbench-Admin",
+    "type": "frontend",
+    "goal": "维护企业管理后台，保障业务页面、权限、数据操作和发布流程可追溯",
+    "runtime": "浏览器访问，按 dev、test、uat、prod 环境构建部署，交接给前端开发和业务维护人员",
+    "toolchain": "Vue 2、JavaScript、Vue CLI、Webpack、Element UI、Jest；使用 Yarn"
+  },
+  "evidence": [
+    {
+      "id": "requirements",
+      "required": true,
+      "question": "需求范围、非目标和验收标准是什么？",
+      "status": "confirmed",
+      "source": "docs/PROJECT.md",
+      "version": "pilot-2",
+      "note": "T001 真实需求已写入任务 PRD"
+    },
+    {
+      "id": "ui",
+      "required": false,
+      "question": "本次任务是否涉及 UI、视觉或交互输入？",
+      "status": "not_applicable",
+      "source": null,
+      "version": null,
+      "note": "T001 基线任务不依赖该类外部输入"
+    },
+    {
+      "id": "api",
+      "required": false,
+      "question": "本次任务是否依赖接口契约或后端数据？",
+      "status": "not_applicable",
+      "source": null,
+      "version": null,
+      "note": "T001 基线任务不依赖该类外部输入"
+    },
+    {
+      "id": "assets",
+      "required": false,
+      "question": "本次任务是否依赖品牌、图片、字体或其他素材？",
+      "status": "not_applicable",
+      "source": null,
+      "version": null,
+      "note": "T001 基线任务不依赖该类外部输入"
+    },
+    {
+      "id": "rp",
+      "required": false,
+      "question": "是否存在原型或页面流程输入？",
+      "status": "not_applicable",
+      "source": null,
+      "version": null,
+      "note": "T001 基线任务不依赖该类外部输入"
+    }
+  ],
+  "questions": [],
+  "updated_at": "2026-10-08T03:41:54.526Z",
+  "next_questions": []
+}

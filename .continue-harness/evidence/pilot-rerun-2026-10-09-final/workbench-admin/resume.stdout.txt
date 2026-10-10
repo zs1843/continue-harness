@@ -1,0 +1,309 @@
+{
+  "project": {
+    "branch": "master",
+    "dirty_files": [
+      "M .continue-harness/logs/commands.ndjson"
+    ]
+  },
+  "task": {
+    "id": "T001",
+    "title": "建立后台项目可运行基线并确认环境与权限边界",
+    "status": "草稿",
+    "updated_at": "2026-10-08"
+  },
+  "inputs": {
+    "status": "passed",
+    "count": 1,
+    "unregistered": 0,
+    "manifest": ".continue-harness/inputs/manifest.yaml",
+    "entries": [
+      {
+        "id": "PRD-T001",
+        "path": ".continue-harness/inputs/prd/modules/T001/PRD.md",
+        "status": "active",
+        "task_id": "T001",
+        "type": "prd",
+        "version": "1.0",
+        "sha256": "6646727c8ea766907842176773c65222f629eaffd92610d5294fccd12d4eef3f",
+        "changed": false,
+        "display_type": "产品需求输入",
+        "exists": true
+      }
+    ],
+    "issues": []
+  },
+  "project_context": {
+    "facts": {
+      "name": "Workbench-Admin",
+      "type": "frontend",
+      "goal": "维护企业管理后台，保障业务页面、权限、数据操作和发布流程可追溯",
+      "runtime": "浏览器访问，按 dev、test、uat、prod 环境构建部署，交接给前端开发和业务维护人员",
+      "toolchain": "Vue 2、JavaScript、Vue CLI、Webpack、Element UI、Jest；使用 Yarn"
+    },
+    "intake_path": ".continue-harness/intake.yaml",
+    "documents": [
+      {
+        "path": "docs/PROJECT.md",
+        "content": "# 项目基本信息\n\n## 目标\n\nT001 只建立后台项目当前 Vue 2/Vue CLI 基线，确认环境脚本、单元测试和开发构建可以被 Harness 重复调用。\n\n## 范围\n\n- 环境脚本：`serve:dev`、`serve:test`、`serve:uat`、`serve:prod` 及对应构建脚本。\n- 工程门禁：Vue-aware 语法检查 `npm run lint:pilot`、`npm run test:unit` 和带 Node OpenSSL 兼容参数的 `npm run build:pilot`。\n- 现有业务权限、API 合约和生产凭据不属于本次基线任务。\n\n## 非目标\n\n- 不在 T001 内修改历史业务代码以消除全量格式债务。\n- 不把本地环境文件中的凭据写入 Harness 日志或快照。\n- 不宣称业务权限矩阵已经完成验收。\n\n## 交付物\n\n- 可执行的环境脚本清单。\n- 通过的 Pilot 工程门禁结果。\n- 明确的业务权限/API 验收边界，供后续任务接续。\n"
+      },
+      {
+        "path": "docs/CURRENT_STATUS.md",
+        "content": "# 当前状态\n\n- Intake：第一轮已确认，证据确认仍待补充。\n- 输入：已登记 `PRD-T001`；尚无外部 PRD/RP/UI/API/资产输入。\n- 任务：`T001` 建立后台项目可运行基线并确认环境与权限边界，状态为草稿。\n- 验收：已建立 3 条标准，2 条阻塞，1 条延期。\n- 验收：已建立 4 条标准，3 条阻塞，1 条延期。\n- 验证：`continue-harness verify audit` 已执行；Lint、Jest 和开发构建均因依赖命令不存在而失败。\n- 交接：`resume` 可恢复 T001 和输入状态；任务快照因仓库已有 `.env.*` 文件名触发敏感扫描而未生成。\n## 2026-10-08 Pilot 复跑\n\n- 依赖：Yarn frozen install 因锁文件需要更新且 registry 证书问题未完成；本地使用 `npm install --legacy-peer-deps --ignore-scripts --no-package-lock` 仅完成诊断安装。\n- 单测：`npm run test:unit` 通过，7 suites / 28 tests。\n- Lint：`npm run lint` 失败，共 178171 个问题。\n- 构建：`npm run build:dev` 因旧版 Webpack/OpenSSL 兼容性失败。\n- Audit：整体仍为 `failed`，原因是 AC-002/AC-003 阻塞及 AC-001 延期。\n\n## 2026-10-08 Pilot 收口\n\n- 环境边界：登记 dev/test/uat/prod 脚本；业务凭据、API 和权限矩阵明确留给后续任务。\n- 门禁：新增 `npm run lint:pilot`（Vue-aware 语法门禁）和 `npm run build:pilot`（带旧版 Webpack/OpenSSL 兼容参数）。\n- 验证：`lint:pilot` 通过，单测 7 suites / 28 tests 通过，开发构建通过。\n- Audit：所有配置命令和验收门禁通过，最终状态为 `passed`；原始全量 Lint 的历史格式债务仍单独记录。\n"
+      },
+      {
+        "path": "docs/DECISIONS.md",
+        "content": "# 决策记录\n\n记录影响后续实现的长期决策、备选方案、依据、影响范围和复审条件。\n\n## Pilot 记录\n\n- 决策：保留现有 Vue 2、Vue CLI、Yarn 和多环境构建脚本，不在 Pilot 阶段升级技术栈。\n- 依据：package.json 已声明 `serve:*`、`build:*`、Lint 和 Jest 命令，仓库存在 `yarn.lock`。\n- 影响：先建立可复现验证基线，再讨论升级 Vue、CLI 或依赖。\n- 复审条件：基线构建、测试和部署环境完成证据登记后。\n"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "T001",
+        "created_at": "2026-10-08",
+        "dependencies": [],
+        "sources": [],
+        "status": "草稿",
+        "supersedes": [],
+        "title": "建立后台项目可运行基线并确认环境与权限边界",
+        "updated_at": "2026-10-08",
+        "version": "1.0"
+      }
+    ],
+    "logs": {
+      "path": ".continue-harness/logs/commands.ndjson",
+      "entries": [
+        {
+          "timestamp": "2026-10-08T05:49:14.450Z",
+          "kind": "command",
+          "command": "npm run build:pilot",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "timestamp": "2026-10-08T05:49:42.739Z",
+          "kind": "command",
+          "command": "npm run lint:pilot",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "timestamp": "2026-10-08T05:49:46.321Z",
+          "kind": "command",
+          "command": "npm run test:unit",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "timestamp": "2026-10-08T05:50:04.369Z",
+          "kind": "command",
+          "command": "npm run build:pilot",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "timestamp": "2026-10-09T03:34:28.522Z",
+          "kind": "command",
+          "command": "npm run lint:pilot",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "timestamp": "2026-10-09T03:34:33.118Z",
+          "kind": "command",
+          "command": "npm run test:unit",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "timestamp": "2026-10-09T03:34:50.769Z",
+          "kind": "command",
+          "command": "npm run build:pilot",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "timestamp": "2026-10-09T07:23:42.665Z",
+          "kind": "command",
+          "command": "npm run lint:pilot",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "timestamp": "2026-10-09T07:23:46.863Z",
+          "kind": "command",
+          "command": "npm run test:unit",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "timestamp": "2026-10-09T07:24:03.913Z",
+          "kind": "command",
+          "command": "npm run build:pilot",
+          "status": "passed",
+          "exitCode": 0
+        }
+      ]
+    }
+  },
+  "intake": {
+    "status": "confirmed",
+    "phase": "evidence",
+    "unresolved": 0
+  },
+  "acceptance": {
+    "exists": true,
+    "path": "docs/ACCEPTANCE.md",
+    "rows": [
+      {
+        "id": "AC-001",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "明确 dev/test/uat/prod 构建目标和配置来源",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": "",
+        "issues": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_implementation",
+          "missing_evidence"
+        ]
+      },
+      {
+        "id": "AC-002",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "Pilot 工程门禁可重复执行",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": "",
+        "issues": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_implementation",
+          "missing_evidence"
+        ]
+      },
+      {
+        "id": "AC-003",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "明确权限、路由和关键数据操作的后续验收边界",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": "",
+        "issues": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_implementation",
+          "missing_evidence"
+        ]
+      },
+      {
+        "id": "AC-004",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "为 T001 生成不含敏感文件内容的不可变交接快照",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": "",
+        "issues": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_implementation",
+          "missing_evidence"
+        ]
+      },
+      {
+        "id": "PRD-T001",
+        "task": "T001",
+        "requirement": "PRD-T001",
+        "status": "pending",
+        "evidence": "",
+        "implementation": "",
+        "issues": [
+          "uncovered_requirement"
+        ]
+      }
+    ],
+    "unresolved": 5,
+    "status": "needs_confirmation"
+  },
+  "verification": {
+    "path": "tmp/continue-harness/report.json",
+    "task_id": "T001",
+    "mode": "audit",
+    "status": "failed",
+    "recorded_status": "failed",
+    "applicable": true,
+    "generatedAt": "2026-10-09T07:24:03.923Z"
+  },
+  "snapshots": {
+    "snapshots": [
+      {
+        "id": "2026-10-08T034155+0000",
+        "snapshot": "docs/history/tasks/T001/2026-10-08T034155+0000/SNAPSHOT.md",
+        "snapshot_exists": true
+      },
+      {
+        "id": "2026-10-08T034228+0000",
+        "snapshot": "docs/history/tasks/T001/2026-10-08T034228+0000/SNAPSHOT.md",
+        "snapshot_exists": true
+      },
+      {
+        "id": "2026-10-08T035607+0000",
+        "snapshot": "docs/history/tasks/T001/2026-10-08T035607+0000/SNAPSHOT.md",
+        "snapshot_exists": true
+      },
+      {
+        "id": "2026-10-08T055026+0000",
+        "snapshot": "docs/history/tasks/T001/2026-10-08T055026+0000/SNAPSHOT.md",
+        "snapshot_exists": true
+      }
+    ],
+    "status": "passed",
+    "task_id": "T001"
+  },
+  "coverage": {
+    "exists": false,
+    "total": 0,
+    "statuses": {},
+    "unresolved": 0
+  },
+  "decisions": [
+    "记录影响后续实现的长期决策、备选方案、依据、影响范围和复审条件。",
+    "- 决策：保留现有 Vue 2、Vue CLI、Yarn 和多环境构建脚本，不在 Pilot 阶段升级技术栈。",
+    "- 依据：package.json 已声明 `serve:*`、`build:*`、Lint 和 Jest 命令，仓库存在 `yarn.lock`。",
+    "- 影响：先建立可复现验证基线，再讨论升级 Vue、CLI 或依赖。",
+    "- 复审条件：基线构建、测试和部署环境完成证据登记后。"
+  ],
+  "next_actions": [
+    {
+      "action": "verify feature",
+      "reason": "验收标准存在未收口项"
+    },
+    {
+      "action": "verify audit",
+      "reason": "最近一次 audit 未通过"
+    }
+  ]
+}

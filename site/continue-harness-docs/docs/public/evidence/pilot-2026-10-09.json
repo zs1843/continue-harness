@@ -1,0 +1,130 @@
+{
+  "date": "2026-10-09",
+  "cli_version": "0.1.0",
+  "harness_source": {
+    "revision": "18379cbd4a6007c120c9f20c567e3bebd445862a",
+    "working_tree": true,
+    "source_file_set_digest": "824d2acd0d817b8db6ab8948ca6b8138fb346e3d1fa1f5f916719a1c119fc345",
+    "source_file_set_digest_scope": "SHA-256 over 21 source-file hashes preserved in local source-integrity.json",
+    "algorithm": "sha256"
+  },
+  "evidence_location": {
+    "repository_path": ".continue-harness/evidence/pilot-rerun-2026-10-09-source-current/",
+    "published_with_site": false,
+    "includes": [
+      "full command outputs",
+      "verification reports",
+      "project command logs",
+      "source file hashes"
+    ],
+    "project_source_snapshots_included": false
+  },
+  "workflow": [
+    "intake inspect --json",
+    "inputs inspect --json",
+    "inputs analyze --json",
+    "task inspect T001 --json",
+    "task history T001 --json",
+    "resume --task T001 --json",
+    "doctor --json",
+    "verify audit --task T001 --json",
+    "task snapshot T001 --title <title> --request <request> --json"
+  ],
+  "projects": [
+    {
+      "name": "HeTun-Site",
+      "source_revision": "cf053e1b40b515f4716e1685c0731c6b776c1f8b",
+      "working_tree_note": "Only .continue-harness/logs/commands.ndjson is modified in the recorded worktree status",
+      "intake": "confirmed",
+      "input_inspection": "passed",
+      "input_analysis": "passed",
+      "task_inspection": "passed",
+      "task_history": "passed",
+      "context_recovery": "passed; current report is failed",
+      "doctor": {
+        "status": "failed",
+        "issues": [
+          "GITIGNORE_ENV",
+          "AGENT_WORKFLOW"
+        ]
+      },
+      "configured_checks": [
+        "passed",
+        "passed"
+      ],
+      "acceptance": {
+        "status": "needs_confirmation",
+        "unresolved": 5,
+        "issue_codes": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_evidence",
+          "uncovered_requirement"
+        ]
+      },
+      "audit": {
+        "status": "failed",
+        "report_sha256": "6a2bd7dbddecf304bccfe04ea63cc19a203b3e25a4b70160f9377f801b6af1d0",
+        "context_fingerprint": "bdb85c68c6d07caf9892199b5df1808009063cedea2c5af9a1fe61cafb4cd1a1",
+        "changed_during_verification": false
+      },
+      "snapshot": "blocked by unresolved acceptance; no new snapshot was written",
+      "log_hashes": {
+        "acceptance.log": "9951192774a697641b7f28717f0781f843e2199a7419c460172ac36c72384e48",
+        "build.log": "b90cbd51e2dbf4089c497fad80c158c0cc6e0a389045d7d97c7995f5595cd6f9",
+        "verify_pilot.log": "33fd3c2f8a66c65e45ab86d742b67248d5b3bf4bdee8a70c5d42e11cc85849a2"
+      }
+    },
+    {
+      "name": "Workbench-Admin",
+      "source_revision": "22da4ad755a2682377540f791684bea257c30740",
+      "working_tree_note": "Only .continue-harness/logs/commands.ndjson is modified in the recorded worktree status",
+      "intake": "confirmed",
+      "input_inspection": "passed",
+      "input_analysis": "passed",
+      "task_inspection": "passed",
+      "task_history": "passed",
+      "context_recovery": "passed; current report is failed",
+      "doctor": {
+        "status": "failed",
+        "issues": [
+          "GITIGNORE_ENV",
+          "AGENT_WORKFLOW"
+        ]
+      },
+      "configured_checks": [
+        "passed",
+        "passed",
+        "passed"
+      ],
+      "acceptance": {
+        "status": "needs_confirmation",
+        "unresolved": 5,
+        "issue_codes": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_evidence",
+          "uncovered_requirement"
+        ]
+      },
+      "audit": {
+        "status": "failed",
+        "report_sha256": "1d795fa0e68f12a16b12428c95322e6f19156c6f429599f44280c9cc1ccd4d20",
+        "context_fingerprint": "f3c6881f1d7939ecd1b07828a4f375836ba8e1c72c391f78de83d43033008c03",
+        "changed_during_verification": false
+      },
+      "snapshot": "blocked by unresolved acceptance; no new snapshot was written",
+      "log_hashes": {
+        "acceptance.log": "9951192774a697641b7f28717f0781f843e2199a7419c460172ac36c72384e48",
+        "build.log": "d4aa3a8f4c8e643e7fe16a20b76fb7bad350a9acd8e64dad9ea6249bcabc3817",
+        "lint.log": "690d63e3435e9a376291c6b26afc678e791d2d6771a225874f92081b9962926a",
+        "lint_pilot.log": "634e3debe83b828dce74a84be5a42f54d3d854df4ac630d34470d0698b4142be",
+        "unit_test.log": "e7dc8bd0121f361c1f53b4bb8cc0e6fe6accc67efa49eae0a8c45b89565594ac"
+      }
+    }
+  ]
+}

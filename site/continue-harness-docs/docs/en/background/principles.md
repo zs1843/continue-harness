@@ -1,39 +1,31 @@
 # Design principles
 
-This page covers the boundary split, fact ownership, initialization behavior, capability activation, and verification stance of continue-harness. These principles decide what belongs in Core and what stays with the target project.
+Continue Harness keeps project facts, requirements, implementation, acceptance, evidence, and handoff state linked. The Harness provides common records and gates; each project owns its business judgments, authoritative inputs, and actual check methods.
 
-## Core does not understand business
+## Core and project boundaries
 
-Core contains no product pages, domain states, API paths, brands, or token values. It carries reusable mechanisms only: configuration, command parsing, diagnostics, verification, reporting, and safe writes. Adapter values are configuration protocol: Core configuration enums and `schemas/project.schema.json` validate `project.product_type`, `project.platforms`, and `stack.adapter`, and none of them hold business facts.
+Core maintains configuration, Intake, input registration, task history, context recovery, verification orchestration, acceptance checks, reports, and logs. It does not define project business behavior or requirement conclusions.
 
-The cost is more explicit configuration; the benefit is that the harness does not become tied to one business project.
+Project configuration belongs to the project and records confirmed facts, relevant inputs, and checks the project actually runs. The Harness does not infer other projects' structure from one sample.
 
-## Project facts are project-owned
+## Safe initialization
 
-`.continue-harness/project.yaml` belongs to the target project. The project selects its profile, platform, and stack, and maps symbolic verification steps to real commands.
+Preview the write plan before adopting an existing project. Initialization preserves existing files, including project-modified files, and creates missing files individually. A write failure or concurrent change may leave a partial result.
 
-The harness provides templates and defaults, while real business facts stay in the project's own files and configuration.
+```bash
+continue-harness init --dry-run
+```
 
-## Initialization is safe
+## Enable capabilities when needed
 
-When adopting an existing project, the harness inspects every target file first and stops writing on a real conflict. Files with identical content are kept, and files with different content are reported as project-maintained or conflicting.
+The default workflow covers project facts, inputs, tasks, logs, context recovery, and acceptance. Other inputs and checks are enabled only when relevant to the task and confirmed by the project. Optional capabilities do not alter the common closure or become universal requirements.
 
-`continue-harness init --dry-run` prints the write plan without changing files.
+## Verification is evidence, not a business judgment
 
-## Capabilities stay light until needed
-
-New projects get aggregation workflow Skills from the CLI and the project type, with `generic` as the default preset. Consumer H5 Skills, command-level Skills, OpenAPI, UI System, design token discovery, and visual baselines activate per task.
-
-These capabilities expand on demand, which keeps the default cognitive cost low.
-
-## Verification is completion evidence
-
-A verification report records commands, results, and blocking reasons, and separates business failures, environment blocks, and unconfigured checks. An unconfigured check returns an unconfigured or blocked status and does not count as passed.
-
-Functional acceptance for Consumer H5 also checks requirement closure.
+Reports record configured checks, outcomes, and blocking reasons. Unconfigured, failed, blocked, and passed are distinct states. A successful command does not automatically mean a requirement is complete; requirements need links to implementation items, acceptance criteria, and reviewable evidence.
 
 ## Constraints and approvals
 
-`AGENTS.md` is the single constraint authority; `CLAUDE.md` and the Cursor rule are thin adapters, and Skills are callable workflows.
+`AGENTS.md` is the single authority for project constraints. Host entry files may point to it; Skills describe callable workflows and do not copy or override constraints.
 
 Publishing, dependency upgrades, and public protocol changes require explicit approval.

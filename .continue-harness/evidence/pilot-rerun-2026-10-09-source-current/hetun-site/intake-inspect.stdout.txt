@@ -1,0 +1,64 @@
+{
+  "path": ".continue-harness/intake.yaml",
+  "exists": true,
+  "version": 1,
+  "phase": "evidence",
+  "status": "confirmed",
+  "project": {
+    "name": "HeTun-Site",
+    "type": "frontend",
+    "goal": "维护和迭代河豚出行官网及下载页，统一官网入口、页面内容和发布流程",
+    "runtime": "浏览器访问，构建为静态资源部署，支持开发环境和生产环境",
+    "toolchain": "React、TypeScript、Vite、Tailwind；历史独立 HTML 页面；包管理器待确认"
+  },
+  "evidence": [
+    {
+      "id": "requirements",
+      "required": true,
+      "question": "需求范围、非目标和验收标准是什么？",
+      "status": "confirmed",
+      "source": "docs/PROJECT.md",
+      "version": "pilot-2",
+      "note": "T001 真实需求已写入任务 PRD"
+    },
+    {
+      "id": "ui",
+      "required": false,
+      "question": "本次任务是否涉及 UI、视觉或交互输入？",
+      "status": "not_applicable",
+      "source": null,
+      "version": null,
+      "note": "T001 基线任务不依赖该类外部输入"
+    },
+    {
+      "id": "api",
+      "required": false,
+      "question": "本次任务是否依赖接口契约或后端数据？",
+      "status": "not_applicable",
+      "source": null,
+      "version": null,
+      "note": "T001 基线任务不依赖该类外部输入"
+    },
+    {
+      "id": "assets",
+      "required": false,
+      "question": "本次任务是否依赖品牌、图片、字体或其他素材？",
+      "status": "not_applicable",
+      "source": null,
+      "version": null,
+      "note": "T001 基线任务不依赖该类外部输入"
+    },
+    {
+      "id": "rp",
+      "required": false,
+      "question": "是否存在原型或页面流程输入？",
+      "status": "not_applicable",
+      "source": null,
+      "version": null,
+      "note": "T001 基线任务不依赖该类外部输入"
+    }
+  ],
+  "questions": [],
+  "updated_at": "2026-10-08T03:41:52.398Z",
+  "next_questions": []
+}

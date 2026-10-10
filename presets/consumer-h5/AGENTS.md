@@ -9,7 +9,7 @@
 1. `.continue-harness/project.yaml`
 2. `docs/PROJECT_MAP.md`
 3. `docs/CURRENT_STATUS.md`
-4. `.agents/skills/consumer-h5-harness/SKILL.md`
+4. 当前任务相关的输入依据与项目约束文档
 5. 有业务任务时再读取输入清单、`docs/PRODUCT.md` 和对应 PRD/RP
 6. 有 UI 任务时再读取 `docs/DESIGN.md`、Design Token、UI 输入和视觉调整记录
 7. 有 API 任务时再读取 API 输入和任务 operationId 选择

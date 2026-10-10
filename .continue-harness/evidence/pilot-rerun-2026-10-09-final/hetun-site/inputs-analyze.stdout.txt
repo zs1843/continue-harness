@@ -1,0 +1,30 @@
+{
+  "facts": [],
+  "inputs": [
+    {
+      "id": "PRD-T001",
+      "path": ".continue-harness/inputs/prd/modules/T001/PRD.md",
+      "status": "active",
+      "task_id": "T001",
+      "type": "prd",
+      "version": "1.0",
+      "sha256": "25c99865a7988feb5d1534d061bba834ad90a7983f1541b35e3c058aa38a329e",
+      "changed": false,
+      "display_type": "产品需求输入",
+      "exists": true
+    }
+  ],
+  "issues": [],
+  "priority": {
+    "business": [
+      "用户当前任务",
+      "最新有效 PRD",
+      "最新有效 RP",
+      "最新有效 UI",
+      "项目事实文档",
+      "Harness 默认模板",
+      "Agent 推断"
+    ]
+  },
+  "status": "passed"
+}

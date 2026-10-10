@@ -1,113 +1,47 @@
 # Architecture
 
-## Active scope
+## Purpose
 
-Continue Harness maintains requirement → implementation → acceptance → evidence → handoff links.
-Acceptance criteria are confirmed before implementation. Project types suggest input questions; project
-facts, toolchain and task scope determine applicability. Custom input types are supported by the manifest.
-Core validates traceability and evidence freshness, while project commands and reviewers establish behavior.
-
-The existing ACCEPTANCE.md ledger is the relationship authority. Reports bind to task and content
-fingerprints; snapshots retain report copies and context. Resume includes project facts and source documents.
-This does not provide automatic business correctness or detection of changes in unregistered dependencies.
-Adapter expansion is outside the current milestone.
-
-## Composition model
-
-Target-project behavior is composed from four sources:
+Continue Harness maintains the chain:
 
 ```text
-Core
-  + Product Profile
-  + Platform Adapter
-  + Stack Adapter
-  + optional UI System Adapter
-  + Project-owned configuration
+Requirement → implementation item → acceptance item → evidence → handoff state
 ```
 
-### Core
+Its common workflow confirms project facts, registers applicable inputs, records task and acceptance links, executes project-declared checks, and preserves logs and snapshots for recovery. Project facts determine which inputs and checks apply; no single input category is mandatory for every project.
 
-Core owns:
+The existing acceptance ledger is the relationship authority. Reports bind results to task and content fingerprints; snapshots retain reports and context. Resume restores the current task, relevant inputs, decisions, risks, logs, and next actions. This supports traceability and recovery; it does not prove business correctness or detect every change in unregistered external dependencies.
 
-- Configuration loading and validation.
-- Named command resolution.
-- Fail-fast and non-fail-fast execution.
-- Process exit semantics.
-- Doctor diagnostics.
-- Markdown, JSON, and command-log reports.
+When a project has an Intake record, its state is recomputed from confirmed facts and evidence; an unconfirmed Intake blocks feature/audit verification and snapshots. Projects without an Intake record remain compatible. Active task-scoped and shared inputs must link to acceptance items. Requirement decomposition and semantic coverage still require project judgment. Verification compares relevant configuration and input fingerprints before and after execution; this is not filesystem locking.
 
-Core does not understand UI pages, business domains, product copy, brands, or API payloads.
+## Core and project ownership
 
-The target architecture is project-neutral by default. A generic project receives constraints,
-evidence registration, task/history state, context snapshots, structured logs, command orchestration,
-and acceptance closure without receiving a language, framework, UI, or page template. Product, runtime,
-and toolchain behavior is enabled only after project facts select an Adapter or preset. See
-`docs/GENERIC_HARNESS_DESIGN.md` for the multi-round intake and context model.
+Core owns configuration loading, Intake state, input registration, task history, context recovery, command orchestration, acceptance closure, reports, and logs. The project owns requirements, constraints, authoritative evidence, decisions, and actual check commands.
 
-Profiles, Platform Adapters, and Stack Adapters are independent extension points. The entries below
-are the initial public implementations, not a limitation imposed by Core; other combinations can be
-supported when their corresponding descriptors are available.
-
-Core 只理解 UI System Adapter 的通用描述协议，不导入 TDesign、Vant 或其他组件库。项目拥有
-语义 Design Token；Adapter 负责将其映射到具体框架变量。Page Flow Model 承接 RP 的页面与
-交互事实，Layout Spec 承接页面组合和视觉参考元数据，UI Reference 只用于校准和验收。
-
-### Product Profile
-
-A Product Profile describes verification priorities caused by the shape of a product. The initial
-public profile is `consumer-h5`.
-
-### Platform Adapter
-
-A Platform Adapter describes runtime acceptance behavior. The initial public adapter is `web-mobile`.
-
-### Stack Adapter
-
-A Stack Adapter describes framework and toolchain integration. The initial public adapter is `uni-app`.
+The repository has specialized implementation areas, but they are not a dynamically discovered plugin protocol. Some configuration values and diagnostic paths remain fixed in code. They are not prerequisites for the common workflow, and arbitrary support must not be claimed without implementation and tests.
 
 ## Configuration ownership
 
-Each target project owns `.continue-harness/project.yaml`. The file selects adapters and maps symbolic
-verification steps to actual project commands.
-
-Projects created before the directory migration may still own `.fe-harness/project.yaml`; Core resolves
-the canonical directory first and falls back to the legacy directory until it is explicitly migrated.
-
-The Harness repository also has a self-maintenance configuration using the internal
-`developer_tooling + node + node-esm` combination. That combination describes this repository only;
-it is not a public target-project preset in version `0.1.0`.
+Each target project owns `.continue-harness/project.yaml`. It records confirmed facts and maps verification modes to project-defined commands. Legacy configuration locations may be read for compatibility; new projects use the canonical location.
 
 ## Verification modes
 
-- Quick: fast, fail-fast feedback.
-- Feature: completed-change gate.
-- Visual: platform visual and interaction checks.
-- Audit: run all configured checks and report all failures.
+- Quick: ordered checks with fail-fast behavior.
+- Feature: configured checks plus requirement-to-acceptance closure.
+- Runtime, interaction, and visual: run only when explicitly configured.
+- Audit: collect all configured results and apply the acceptance closure gate.
 
-Consumer-H5 feature completion includes a requirement-closure gate. An active PRD is not complete
-until every extracted RP/PRD node is individually verified, explicitly deferred by the user, or
-recorded as externally blocked. Build, first-page runtime, and screenshot success are supporting
-evidence, not substitutes for coverage closure.
+An unconfigured check is not a pass. External conditions are recorded as blocked; unresolved acceptance or evidence links prevent a passing closure result.
 
 ## Safety model
 
-- Initialization must not overwrite existing files.
-- Dry-run must be available before mutation.
+- Initialization preflights and does not overwrite existing files.
+- Plans can be inspected before mutation.
 - Doctor is read-only.
-- Upgrade must eventually produce a patch before applying conflicts.
-- Credentials remain project-owned and must not enter package templates.
-- API generation is task-scoped: PRD selects operationIds, while OpenAPI remains the transport data
-  contract. Generated files are updated only when their recorded hash proves they remain managed.
+- Credentials and sensitive values remain project-owned and must not enter templates, snapshots, or reports.
+- Generated files are protected by managed metadata where that capability is configured.
 - Publishing and remote repository operations require explicit approval.
 
 ## Agent constraint authority
 
-`AGENTS.md` is the single project constraint body. Provider files are managed adapters:
-
-- Codex reads root `AGENTS.md` and project workflows from `.agents/skills/`.
-- Claude Code reads `CLAUDE.md`, which imports `AGENTS.md`, and workflows from `.claude/skills/`.
-- Cursor reads root `AGENTS.md`; `.cursor/rules/continue-harness.mdc` only makes that authority explicit,
-  while workflows remain under the provider-neutral `.agents/skills/` path.
-
-Provider adapters must not copy project constraints. Skills define invokable procedures and never
-override the canonical project constraints.
+`AGENTS.md` is the single project constraint authority. Provider-specific entry files may point to it; they must not duplicate or contradict it. Skills describe callable workflows and do not override project constraints.

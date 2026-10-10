@@ -1,79 +1,39 @@
 # Execution steps
 
-This page lists execution steps per Skill. Aggregate workflow Skills get the full flow; command-level Skills get the main steps.
+This page lists steps for operation Skills. Project constraints remain defined by `AGENTS.md`; an aggregate project Skill is not required.
 
-## Aggregate workflow Skills
-
-### generic-harness
-
-The generic project workflow is installed by default. Confirm project facts, select inputs from the toolchain and task scope, then use the project-configured CLI checks, verification and handoff. Enable specialized inputs only after confirming applicability.
-
-#### Read order
-
-1. `.continue-harness/project.yaml`
-2. `.continue-harness/intake.yaml`
-3. `AGENTS.md`
-4. `docs/PROJECT.md`, `docs/CURRENT_STATUS.md`, `docs/ACCEPTANCE.md`
-5. `docs/DECISIONS.md`, the current task, active inputs, snapshots, and logs
-
-#### Responsibility boundaries
-
-`inputs/` holds raw evidence, `logs/` holds an append-only execution trail, `docs/history/` holds immutable handoff snapshots, and `docs/DECISIONS.md` holds long-lived decisions. Do not copy the same content between these directories.
-
-#### Handoff requirements
-
-Each round records goal, basis, changes, verification, failed retries, risks, and next steps. Only confirmed facts enter canonical context.
-
-#### Intake and acceptance
-
-The second Intake round confirms inputs item by item: required items need a source, non-applicable items are marked `not_applicable`, and placeholder documents do not stand in for evidence. Close out acceptance status and keep the latest verification report before a task handoff.
-
-### consumer-h5-harness
-
-The full Consumer H5 flow, installed with `--preset consumer-h5`. These 15 steps follow the Skill's automatic workflow.
-
-1. Restore context: run `continue-harness resume --json` when taking over an existing task, and `continue-harness inspect --json` when nothing is resumable.
-2. Run `continue-harness doctor` when project validity is uncertain.
-3. Read the input manifest: `continue-harness inputs inspect --json`. For a newly created project with no inputs, show the five input directories and pause business implementation.
-4. Analyze inputs against the three priorities: business, interaction, and Tokens.
-5. Build the page and flow list from PRD/RP, trace every reachable node recursively, and output the page split, route registration, and layering plan. Keep `.continue-harness/models/page-flow.yaml` and `layout-specs.yaml` in sync.
-6. Check `docs/design/tokens.json`; when UI/RP inputs exist and Tokens are empty or `pending_extraction`, extract or update them first.
-7. Update the coverage matrix `docs/IMPLEMENTATION_COVERAGE.md` before coding.
-8. Run `continue-harness plan init --json` or `continue-harness plan create <name> --json`.
-9. Implement the project code without overwriting project-owned content.
-10. Run verification for the change type; the mapping is in the table below.
-11. Fix in-scope failures, with at most two retry rounds.
-12. Update `docs/CURRENT_STATUS.md`, `docs/DECISIONS.md`, `docs/history/PRD_HISTORY.md`, `docs/history/CHANGE_HISTORY.md`, and `docs/CHANGELOG.md`.
-13. Re-walk entries and every transition against the PRD/RP; implement remaining gaps and raise blockers as a batch. Write visual adjustments into `.continue-harness/ui/adjustments.yaml` as token, component, layout, responsive, or page_exception.
-14. After closure, create the immutable task snapshot: `continue-harness task snapshot <task ID> --json`.
-15. Report actual implementation, actual verification, explicit deferrals, and remaining risks, then list executable numbered next actions.
-
-| Change type | Verification command |
-| --- | --- |
-| Logic | `pnpm harness:quick` |
-| Completed feature | `pnpm harness:feature` |
-| Runtime | `pnpm harness:runtime` |
-| Interaction | `pnpm harness:interaction` |
-| UI, styles, layout | `pnpm harness:visual` |
-| Configuration or cross-module | `pnpm harness:audit` |
-
-Report visual verification as not configured when no baseline exists. A passing build, an openable page, a passing E2E run, or a passing screenshot does not equal product acceptance.
-
-## Command-level Skills
+## Operation Skills
 
 ### continue-harness-create
 
-Confirm goals, project type, toolchain and task-specific inputs. Preview creation and create a constraint workspace. Register actual evidence, define acceptance criteria, implement, verify and save the handoff. Specialized presets require explicit selection.
+Use the Intake questions when multiple rounds of clarification are needed.
+
+1. Confirm the project name, destination, goals, delivery scope, and project facts that affect collaboration or verification. Record runtime or toolchain facts when relevant; keep unknowns pending and do not enable specialized capabilities based on assumptions.
+2. Check whether the CLI is available. The current package is unpublished; do not install an unpublished placeholder scope. Use a user-provided local repository or a verified source, following the host's permissions.
+3. Run `continue-harness plan create <name> --output <dir> --json`, inspect the destination, then create it. By default, create only project constraints; use a specialized preset only when explicitly selected.
+4. Confirm project facts through Intake. Select evidence from the project facts and task scope; project-type questions are candidates, not a fixed checklist. UI, interface, and visual-value records are not automatically required.
+5. Register confirmed source evidence in the manifest with its type, source, version or hash, and task ID. Save and confirm requirements from conversation as project records before registering them. Do not require users to prepare a fixed document format.
+6. Create a task and record requirement IDs, implementation items, and acceptance criteria in `docs/ACCEPTANCE.md` before implementation. Run project-configured checks with `verify feature --task <id>` or `verify audit --task <id>`.
+7. Save status, decisions, execution logs, and a task snapshot. Report deferrals, blockers, and verification results distinctly.
+
+The root `AGENTS.md` is the single project-constraint entry point. Creation does not overwrite existing project content or add task-irrelevant component, visual-value, or framework constraints.
 
 ### continue-harness-init
 
-Inspect the existing project and preview initialization. Preserve its files and conventions. Select evidence through Intake, map existing checks, and restore task and acceptance state. Adoption does not require Token extraction or style changes.
+1. Read project constraints, documentation, structure, and existing checks. Confirm project goals, project shape, and current task; record runtime and toolchain facts only when they affect collaboration or verification.
+2. Run `continue-harness plan init --json`. Review the per-file plan before running `continue-harness init`; existing files are preserved, and missing files are created individually.
+3. Complete Intake. Select evidence from confirmed facts, record each source, applicability, and version, and give a reason for non-applicable items. Do not create placeholder inputs.
+4. Run `inspect`, `doctor`, and `inputs inspect`; map the project's existing checks into verification configuration.
+5. Restore the current task, valid requirements, decisions, acceptance state, and next steps. Confirm acceptance criteria before starting a new task.
+6. Maintain the requirement → implementation item → acceptance item → evidence → handoff links, using existing project logs and history to preserve the process.
+
+Enable visual, component, or interface-generation capabilities only when the current task requires them. Adoption does not require extracting visual values, rewriting styles, or replacing tools. Provider entry files point to `AGENTS.md`, and Skills are used as needed by stage.
 
 ### continue-harness-inspect
 
 1. Run `continue-harness inspect --json` in the project root.
 2. Translate the stable JSON codes into conclusions without modifying the project.
-3. Report project and toolchain, fact documents, inputs, the single Token source, verification modes, and Agent workflow separately.
+3. Report project facts, relevant documents, applicable inputs, configured verification, and Agent workflow. Include visual references only when the project uses that capability.
 4. For unconfigured items, suggest what to add; do not describe them as failures or as complete.
 5. Switch to `continue-harness-doctor` when specific diagnostics are needed.
 
@@ -81,9 +41,9 @@ Inspect the existing project and preview initialization. Preserve its files and 
 
 - New project: `continue-harness plan create <name> --output <complete target directory> --json`.
 - Existing project: `continue-harness plan init --json`.
-- Explain `create`, `managed_unchanged`, `project_owned_modified`, `template_update_available`, and `true_conflict`.
+- Explain `create`, `managed_unchanged`, and `project_owned_modified`; the latter means an existing file is preserved and does not prevent other missing files from being created.
 - `--output` is the complete project directory, not its parent.
-- The plan stage installs no dependencies and writes no files; on true conflicts, list the exact files and decision points.
+- The plan stage installs no dependencies and writes no files; it lists files to create, unchanged managed files, and project-modified files.
 
 ### continue-harness-doctor
 
@@ -96,15 +56,33 @@ Inspect the existing project and preview initialization. Preserve its files and 
 
 ### continue-harness-verify
 
-Run project-configured checks. Use `verify feature/audit --task <id>` for acceptance. Verified rows require requirement, implementation and evidence links. Deferrals and blockers retain their reasons and do not count as passed.
+Read the project configuration and the current task's acceptance criteria, then select checks for the task scope. Use `quick` for rapid feedback and `feature` or `audit` for task acceptance. Run `continue-harness verify feature --task <id>` or `continue-harness verify audit --task <id>` to bind the result to an explicit task.
+
+Each row in `docs/ACCEPTANCE.md` must link a valid requirement, implementation item, and readable local evidence. Record a reason, owner, and follow-up condition for deferrals or blockers; neither counts as passed. Update existing legacy rows instead of creating a parallel ledger.
+
+Use `runtime`, `interaction`, or `visual` modes only when configured and relevant to the project. Do not add browser, visual, or screenshot requirements to every project. Rerun verification when inputs, implementation, or criteria change, and report completion only when checks and acceptance both meet the current scope.
 
 ### continue-harness-inputs
 
-Register project-selected inputs with source, version or hash and task ID. Custom types are supported. Record reasons for applicability, inspect changes and link requirements to acceptance. UI, API and Tokens are optional.
+1. Read Intake facts about project goals, project shape, and current task to determine which evidence implementation and acceptance need.
+2. Treat project-type questions as candidates; select inputs from the conversation and record why they apply. Mark non-applicable items `not_applicable` with a reason. Custom input types use lowercase names such as `data_contract` or `deployment`.
+3. Register `id`, `type`, `path`, `status`, `task_id`, `source`, and version or `sha256` in `inputs/manifest.yaml`. Preserve the original evidence.
+4. Run `inputs inspect --json` and `inputs diff --json`. Reconfirm changed inputs and rerun acceptance verification when needed.
+5. `inputs analyze --json` provides text clues; it does not prove that requirements were fully understood. Use suitable tools to interpret images, PDFs, and other non-text material.
+6. Link requirement input IDs to implementation items, acceptance criteria, and evidence in `docs/ACCEPTANCE.md`. Ask the user to resolve uncertain goals or conflicts.
+
+Do not presume that visual, prototype, interface, or design-value records are required; load their specialized instructions only when the task needs them.
 
 ### continue-harness-task
 
-Restore or create a task, define acceptance links before implementation, verify with an explicit task ID, and save current state and a snapshot. Snapshots preserve report copies and context; outdated reports require another verification.
+1. Restore an existing task with `resume --task <id> --json`; create a new ID with `task create --title "<title>" --json`.
+2. Register valid requirements and link their IDs, implementation items, and acceptance criteria in `docs/ACCEPTANCE.md`. Confirm scope and non-goals before implementation.
+3. After implementation, run `verify feature --task <id>` or `verify audit --task <id>`. The report must match the task and current input and implementation versions.
+4. Update current status, decisions, and necessary logs. Record reasons, owners, and follow-up conditions for deferrals or blockers; do not mark them passed.
+5. Create a handoff snapshot with `task snapshot <id> --title "<title>" --request "<request>" --json`. The snapshot preserves acceptance links, context, and a copy of the verification report. Rerun verification when the report no longer matches.
+6. State the goal, completed and unfinished work, evidence locations, risks, and next steps in the handoff. Record revisions with a new snapshot.
+
+Do not create parallel ledgers or add visual-value files unrelated to the task.
 
 ### continue-harness-design-tokens
 

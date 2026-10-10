@@ -1,3 +1,0 @@
-name: generic-harness
-description: 通用项目约束、Intake、上下文恢复、日志和验收闭环
-default_prompt: 使用 $generic-harness 先确认项目基本信息，再按项目类型收集最小输入，维护约束、日志、上下文和验收闭环。

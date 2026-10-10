@@ -1,0 +1,171 @@
+{
+  "results": [
+    {
+      "code": "RUNTIME_NODE_VERSION",
+      "display_name": "通过",
+      "message": "Node.js 20.20.2 满足要求",
+      "name": "node-version",
+      "status": "passed"
+    },
+    {
+      "code": "PROJECT_PACKAGE_JSON",
+      "display_name": "通过",
+      "message": "package.json 已存在",
+      "name": "package-json",
+      "status": "passed"
+    },
+    {
+      "code": "TEST_ISOLATION_NOT_CONFIGURED",
+      "display_name": "未配置",
+      "message": "未识别可判断隔离性的测试运行器配置",
+      "name": "test-isolation",
+      "status": "not_configured"
+    },
+    {
+      "code": "NODE_ENGINE_DECLARATION",
+      "display_name": "未配置",
+      "message": "package.json 未声明 engines.node",
+      "name": "node-engine-declaration",
+      "status": "not_configured",
+      "suggestion": "在 package.json 中声明 engines.node >=20"
+    },
+    {
+      "code": "CI_ENTRY_POINT",
+      "display_name": "未配置",
+      "message": "未检测到 CI 入口",
+      "name": "ci-entry-point",
+      "status": "not_configured",
+      "suggestion": "配置 GitLab CI、GitHub Actions 或 Jenkins 入口并执行 Harness gate"
+    },
+    {
+      "code": "GITIGNORE_REPORTS",
+      "display_name": "通过",
+      "message": "Harness 报告目录已被 Git 忽略",
+      "name": "gitignore-reports",
+      "status": "passed"
+    },
+    {
+      "code": "GITIGNORE_ENV",
+      "display_name": "失败",
+      "message": ".env* 未被安全忽略",
+      "name": "gitignore-env",
+      "status": "failed",
+      "suggestion": "在 .gitignore 中添加 .env*，可保留 .env.example"
+    },
+    {
+      "code": "OPENAPI_SNAPSHOT",
+      "display_name": "未配置",
+      "message": "未配置 OpenAPI Snapshot",
+      "name": "openapi-snapshot",
+      "status": "not_configured"
+    },
+    {
+      "code": "API_GENERATION",
+      "display_name": "未配置",
+      "message": "尚未生成任务级接口代码",
+      "name": "api-generation",
+      "status": "not_configured"
+    },
+    {
+      "code": "AGENT_WORKFLOW",
+      "display_name": "待确认",
+      "message": "Agent 约束文档尚未说明：输入清单",
+      "name": "agent-workflow",
+      "status": "needs_confirmation",
+      "suggestion": "在 Agent 约束文档中补充对应的任务与验证约定"
+    },
+    {
+      "code": "AGENT_ADAPTERS",
+      "display_name": "通过",
+      "message": "Codex、Claude Code 和 Cursor 均指向唯一约束本体 AGENTS.md",
+      "name": "agent-adapters",
+      "status": "passed"
+    },
+    {
+      "code": "INTAKE",
+      "display_name": "通过",
+      "message": "Intake: confirmed",
+      "name": "intake",
+      "status": "passed"
+    },
+    {
+      "code": "INPUT_MANIFEST",
+      "display_name": "通过",
+      "message": "输入清单 manifest.yaml 已存在",
+      "name": "input-manifest",
+      "status": "passed"
+    },
+    {
+      "code": "INPUT_REGISTRY",
+      "display_name": "通过",
+      "message": ".continue-harness/inputs/README.md 已存在",
+      "name": "input-registry",
+      "status": "passed"
+    },
+    {
+      "code": "HISTORY_ROOT",
+      "display_name": "通过",
+      "message": "历史根目录 docs/history 已存在",
+      "name": "history-root",
+      "status": "passed"
+    },
+    {
+      "code": "TASK_SNAPSHOT_ROOT",
+      "display_name": "通过",
+      "message": "任务快照目录已存在",
+      "name": "task-snapshot-root",
+      "status": "passed"
+    },
+    {
+      "code": "TASK_SNAPSHOT_INTEGRITY",
+      "display_name": "通过",
+      "message": "任务快照均保留快照、文件清单、验证结果与上下文记录",
+      "name": "task-snapshot-integrity",
+      "status": "passed"
+    },
+    {
+      "code": "TASK_SNAPSHOT_LEGACY",
+      "display_name": "未配置",
+      "message": "4 个旧格式快照缺少当前上下文绑定，仅作历史记录；请新建快照，不修改旧快照",
+      "name": "task-snapshot-legacy",
+      "status": "not_configured"
+    },
+    {
+      "code": "DESIGN_GOVERNANCE",
+      "display_name": "不适用",
+      "message": "项目未启用设计治理",
+      "name": "design-governance",
+      "status": "not_applicable"
+    },
+    {
+      "code": "VISUAL_BASELINE",
+      "display_name": "未配置",
+      "message": "视觉回归未配置",
+      "name": "visual-baseline",
+      "status": "not_configured",
+      "suggestion": "提供 tests/visual 或 Playwright screenshot 基线，并配置显式更新命令"
+    },
+    {
+      "code": "PROJECT_SCRIPT",
+      "display_name": "通过",
+      "message": "脚本 build 已配置",
+      "name": "command:build",
+      "status": "passed"
+    },
+    {
+      "code": "PROJECT_SCRIPT",
+      "display_name": "通过",
+      "message": "脚本 verify:pilot 已配置",
+      "name": "command:verify_pilot",
+      "status": "passed"
+    },
+    {
+      "code": "PROJECT_SCRIPT",
+      "display_name": "通过",
+      "message": "脚本 dev 已配置",
+      "name": "command:dev",
+      "status": "passed"
+    }
+  ],
+  "status": "failed"
+}

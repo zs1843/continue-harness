@@ -1,89 +1,32 @@
 # Adopt an existing project
 
-This page covers the commands, preflight statuses, and incremental adoption order for adding Harness files to an existing project. For command options see [CLI](../reference/commands.md).
+When adopting an existing project, inspect its current state and target files before deciding which Harness records to add. The recommended entry point is the `continue-harness-init` Skill; the CLI is optional.
 
-## Commands
-
-Run a read-only preflight with the `init` Skill to confirm project-owned files are not overwritten.
-
-**Skill**: `continue-harness-init`
-
-**CLI (optional)**:
+## Preview and write
 
 ```bash
 continue-harness init --dry-run
-```
-
-Use the `plan` Skill when a machine-readable write plan is needed.
-
-**Skill**: `continue-harness-plan`
-
-**CLI (optional)**:
-
-```bash
 continue-harness plan init --json
-```
-
-Once the plan is confirmed, write the missing Harness files with the `init` Skill.
-
-**Skill**: `continue-harness-init`
-
-**CLI (optional)**:
-
-```bash
 continue-harness init
-```
-
-After writing, run a read-only diagnosis with the `doctor` Skill.
-
-**Skill**: `continue-harness-doctor`
-
-**CLI (optional)**:
-
-```bash
 continue-harness doctor
 ```
 
-## Preflight statuses
+The plan identifies files to create, unchanged managed files, and project-modified files:
 
-The initialization plan sorts files before writing:
+| Status | Meaning | Adoption behavior |
+| --- | --- | --- |
+| `create` | Target does not exist | Create the file |
+| `managed_unchanged` | Target matches the template | Preserve without rewriting |
+| `project_owned_modified` | The project has modified the target | Preserve without overwriting; other missing files can still be created |
 
-| Status | Meaning |
-| --- | --- |
-| `create` | The target does not exist and can be created |
-| `unchanged` | The file exists with identical content |
-| `managed_unchanged` | A scaffold-managed file is unmodified |
-| `project_owned_modified` | Maintained by the project and not directly overwritable |
-| `conflict` | A real conflict that requires human handling |
-
-When the plan contains any conflict, `init` writes nothing. `--dry-run` and `plan init` emit the same plan, for human review and machine consumption respectively.
+Adoption is not an all-or-nothing transaction. A write error or concurrent change may leave a partial result. Doctor performs read-only checks of the current configuration and enabled capabilities.
 
 ## Incremental adoption
 
-`init` replaces no package manager, test runner, style, or Agent rule; it adds only missing Harness files. Teams enable capabilities in this order:
+1. Confirm project constraints, goals, and owners.
+2. Reuse existing project documents and evidence; register their sources and applicability.
+3. Confirm tasks and acceptance criteria, then map the checks the project actually runs.
+4. Execute configured checks and review reports and unresolved items.
+5. Save recoverable context and handoff actions.
 
-1. Add `.continue-harness/project.yaml`.
-2. Add input directories and project documents.
-3. Enable `doctor` and `verify`.
-4. Enable Design Token, OpenAPI, or UI System per task.
-
-## Existing Token discovery
-
-After adoption, scan the visual values the project already uses with the Design Token Skill.
-
-**Skill**: `continue-harness-design-tokens`
-
-**CLI (optional)**:
-
-```bash
-continue-harness design tokens discover --json
-continue-harness design tokens inspect --json
-```
-
-`discover` read-only scans Vue, CSS, SCSS, and Less files under `src/` and prints candidates for CSS Variables, frequent colors, fonts, spacing, radii, shadows, sizes, elevation, motion, and breakpoints. The Token source of truth is updated only after a human confirms candidates.
-
-Token priority is defined in [Glossary](../reference/glossary.md).
-
-## Limits
-
-`discover` prints candidates only and does not write `docs/design/tokens.json`; a human confirms the update of the Token source of truth.
+Enable optional capabilities only when confirmed requirements and acceptance criteria need them. Adoption does not replace existing project workflows or rewrite existing materials automatically.

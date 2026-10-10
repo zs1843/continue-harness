@@ -1,6 +1,6 @@
 # Workflow
 
-This page describes the flow from project adoption to task delivery and its artifacts. Start with [Project adoption](/en/guide/ai-first).
+This page outlines the flow from project fact confirmation through task handoff. Start with [Get started](/en/guide/getting-started).
 
 ## Collaboration flow
 
@@ -16,7 +16,7 @@ Each step reads or produces a durable project fact or a verifiable result. The H
 
 ## First use
 
-See [Project adoption](/en/guide/ai-first) for the adoption prompt, the Skill installation commands, the task prompt, and the prompt that resumes work in a new session.
+See [Get started](/en/guide/getting-started) for the user entry point and Agent prompt.
 
 ## Loading capabilities on demand
 
@@ -33,7 +33,7 @@ The current milestone focuses on acceptance links, evidence validity and project
 <details>
 <summary>CLI reference (optional)</summary>
 
-**Skill**: `generic-harness` (Intake), `continue-harness-task` (tasks), `continue-harness-verify` (verification)
+Use the existing operation Skill for each stage: `continue-harness-create` for a new project, `continue-harness-init` for adoption, `continue-harness-inputs` for input registration, `continue-harness-task` for tasks and handoff, and `continue-harness-verify` for verification. Intake is part of the create, adoption, and input-confirmation workflows; there is no standalone Intake Skill.
 
 Use the CLI when an Agent is unavailable, CI needs explicit commands, or execution must be diagnosed manually:
 
@@ -44,5 +44,7 @@ continue-harness verify feature
 ```
 
 See the [CLI reference](/en/reference/commands) for the complete command list.
+
+These commands illustrate entry points; they do not imply that a project already has task, input, or verification configuration. An unconfigured verification mode returns `not_configured`, not a pass.
 
 </details>

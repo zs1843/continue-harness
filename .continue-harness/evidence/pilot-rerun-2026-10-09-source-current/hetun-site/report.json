@@ -1,0 +1,292 @@
+{
+  "mode": "audit",
+  "results": [
+    {
+      "command": "npm run build",
+      "durationMs": 6550,
+      "exitCode": 0,
+      "status": "passed",
+      "stderr": "\n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n",
+      "stdout": "\n> @figma/my-make-file@0.0.1 build\n> vite build\n\nvite v6.3.5 building for production...\ntransforming...\n✓ 2392 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                                      0.75 kB │ gzip:   0.47 kB\ndist/assets/partner-t3-BgS__-pm.png                  5.76 kB\ndist/assets/partner-xiangdao-C8iBwqxV.png            5.86 kB\ndist/assets/partner-mercedes-DY5VZduv.png            8.06 kB\ndist/assets/partner-zeekr-CFpQMuwZ.png               9.19 kB\ndist/assets/partner-lingxi-OZaP-kqY.png              9.99 kB\ndist/assets/partner-k9-CxC1v-uR.png                 10.65 kB\ndist/assets/partner-mova-DC6HNfUd.png               10.93 kB\ndist/assets/partner-geely-Bgcm4_44.png              10.98 kB\ndist/assets/partner-baidu-Be4FkfI8.png              11.13 kB\ndist/assets/partner-zeiss-CEB46Aim.png              11.17 kB\ndist/assets/partner-netease-CJvj4BSV.png            11.53 kB\ndist/assets/partner-361-B2l-gSov.png                13.03 kB\ndist/assets/partner-radar-CvJC5Yno.png              16.47 kB\ndist/assets/partner-alibaba-I8g6LkIY.png            17.38 kB\ndist/assets/partner-huawei-Dq_xBdfl.png             18.08 kB\ndist/assets/partner-kuka-CxCto-F7.png               19.86 kB\ndist/assets/partner-caocao-D9mcfQL8.png             20.43 kB\ndist/assets/partner-8continents-3PtlXZsZ.png        20.80 kB\ndist/assets/partner-dreame-Drb3Icdt.png             21.14 kB\ndist/assets/partner-sf-express-pIDDPoTa.png         21.15 kB\ndist/assets/partner-lotus-2Ngu51gb.png              21.28 kB\ndist/assets/partner-tongcheng-C7KFAr3t.png          22.00 kB\ndist/assets/partner-trip-CZo3JpgR.png               22.37 kB\ndist/assets/partner-pingan-BoStqXA8.png             22.73 kB\ndist/assets/partner-jd-DhKT0izv.png                 23.03 kB\ndist/assets/partner-fenbeitong-CtFB2BDp.png         24.14 kB\ndist/assets/partner-shouqi-BEbTNSCh.png             24.93 kB\ndist/assets/partner-natuzzi-CdU-t2cr.png            25.65 kB\ndist/assets/partner-ontime-BCSLKRCZ.png             27.08 kB\ndist/assets/partner-csg-BjAaXLLa.png                29.10 kB\ndist/assets/partner-didatrip-BDAl_f6o.png           40.32 kB\ndist/assets/partner-meiya-DacAfMqp.png              40.59 kB\ndist/assets/partner-tencent-travel-BaZOIf31.png     40.86 kB\ndist/assets/20260605-172743-rTh2msJD.jpeg        1,478.19 kB\ndist/assets/index-B-ST3sgs.css                     101.75 kB │ gzip:  16.33 kB\ndist/assets/index-CvZFEfGw.js                      527.04 kB │ gzip: 176.09 kB\n✓ built in 6.18s\n",
+      "name": "build",
+      "display_name": "通过"
+    },
+    {
+      "command": "npm run verify:pilot",
+      "durationMs": 135,
+      "exitCode": 0,
+      "status": "passed",
+      "stderr": "",
+      "stdout": "\n> @figma/my-make-file@0.0.1 verify:pilot\n> node scripts/pilot-check.mjs\n\npilot smoke check passed: canonical React entry produced dist/index.html\n",
+      "name": "verify_pilot",
+      "display_name": "通过"
+    },
+    {
+      "name": "acceptance",
+      "command": "docs/ACCEPTANCE.md",
+      "durationMs": 0,
+      "status": "failed",
+      "stderr": "存在 5 个未收口验收项",
+      "stdout": "",
+      "display_name": "失败"
+    }
+  ],
+  "status": "failed",
+  "task_id": "T001",
+  "context": {
+    "task_id": "T001",
+    "project": {
+      "name": "HeTun-Site",
+      "type": "frontend",
+      "goal": "维护和迭代河豚出行官网及下载页，统一官网入口、页面内容和发布流程",
+      "runtime": "浏览器访问，构建为静态资源部署，支持开发环境和生产环境",
+      "toolchain": "React、TypeScript、Vite、Tailwind；历史独立 HTML 页面；包管理器待确认"
+    },
+    "intake": {
+      "status": "confirmed",
+      "evidence": [
+        {
+          "id": "requirements",
+          "required": true,
+          "question": "需求范围、非目标和验收标准是什么？",
+          "status": "confirmed",
+          "source": "docs/PROJECT.md",
+          "version": "pilot-2",
+          "note": "T001 真实需求已写入任务 PRD"
+        },
+        {
+          "id": "ui",
+          "required": false,
+          "question": "本次任务是否涉及 UI、视觉或交互输入？",
+          "status": "not_applicable",
+          "source": null,
+          "version": null,
+          "note": "T001 基线任务不依赖该类外部输入"
+        },
+        {
+          "id": "api",
+          "required": false,
+          "question": "本次任务是否依赖接口契约或后端数据？",
+          "status": "not_applicable",
+          "source": null,
+          "version": null,
+          "note": "T001 基线任务不依赖该类外部输入"
+        },
+        {
+          "id": "assets",
+          "required": false,
+          "question": "本次任务是否依赖品牌、图片、字体或其他素材？",
+          "status": "not_applicable",
+          "source": null,
+          "version": null,
+          "note": "T001 基线任务不依赖该类外部输入"
+        },
+        {
+          "id": "rp",
+          "required": false,
+          "question": "是否存在原型或页面流程输入？",
+          "status": "not_applicable",
+          "source": null,
+          "version": null,
+          "note": "T001 基线任务不依赖该类外部输入"
+        }
+      ]
+    },
+    "verify": {
+      "commands": {
+        "build": "npm run build",
+        "verify_pilot": "npm run verify:pilot",
+        "dev": "npm run dev"
+      },
+      "verify": {
+        "quick": {
+          "commands": [
+            "build"
+          ]
+        },
+        "audit": {
+          "fail_fast": false,
+          "commands": [
+            "build",
+            "verify_pilot"
+          ]
+        }
+      }
+    },
+    "inputs": [
+      {
+        "id": "PRD-T001",
+        "sha256": "25c99865a7988feb5d1534d061bba834ad90a7983f1541b35e3c058aa38a329e",
+        "changed": false
+      }
+    ],
+    "acceptance": [
+      {
+        "id": "AC-001",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "明确 React/Vite 与历史 HTML 的主入口及迁移边界",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": ""
+      },
+      {
+        "id": "AC-002",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "在干净环境完成依赖安装和生产构建",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": ""
+      },
+      {
+        "id": "AC-003",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "关键页面具备可重复的验收步骤和验证证据",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": ""
+      },
+      {
+        "id": "AC-004",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "为 T001 生成不含敏感文件误报的不可变交接快照",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": ""
+      },
+      {
+        "id": "PRD-T001",
+        "task": "T001",
+        "requirement": "PRD-T001",
+        "status": "pending",
+        "evidence": "",
+        "implementation": ""
+      }
+    ],
+    "implementations": {
+      "": null
+    },
+    "evidence": {
+      "": null
+    },
+    "before_fingerprint": "bdb85c68c6d07caf9892199b5df1808009063cedea2c5af9a1fe61cafb4cd1a1",
+    "changed_during_verification": false,
+    "fingerprint": "bdb85c68c6d07caf9892199b5df1808009063cedea2c5af9a1fe61cafb4cd1a1"
+  },
+  "acceptance": {
+    "exists": true,
+    "path": "docs/ACCEPTANCE.md",
+    "rows": [
+      {
+        "id": "AC-001",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "明确 React/Vite 与历史 HTML 的主入口及迁移边界",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": "",
+        "issues": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_implementation",
+          "missing_evidence"
+        ]
+      },
+      {
+        "id": "AC-002",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "在干净环境完成依赖安装和生产构建",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": "",
+        "issues": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_implementation",
+          "missing_evidence"
+        ]
+      },
+      {
+        "id": "AC-003",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "关键页面具备可重复的验收步骤和验证证据",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": "",
+        "issues": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_implementation",
+          "missing_evidence"
+        ]
+      },
+      {
+        "id": "AC-004",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "为 T001 生成不含敏感文件误报的不可变交接快照",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": "",
+        "issues": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_implementation",
+          "missing_evidence"
+        ]
+      },
+      {
+        "id": "PRD-T001",
+        "task": "T001",
+        "requirement": "PRD-T001",
+        "status": "pending",
+        "evidence": "",
+        "implementation": "",
+        "issues": [
+          "uncovered_requirement"
+        ]
+      }
+    ],
+    "unresolved": 5,
+    "status": "needs_confirmation"
+  },
+  "generatedAt": "2026-10-09T07:34:17.912Z",
+  "harnessVersion": "0.1.0"
+}

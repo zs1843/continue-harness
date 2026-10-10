@@ -34,7 +34,92 @@ test('doctor recognizes the Node.js test runner and CI entry point', async () =>
   assert.equal(checks.TEST_ISOLATION.status, 'passed');
   assert.equal(checks.NODE_ENGINE_DECLARATION.status, 'passed');
   assert.equal(checks.CI_ENTRY_POINT.status, 'passed');
-  assert.equal(checks.VISUAL_BASELINE.status, 'not_applicable');
+  // Non consumer-h5 projects still get the visual check evaluated instead of skipped.
+  assert.equal(checks.VISUAL_BASELINE.status, 'not_configured');
+});
+
+test('doctor inspects inputs, task history and agent entry for generic projects', async () => {
+  const cwd = await mkdtemp(resolve(tmpdir(), 'continue-harness-generic-doctor-'));
+  await writeFile(resolve(cwd, 'package.json'), '{"scripts":{}}\n');
+  await writeFile(resolve(cwd, '.gitignore'), 'tmp/\n.env*\n');
+  await writeFile(resolve(cwd, 'AGENTS.md'), '# 唯一约束本体\n');
+  const genericConfig = {
+    harness: { mode: 'generic', version: '0.1.0' },
+    project: { name: 'generic-doctor', product_type: 'generic' },
+  };
+  const report = await runDoctor(cwd, genericConfig);
+  const checks = Object.fromEntries(report.results.map((item) => [item.code, item]));
+  // These used to collapse into a single "not_applicable", which hid the generic closure gaps.
+  assert.equal(checks.INPUT_MANIFEST.status, 'not_configured');
+  assert.equal(checks.INPUT_REGISTRY.status, 'not_configured');
+  assert.equal(checks.HISTORY_ROOT.status, 'not_configured');
+  assert.equal(checks.TASK_SNAPSHOT_ROOT.status, 'not_configured');
+  assert.equal(checks.AGENT_ADAPTERS.status, 'not_configured');
+  // The canonical project instructions work without an aggregate project Skill.
+  assert.equal(checks.AGENT_WORKFLOW.status, 'needs_confirmation');
+  assert.equal(checks.DESIGN_GOVERNANCE.status, 'not_applicable');
+  assert.ok(!report.results.some((item) => item.status === 'not_applicable'
+    && ['INPUT_MANIFEST', 'INPUT_REGISTRY', 'TASK_SNAPSHOT_ROOT', 'AGENT_WORKFLOW'].includes(item.code)));
+  assert.equal(report.status, 'passed');
+
+  // A generic project with a broken task snapshot must fail, not skip.
+  await mkdir(resolve(cwd, 'docs/history/tasks/T001/snapshot-1'), { recursive: true });
+  const snapshotReport = await runDoctor(cwd, genericConfig);
+  const snapshotChecks = Object.fromEntries(snapshotReport.results.map((item) => [item.code, item]));
+  assert.equal(snapshotChecks.TASK_SNAPSHOT_INTEGRITY.status, 'failed');
+  assert.match(snapshotChecks.TASK_SNAPSHOT_INTEGRITY.message, /SNAPSHOT\.md/);
+  assert.equal(snapshotReport.status, 'failed');
+});
+
+test('doctor does not impose source-tree or built-in toolchain assumptions on an arbitrary project', async () => {
+  const cwd = await mkdtemp(resolve(tmpdir(), 'continue-harness-arbitrary-doctor-'));
+  await mkdir(resolve(cwd, 'app/modules'), { recursive: true });
+  await writeFile(resolve(cwd, 'app/modules/main.txt'), 'project-owned layout\n');
+  await writeFile(resolve(cwd, '.gitignore'), 'tmp/\n.env*\n');
+  await writeFile(resolve(cwd, 'package.json'), JSON.stringify({ packageManager: 'workspace-manager@1.0' }));
+  await writeFile(resolve(cwd, 'AGENTS.md'), '# Constraints\n');
+  const report = await runDoctor(cwd, {
+    harness: { mode: 'generic' },
+    project: { name: 'arbitrary-layout', product_type: 'service-platform', platforms: ['custom-runtime'] },
+    stack: { adapter: 'custom-build', package_manager: 'workspace-manager' },
+  });
+  const checks = Object.fromEntries(report.results.map((item) => [item.code, item]));
+  assert.equal(checks.PACKAGE_MANAGER.status, 'not_configured');
+  assert.ok(!report.results.some((item) => ['UNI_APP_PAGE_REGISTRY', 'UNI_APP_DEPENDENCIES'].includes(item.code)));
+  assert.ok(!report.results.some((item) => item.status === 'failed'));
+});
+
+test('doctor does not require a package manifest for a non-package project', async () => {
+  const cwd = await mkdtemp(resolve(tmpdir(), 'continue-harness-no-package-doctor-'));
+  await writeFile(resolve(cwd, '.gitignore'), 'tmp/\n.env*\n');
+  await writeFile(resolve(cwd, 'AGENTS.md'), [
+    'continue-harness inspect',
+    'continue-harness doctor',
+    'continue-harness verify',
+    'task snapshot',
+    'manifest.yaml',
+    '输入清单',
+  ].join('\n'));
+  const report = await runDoctor(cwd, {
+    harness: { mode: 'generic' },
+    project: { name: 'non-package-project', product_type: 'knowledge-system' },
+  });
+  const checks = Object.fromEntries(report.results.map((item) => [item.code, item]));
+  assert.equal(checks.PROJECT_PACKAGE_JSON.status, 'not_configured');
+  assert.ok(!report.results.some((item) => item.status === 'failed'));
+  assert.equal(report.status, 'passed');
+});
+
+test('doctor retains complete legacy snapshots without demanding retroactive context', async () => {
+  const cwd = await mkdtemp(resolve(tmpdir(), 'continue-harness-legacy-snapshot-'));
+  const root = resolve(cwd, 'docs/history/tasks/T001/old');
+  await mkdir(root, { recursive: true });
+  for (const name of ['SNAPSHOT.md', 'files.json', 'verification.json', 'design-token-diff.json']) {
+    await writeFile(resolve(root, name), name.endsWith('.json') ? '{}' : '# Historical snapshot');
+  }
+  const report = await runDoctor(cwd, { project: { product_type: 'generic' }, harness: { mode: 'generic' } });
+  assert.equal(report.results.find((item) => item.code === 'TASK_SNAPSHOT_INTEGRITY').status, 'passed');
+  assert.equal(report.results.find((item) => item.code === 'TASK_SNAPSHOT_LEGACY').status, 'not_configured');
 });
 
 test('doctor validates a configured consumer H5 OpenAPI snapshot and uni-app structure', async () => {
@@ -118,7 +203,6 @@ test('doctor requires the project Agent workflow for consumer H5', async () => {
 test('doctor accepts thin Claude and Cursor adapters to the canonical AGENTS constraints', async () => {
   const cwd = await mkdtemp(resolve(tmpdir(), 'continue-harness-adapter-doctor-'));
   await mkdir(resolve(cwd, '.cursor/rules'), { recursive: true });
-  await mkdir(resolve(cwd, '.claude/skills/consumer-h5-harness'), { recursive: true });
   await writeFile(resolve(cwd, 'package.json'), '{}\n');
   await writeFile(resolve(cwd, '.gitignore'), 'tmp/\n');
   await writeFile(resolve(cwd, 'AGENTS.md'), '# 唯一约束本体\n');
@@ -126,10 +210,6 @@ test('doctor accepts thin Claude and Cursor adapters to the canonical AGENTS con
   await writeFile(
     resolve(cwd, '.cursor/rules/continue-harness.mdc'),
     '---\nalwaysApply: true\n---\n读取 AGENTS.md。\n',
-  );
-  await writeFile(
-    resolve(cwd, '.claude/skills/consumer-h5-harness/SKILL.md'),
-    '---\nname: consumer-h5-harness\ndescription: 测试\n---\n',
   );
   const report = await runDoctor(cwd, {
     facts: { agent_entry: 'AGENTS.md' },

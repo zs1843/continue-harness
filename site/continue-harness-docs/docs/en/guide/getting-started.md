@@ -1,80 +1,43 @@
-# Create or adopt a project
+# Get started
 
-This page describes the Skill path used by default for a first adoption; the CLI is an optional fallback. The Agent selects the create, adoption, Intake, evidence, and verification flow from project facts.
+Continue Harness keeps requirements linked to acceptance and enables later collaborators to restore project context. Start by confirming project facts with an Agent, then select evidence and checks based on the project and task.
 
-## Adopt through an Agent
+## Ask an Agent
 
-See [Project adoption](/en/guide/ai-first) for the complete adoption prompt.
+Send the following request to an Agent. When an operation Skill for the current stage is available, the Agent can invoke it; without one, the workflow can still proceed through conversation using this guide. No aggregate project Skill is required. Do not assume the CLI is installed or will be downloaded from an unverified source.
 
-For a new project, the Agent creates a technology-neutral constraint container. For an existing project, it previews the adoption impact and adds only missing files without overwriting project-owned content. Project constraints are declared by the target project; the Agent enables capabilities only from confirmed facts and does not assume a product shape or toolchain.
+```text
+Use Continue Harness to inspect and take over the current project.
 
-## If the Skill is unavailable
-
-Ask the Agent to install only the project Skill required for the current stage and then rerun Intake. Do not install Consumer H5 or another specialized Skill unless project facts require it. See [Project adoption](/en/guide/ai-first) for the prompt and the install command.
-
-If the Agent needs a manual installation command, use [Install the CLI](#install-the-cli) below.
-
-## Working with an Agent
-
-After the facts and inputs are confirmed, give the Agent the goal, scope, non-goals, and acceptance criteria so it can restore context and start the task. See [Project adoption](/en/guide/ai-first) for the task prompt.
-
-To continue in a new Agent or session, reuse the same prompt, restore the current project context first, then continue the task.
-
-Decisions that stay with people are listed under [Human approval boundaries](./agent-workflow.md).
-
-<details>
-<summary>CLI reference (optional)</summary>
-
-### Install the CLI
-
-Installing the CLI requires the command line; the version check maps to the `continue-harness-version` Skill.
-
-Version `0.1.0` is not published to npm yet, and `@company` is still a placeholder scope. For manual execution, install from source:
-
-```bash
-git clone https://github.com/zs1843/continue-harness.git
-cd continue-harness
-pnpm install
-node packages/cli/bin/continue-harness.mjs version
+First determine whether this is a new or existing project and follow the corresponding workflow. Confirm goals, scope, deliverables, constraints, collaborators, and available materials in conversation. Mark unknown facts as pending; do not guess.
+Select the evidence and checks required by the confirmed project facts and task. Explain non-applicable items; do not require every project to provide the same materials.
+Without changing business implementation, inspect the project and preview the plan. Explain which collaboration records would be created or preserved, identified risks, and decisions requiring my confirmation. Write only after confirmation.
+Report confirmed facts, open questions, evidence, check results, and next actions.
 ```
 
-Requirements: Node.js 20 or later and pnpm 10.12.1 or a compatible version.
+After adoption, state the goal, scope, non-goals, and acceptance criteria when assigning work. The Agent restores the current task and evidence, links “requirement → implementation item → acceptance item → evidence → handoff state,” and runs checks declared by the project.
 
-### Create a project
+## Create or adopt
 
-**Skill**: `continue-harness-create` (create), `continue-harness-plan` (preview)
+- [Create a project](/en/sop/create-project): establish collaboration constraints and records for a new project.
+- [Adopt an existing project](/en/sop/init-existing-project): preview the impact, add missing records, and preserve project-owned content.
 
-```bash
-continue-harness plan create my-project --json
-continue-harness create my-project
-cd my-project
-```
+Project facts and task scope determine the materials needed; input categories, acceptance methods, and check commands are not a fixed checklist.
 
-The default creation flow writes only constraints and collaboration records; it does not generate business code or dependencies. A specialized project template is generated only when selected explicitly.
+## Optional CLI entry
 
-### Adopt an existing project
-
-**Skill**: `continue-harness-init` (adopt), `continue-harness-plan` (preview)
+The CLI is available to maintainers who need direct operation or need to inspect Agent execution. A compatible version must already be available; this reference does not imply automatic CLI installation.
 
 ```bash
+continue-harness plan create project-name --json
+continue-harness create project-name
 continue-harness init --dry-run
-continue-harness plan init --json
-continue-harness init
+continue-harness inputs inspect --json
+continue-harness task create --title "Confirmed work item" --json
+continue-harness verify feature
+continue-harness resume --json
 ```
 
-A real conflict prevents any initialization writes.
+Creation prepares constraints and collaboration records; it does not create business implementation. During adoption, the plan distinguishes files to create, unchanged managed files, and project-modified files. Modified files are preserved while missing files can still be added. A write error or concurrent change may leave a partial result; the process does not promise transactional rollback.
 
-### Migrate the legacy directory
-
-`migrate` has no matching Skill, so this step is CLI-only.
-
-```bash
-continue-harness migrate --dry-run --json
-continue-harness migrate
-```
-
-Migration moves `.fe-harness/` only when `.continue-harness/` does not already exist.
-
-See the [CLI reference](/en/reference/commands) for the complete command list.
-
-</details>
+See the [CLI reference](/en/reference/commands) for command details.

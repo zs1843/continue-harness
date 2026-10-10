@@ -14,7 +14,7 @@ Create a task ID with the `task` Skill.
 continue-harness task create --title "Task title" --json
 ```
 
-Task IDs usually look like `T001`. The ID connects the following to the same task number:
+Task IDs usually look like `T001`. As applicable to the task, the ID connects:
 
 - PRD/RP excerpts.
 - API operationId selections.
@@ -37,17 +37,8 @@ Load only the evidence that matches the current task type. Reading everything pu
 
 ## Directory ownership
 
-Boundaries suggested by the Consumer H5 preset:
-
-- Pages live in `src/pages/`, one directory per distinct page.
-- Components live in `src/components/`.
-- Request wrappers live in `src/services/`.
-- Business data mapping lives in `src/repositories/`.
-- Cross-page pure functions live in `src/utils/`.
-- State management lives in `src/stores/`.
-
-These directories give pages, components, interfaces, state, and utilities a defined owner.
+Preserve existing module boundaries. For a new project, decide source and test layout after confirming the toolchain. Harness does not prescribe page, component, service or state directories; acceptance records reference actual implementation files.
 
 ## Limits
 
-`task snapshot` fails before writing when `docs/ACCEPTANCE.md` is missing, contains a table without a status column, or has unresolved rows. Snapshots require closed acceptance.
+`task snapshot` fails before writing when `docs/ACCEPTANCE.md` is missing, contains a table without a status column, or has unresolved rows. Input status, Intake, and the current verification report must also meet their gates; see [Verification and snapshots](./verification-and-snapshot.md) for the full requirements.

@@ -1,6 +1,6 @@
 # Input registration
 
-This page describes common input formats. Select evidence from project type, toolchain and task scope before registering it. Custom types and existing project paths are supported. The five types below are optional examples; see [Inputs and evidence](../guide/evidence.md).
+This page describes common input formats. Select evidence from confirmed project facts and task scope before registering it. Custom types and existing project paths are supported. The categories below are optional examples; see [Inputs and evidence](../guide/evidence.md) for task-specific selection.
 
 ## Input types
 
@@ -45,7 +45,7 @@ Extract and classify facts from the inputs using the `inputs` Skill.
 continue-harness inputs analyze --json
 ```
 
-`analyze` extracts simple facts from text inputs, classifies them by business, interaction, and visual dimension, and reports same-key conflicts.
+`analyze` extracts clues from readable text inputs and reports same-key conflicts. It uses a limited set of recognition rules for known categories; custom types remain neutral rather than being classified as business, interaction, or visual evidence by default. Results are clues for review, not requirement-understanding or acceptance conclusions.
 
 ## Diff
 
@@ -61,9 +61,9 @@ continue-harness inputs diff --json
 
 `diff` reports changes to registered files and analysis conclusions, so earlier conclusions can be judged still valid or not.
 
-## Token source
+## Optional visual-value records
 
-UI and RP inputs are sources for Token extraction. Visual conflicts are resolved by the priority in [Glossary](../reference/glossary.md).
+When a task needs confirmed visual evidence organized into reusable values, it may be used to form candidate records. This is not required for every project. See the [Glossary](../reference/glossary.md) for conflict handling.
 
 ## Boundaries
 

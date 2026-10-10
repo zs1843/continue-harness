@@ -1,6 +1,6 @@
 # 输入登记
 
-本页列出常见输入的登记方式。先按项目类型、技术栈和任务范围选择所需依据，再登记到 manifest.yaml；可使用项目自定义类型与原有文件路径。下列五类是可选示例，动态选择方式见[输入与证据](../guide/evidence.md)。
+本页列出常见输入的登记方式。先根据对话确认的项目事实与任务范围选择依据，再登记到 manifest.yaml；可使用项目自定义类型与原有文件路径。下列类别仅为可选示例，任务级选择方式见[输入与证据](../guide/evidence.md)。
 
 ## 输入类型
 
@@ -12,7 +12,7 @@
 | API | `.continue-harness/inputs/api/` | OpenAPI / Apifox 导出 |
 | assets | `.continue-harness/inputs/assets/` | 图片、图标、字体、素材 |
 
-`intake` 在第二轮按项目类型生成最小输入清单，并用 `intake evidence --id <输入项> --status confirmed|not_applicable|pending` 记录登记结果。
+Intake 会根据项目类型给出候选问题，并用 `intake evidence --id <输入项> --status confirmed|not_applicable|pending` 记录确认结果。当前内置若干常见类型的问题集；其他类型回退到通用候选问题。除需求依据外，其余候选项均可按项目情况确认不适用，不构成所有项目的固定输入清单。
 
 ## 检查
 
@@ -45,7 +45,7 @@ continue-harness inputs inspect --json
 continue-harness inputs analyze --json
 ```
 
-`analyze` 从文本输入中抽取简单事实，按业务、交互、视觉维度分类，并报告同 key 冲突。
+`analyze` 对可读取的文本输入抽取线索并报告同 key 冲突。已知类别使用有限的识别规则；自定义类型保持中性，不会一概归入业务、交互或视觉维度。结果是供协作者审阅的线索，不是需求理解或验收结论。
 
 ## 变更
 
@@ -61,9 +61,9 @@ continue-harness inputs diff --json
 
 `diff` 报告已登记文件和分析结论的变化，用于判断旧结论是否仍可继续使用。
 
-## Token 来源
+## 可选的视觉取值整理
 
-UI 和 RP 是 Token 提炼的来源。视觉冲突时的取值优先级见[术语表](../reference/glossary.md)。
+当任务需要将已确认的视觉依据整理为可复用取值时，可以结合相关输入形成候选记录。该能力不是所有项目的必需输入；冲突处理规则见[术语表](../reference/glossary.md)。
 
 ## 边界
 

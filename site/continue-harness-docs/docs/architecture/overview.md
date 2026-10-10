@@ -1,52 +1,36 @@
 # 架构
 
-本页给出 continue-harness 的组成模型、依赖方向、协作边界和仓库模块地图。
-
-continue-harness 由 `Core + Profile + Platform + Stack + optional UI System + Project config` 组合而成，组合模型的规范定义在仓库根 `docs/ARCHITECTURE.md`。
+Continue Harness 围绕一条项目协作闭环组织能力：确认项目事实，登记适用输入，将需求拆解为实现与验收项，执行项目检查，保存证据并形成可恢复的交接状态。
 
 ## 依赖方向
 
 ```text
-CLI -> Core
-Core -> 配置
-项目配置 -> Profile + Platform + Stack 选择
-Profiles / Platforms / Stacks -> 声明式描述
-Examples -> 公共 CLI 行为
-Tests -> Core 和 CLI
+CLI → Core → 项目配置与证据
+项目配置 → 项目事实、输入、命令和验收规则
+Skills → 引导协作流程并调用 Harness 能力
+Tests → 验证 Core、CLI 与端到端闭环
 ```
 
-Core 不 import 适配器模块，但通过配置枚举校验适配器取值；新增适配器需要同步 Core 枚举与 `schemas/project.schema.json`。当前枚举覆盖 generic / consumer-h5、node / web-mobile、node-esm / uni-app。
+Core 提供配置读取、Intake、输入登记、任务与历史、上下文恢复、验证编排、验收门禁、日志和报告。项目拥有业务事实、输入来源、约束内容以及实际检查命令。Harness 不替项目推断这些事实，也不替代人工确认。
 
-## 协作架构图
+## 协作边界
 
-<ZoomableImage
-  src="/ai-architecture.svg"
-  alt="continue-harness 协作架构"
-  caption="点击图片放大；放大后可滚轮缩放、拖拽平移、双击重置，按 Esc 关闭。"
-/>
-
-图中三条边界：
-
-- 人确认权威事实，包括业务目标、视觉来源、接口选择、冲突和延期。
-- Agent 遵循 `AGENTS.md` 和 Skill 工作流，按任务类型读取证据并执行实现与验证；约束权威见[项目协作与 Agent 接入](../guide/agent-workflow.md)。
-- Core 执行通用协议；业务、接口和设计事实由项目持有。
+- 人员确认权威事实、冲突处理、范围变更和延期。
+- Agent 按项目约束读取相关证据、推进实现、运行检查并记录交接状态。
+- Core 维护记录间的关联、状态语义和可追溯证据。
 
 ## 模块地图
 
 | 路径 | 职责 |
 | --- | --- |
-| `packages/core/` | 配置加载、验证执行、诊断、报告、输入分析、resume |
-| `packages/cli/` | 命令行入口、JSON 输出和计划预览 |
-| `profiles/` | 产品形态规则 |
-| `platforms/` | 运行平台规则 |
-| `stacks/` | 框架和工具链规则 |
-| `ui-systems/` | 可选 UI System Adapter |
-| `templates/` | 接入已有项目时创建的业务中立文件 |
-| `presets/` | 创建新项目时使用的业务中立项目容器 |
-| `skills/` | Agent 工作流 |
-| `schemas/` | 公共配置协议 |
-| `tests/` | Core、CLI 和编排测试 |
+| `packages/core/` | 配置、输入、任务、恢复、验证、验收、日志和报告 |
+| `packages/cli/` | 命令行入口、结构化输出和计划预览 |
+| `profiles/`、`platforms/`、`stacks/` | 仓库中的实现分区；不是可动态发现的插件注册协议 |
+| `templates/`、`presets/` | 创建或接入时使用的约束与协作记录 |
+| `skills/` | Agent 可调用的协作工作流 |
+| `schemas/` | 配置协议 |
+| `tests/` | 单元、命令和闭环测试 |
 
-## 分层理由
+真实项目验证结果与限制见[Pilot 记录](../showcase/real-project-pilot.md)及仓库根目录的架构说明。项目输入的选择依据见[输入登记](./inputs.md)。
 
-业务形态、运行平台、框架工具链和 Agent 工作流各自变化。四类规则放在独立目录，Core 只处理通用协议，因此产品形态变化不改 Core，平台变化不改产品 Profile，工具链变化不改输入协议，工作流变化不复制项目约束。各层职责展开见[适配器](./adapters.md)，通用安全模型见仓库根 `docs/ARCHITECTURE.md`。
+通用协作流程不要求某一类项目材料，但这不等于当前实现可通过新增声明文件支持任意项目形态。部分配置值和诊断路径仍由实现固定定义；新增支持范围需要代码、测试与文档共同验证，不能仅凭目录名称推断为已具备的扩展能力。

@@ -1,0 +1,306 @@
+{
+  "project": {
+    "branch": "master",
+    "dirty_files": [
+      "M .continue-harness/logs/commands.ndjson"
+    ]
+  },
+  "task": {
+    "id": "T001",
+    "title": "建立官网项目可运行基线并明确页面入口",
+    "status": "草稿",
+    "updated_at": "2026-10-08"
+  },
+  "inputs": {
+    "status": "passed",
+    "count": 1,
+    "unregistered": 0,
+    "manifest": ".continue-harness/inputs/manifest.yaml",
+    "entries": [
+      {
+        "id": "PRD-T001",
+        "path": ".continue-harness/inputs/prd/modules/T001/PRD.md",
+        "status": "active",
+        "task_id": "T001",
+        "type": "prd",
+        "version": "1.0",
+        "sha256": "25c99865a7988feb5d1534d061bba834ad90a7983f1541b35e3c058aa38a329e",
+        "changed": false,
+        "display_type": "产品需求输入",
+        "exists": true
+      }
+    ],
+    "issues": []
+  },
+  "project_context": {
+    "facts": {
+      "name": "HeTun-Site",
+      "type": "frontend",
+      "goal": "维护和迭代河豚出行官网及下载页，统一官网入口、页面内容和发布流程",
+      "runtime": "浏览器访问，构建为静态资源部署，支持开发环境和生产环境",
+      "toolchain": "React、TypeScript、Vite、Tailwind；历史独立 HTML 页面；包管理器待确认"
+    },
+    "intake_path": ".continue-harness/intake.yaml",
+    "documents": [
+      {
+        "path": "docs/PROJECT.md",
+        "content": "# 项目基本信息\n\n## 目标\n\nT001 只建立官网当前 React/Vite 主应用的可运行基线，并确认可重复构建和入口边界。\n\n## 范围\n\n- canonical 入口：`index.html` → `src/main.tsx` → `src/app/App.tsx`。\n- 构建门禁：`npm run build` 和 `npm run verify:pilot`。\n- `app/`、`newSite/`、根目录历史静态 HTML 是遗留资产，本任务不迁移、不接入 Vite 主应用。\n\n## 非目标\n\n- 不在 T001 内迁移历史 HTML。\n- 不把历史静态页面当作 React 路由或当前发布入口。\n- 不宣称业务页面、视觉稿或部署验收已经完成。\n\n## 交付物\n\n- 可复现的 Vite 生产构建。\n- 主入口和遗留资产边界记录。\n- `dist/index.html` 的最小产物检查。\n"
+      },
+      {
+        "path": "docs/CURRENT_STATUS.md",
+        "content": "# 当前状态\n\n- Intake：第一轮已确认，证据确认仍待补充。\n- 输入：已登记 `PRD-T001`；PRD 仍为任务草稿，未登记外部 PRD/RP/UI/API/资产输入。\n- 任务：`T001` 建立官网项目可运行基线并明确页面入口，状态为草稿。\n- 验收：已建立 3 条标准，2 条阻塞，1 条延期。\n- 验证：未执行成功的项目构建；项目缺少锁文件，包管理器和运行依赖仍待确认。\n- 验证：`continue-harness verify audit` 已执行，`npm run build` 因 `vite: command not found` 失败。\n- 交接：`resume` 可恢复 T001 和输入状态；任务快照因 `app/payNoSecret.html` 被敏感文件名扫描误判而未生成。\n## 2026-10-08 Pilot 复跑\n\n- 依赖：`pnpm install` 成功，并生成 `pnpm-lock.yaml`。\n- 构建：`npm run build` 成功；存在 Vite chunk 超过 500 kB 的性能警告。\n- 验收：AC-002 已验证；AC-001 仍因多套入口未确认而阻塞，AC-003 仍延期。\n- Audit：整体仍为 `failed`，原因是未收口验收项，而不是构建失败。\n\n## 2026-10-08 Pilot 收口\n\n- 入口边界：确认 `index.html` → `src/main.tsx` → `src/app/App.tsx` 为 canonical React 入口；历史 HTML 明确为 T001 非目标。\n- 页面基线：新增 `npm run verify:pilot`，构建后检查 `dist/index.html` 的 root 和 module 入口。\n- Audit：`build`、`verify_pilot` 和验收门禁均通过，最终状态为 `passed`。\n"
+      },
+      {
+        "path": "docs/DECISIONS.md",
+        "content": "# 决策记录\n\n记录影响后续实现的长期决策、备选方案、依据、影响范围和复审条件。\n\n## Pilot 记录\n\n- 决策：暂不把 React/Vite 或历史 HTML 认定为唯一主入口。\n- 依据：仓库同时存在 `src/main.tsx`、根目录 HTML、`app/` 和 `newSite/`。\n- 影响：在入口和发布链路确认前，不进行跨目录页面迁移或删除。\n- 复审条件：项目负责人确认线上入口、部署目录和历史页面保留策略。\n"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "T001",
+        "created_at": "2026-10-08",
+        "dependencies": [],
+        "sources": [],
+        "status": "草稿",
+        "supersedes": [],
+        "title": "建立官网项目可运行基线并明确页面入口",
+        "updated_at": "2026-10-08",
+        "version": "1.0"
+      }
+    ],
+    "logs": {
+      "path": ".continue-harness/logs/commands.ndjson",
+      "entries": [
+        {
+          "timestamp": "2026-10-08T03:41:52.263Z",
+          "kind": "intake",
+          "action": "evidence",
+          "status": "not_applicable"
+        },
+        {
+          "timestamp": "2026-10-08T03:41:52.332Z",
+          "kind": "intake",
+          "action": "evidence",
+          "status": "not_applicable"
+        },
+        {
+          "timestamp": "2026-10-08T03:41:52.401Z",
+          "kind": "intake",
+          "action": "evidence",
+          "status": "not_applicable"
+        },
+        {
+          "timestamp": "2026-10-08T03:41:52.898Z",
+          "kind": "command",
+          "command": "npm run build",
+          "status": "failed",
+          "exitCode": 127
+        },
+        {
+          "timestamp": "2026-10-08T03:52:10.740Z",
+          "kind": "command",
+          "command": "npm run build",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "timestamp": "2026-10-08T03:54:43.083Z",
+          "kind": "command",
+          "command": "npm run build",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "timestamp": "2026-10-08T05:49:40.138Z",
+          "kind": "command",
+          "command": "npm run build",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "timestamp": "2026-10-08T05:49:40.276Z",
+          "kind": "command",
+          "command": "npm run verify:pilot",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "timestamp": "2026-10-09T03:34:33.545Z",
+          "kind": "command",
+          "command": "npm run build",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "timestamp": "2026-10-09T03:34:33.682Z",
+          "kind": "command",
+          "command": "npm run verify:pilot",
+          "status": "passed",
+          "exitCode": 0
+        }
+      ]
+    }
+  },
+  "intake": {
+    "status": "confirmed",
+    "phase": "evidence",
+    "unresolved": 0
+  },
+  "acceptance": {
+    "exists": true,
+    "path": "docs/ACCEPTANCE.md",
+    "rows": [
+      {
+        "id": "AC-001",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "明确 React/Vite 与历史 HTML 的主入口及迁移边界",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": "",
+        "issues": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_implementation",
+          "missing_evidence"
+        ]
+      },
+      {
+        "id": "AC-002",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "在干净环境完成依赖安装和生产构建",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": "",
+        "issues": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_implementation",
+          "missing_evidence"
+        ]
+      },
+      {
+        "id": "AC-003",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "关键页面具备可重复的验收步骤和验证证据",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": "",
+        "issues": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_implementation",
+          "missing_evidence"
+        ]
+      },
+      {
+        "id": "AC-004",
+        "task": "",
+        "requirement": "",
+        "implementation": "",
+        "criterion": "为 T001 生成不含敏感文件误报的不可变交接快照",
+        "status": "verified",
+        "evidence": "",
+        "reason": "",
+        "owner": "",
+        "next": "",
+        "issues": [
+          "missing_task",
+          "missing_requirement",
+          "missing_implementation",
+          "invalid_requirement",
+          "missing_implementation",
+          "missing_evidence"
+        ]
+      },
+      {
+        "id": "PRD-T001",
+        "task": "T001",
+        "requirement": "PRD-T001",
+        "status": "pending",
+        "evidence": "",
+        "implementation": "",
+        "issues": [
+          "uncovered_requirement"
+        ]
+      }
+    ],
+    "unresolved": 5,
+    "status": "needs_confirmation"
+  },
+  "verification": {
+    "path": "tmp/continue-harness/report.json",
+    "task_id": "T001",
+    "mode": "audit",
+    "status": "failed",
+    "recorded_status": "failed",
+    "applicable": true,
+    "generatedAt": "2026-10-09T03:34:33.695Z"
+  },
+  "snapshots": {
+    "snapshots": [
+      {
+        "id": "2026-10-08T034153+0000",
+        "snapshot": "docs/history/tasks/T001/2026-10-08T034153+0000/SNAPSHOT.md",
+        "snapshot_exists": true
+      },
+      {
+        "id": "2026-10-08T034228+0000",
+        "snapshot": "docs/history/tasks/T001/2026-10-08T034228+0000/SNAPSHOT.md",
+        "snapshot_exists": true
+      },
+      {
+        "id": "2026-10-08T035606+0000",
+        "snapshot": "docs/history/tasks/T001/2026-10-08T035606+0000/SNAPSHOT.md",
+        "snapshot_exists": true
+      },
+      {
+        "id": "2026-10-08T055026+0000",
+        "snapshot": "docs/history/tasks/T001/2026-10-08T055026+0000/SNAPSHOT.md",
+        "snapshot_exists": true
+      }
+    ],
+    "status": "passed",
+    "task_id": "T001"
+  },
+  "coverage": {
+    "exists": false,
+    "total": 0,
+    "statuses": {},
+    "unresolved": 0
+  },
+  "decisions": [
+    "记录影响后续实现的长期决策、备选方案、依据、影响范围和复审条件。",
+    "- 决策：暂不把 React/Vite 或历史 HTML 认定为唯一主入口。",
+    "- 依据：仓库同时存在 `src/main.tsx`、根目录 HTML、`app/` 和 `newSite/`。",
+    "- 影响：在入口和发布链路确认前，不进行跨目录页面迁移或删除。",
+    "- 复审条件：项目负责人确认线上入口、部署目录和历史页面保留策略。"
+  ],
+  "next_actions": [
+    {
+      "action": "verify feature",
+      "reason": "验收标准存在未收口项"
+    },
+    {
+      "action": "verify audit",
+      "reason": "最近一次 audit 未通过"
+    }
+  ]
+}

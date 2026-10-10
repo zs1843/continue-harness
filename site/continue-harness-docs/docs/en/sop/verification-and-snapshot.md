@@ -1,6 +1,6 @@
 # Verification and snapshots
 
-This page covers mode selection by change type, the acceptance gate condition, and snapshot creation. Mode definitions are in [Verification modes](../reference/verification-modes.md); command options are in [CLI](../reference/commands.md).
+This page covers mode selection by change type, how the acceptance gate decides, and snapshot creation. Mode definitions are in [Verification modes](../reference/verification-modes.md); command options are in [CLI](../reference/commands.md).
 
 ## Choosing a mode
 
@@ -18,9 +18,9 @@ continue-harness verify feature
 
 ## Acceptance gate
 
-`verify feature` and `verify audit` additionally read `docs/ACCEPTANCE.md`. The gate is active only when that file exists, contains a Markdown table, and the header has a status column: unresolved rows append a failure, and deferred or externally blocked rows append `blocked`.
+feature and audit check acceptance links for the selected task. Missing acceptance for a bound task, invalid references and unresolved rows fail the gate. Deferred or blocked work does not count as passed. Unconfirmed configured Intake or changes to bound state during execution also prevent a completion claim.
 
-When verification is bound to a task (an explicit `--task`, or the most recent task by default), a missing `docs/ACCEPTANCE.md`, a file without a table, a header without a status column, or any unresolved row all fail `verify feature` and `verify audit`; the check is skipped only when no task is bound. The Consumer H5 preset does not generate `docs/ACCEPTANCE.md`; it registers the requirement closure check as `commands.coverage_closure` inside `verify.feature`.
+For fields, coverage granularity and report validity, see [Verification and acceptance](../guide/verification.md). Status rules are in [Verification modes](../reference/verification-modes.md).
 
 ## Reports
 
@@ -38,6 +38,8 @@ Create a task snapshot with the `task` Skill.
 continue-harness task snapshot T001 --title "Task title" --request "The user request" --json
 ```
 
+Snapshot creation requires input inspection to be `passed`, acceptance status to be neither `needs_confirmation` nor `not_configured`, and configured Intake to be `confirmed`. A report for the current task must exist, its task ID and context fingerprint must still match, and bound state must not have changed during verification. A report may record a failure; the snapshot preserves it without treating it as acceptance. Sensitive-content detection also stops creation.
+
 A snapshot records:
 
 - The task statement.
@@ -48,4 +50,4 @@ A snapshot records:
 
 ## Limits
 
-Snapshots never store `.env` content, secrets, Cookies, or Access Tokens. `not_configured` means a capability is absent and must not be presented as passed.
+Snapshots exclude sensitive filenames such as `.env*` and scan for some common credential formats. This is not comprehensive secret detection; review project documents and evidence before handoff. `not_configured` means a capability is absent and must not be presented as passed.

@@ -6,19 +6,19 @@
 
 PRD、RP、UI、API 和 assets 往往来自不同工具，可能散落在聊天记录、网盘、截图、导出文件和临时目录里。没有统一登记时，开发者和 Agent 难以确定当前任务依据哪份输入。
 
-continue-harness 把原始输入放进 `.continue-harness/inputs/`，并通过 manifest 记录来源、类型和状态。原始输入默认只读，分析结果另行生成。
+continue-harness 在 `.continue-harness/inputs/manifest.yaml` 中登记原始输入的路径、来源、类型和状态，不会强制移动或复制项目材料。原始输入默认只读，分析结果另行生成。
 
 ## 上下文加载范围
 
 Agent 读取全部设计、API、历史和任务文件时，容易把无关约束混入当前任务；读取范围过小时，又会转向猜测。
 
-continue-harness 的默认策略是先读取稳定工作流，再按任务类型加载证据：业务任务读取 PRD/RP；UI 任务追加 DESIGN、Token、UI 输入和视觉调整记录；API 任务追加 OpenAPI 输入和 operationId 选择；长期冲突或架构决策追加 DECISIONS。
+continue-harness 的默认策略是先读取稳定工作流，再根据已确认的任务范围加载关联证据。设计、接口或其他专项材料只在任务需要且项目已确认适用时读取；长期决策和架构变更再读取相关决策记录。
 
 ## 完成判定
 
 页面能打开、构建能通过，不构成需求已实现。多层流程中的弹窗、异常状态、返回路径和二级页面容易被遗漏。
 
-continue-harness 用 `docs/ACCEPTANCE.md` 验收表记录需求闭环：条目需要标记为已验证、明确延期或外部阻塞，其余状态算未收口，feature 和 audit 验证会因此失败。consumer-h5 preset 另有覆盖矩阵测试，检查 active PRD 任务的可达页面、状态、动作和返回路径。
+Continue Harness 使用 `docs/ACCEPTANCE.md` 记录验收闭环。验收项必须有可解释的状态及关联证据；未收口项会阻止 feature 和 audit 验证通过。需求分解和覆盖质量仍需项目负责人或 Agent 审阅。
 
 ## 生成代码与手工改动
 

@@ -8,13 +8,12 @@
 
 1. 读取 `.continue-harness/project.yaml`。
 2. 读取 `docs/PROJECT_MAP.md` 和 `docs/CURRENT_STATUS.md`。
-3. 使用项目 Skill：`.agents/skills/consumer-h5-harness/SKILL.md`。
-4. 有业务任务时再读取 `.continue-harness/inputs/manifest.yaml`、`docs/PRODUCT.md` 和对应 PRD/RP。
-5. 有 UI 任务时再读取 `docs/DESIGN.md`、Design Token、UI 输入和视觉调整记录。
+3. 有业务任务时再读取 `.continue-harness/inputs/manifest.yaml`、`docs/PRODUCT.md` 和对应输入依据。
+4. 仅在项目明确启用相关能力时读取设计规范、接口契约等专项依据。
    首次采用 UI Contract 时还要读取 `docs/UI-CONTRACT-ADOPTION.md`、`docs/UI-COMPONENT-INVENTORY.md`
    和 `docs/UI-COMPONENT-BOUNDARIES.md`。
-6. 有 API 任务时再读取 API 输入和任务 operationId 选择。
-7. 只有发生长期约束冲突或架构决策时才读取 `docs/DECISIONS.md`。
+5. 有 API 任务时再读取 API 输入和任务 operationId 选择。
+6. 只有发生长期约束冲突或架构决策时才读取 `docs/DECISIONS.md`。
 
 接口任务按 PRD 选择 operationId，并以登记的 OpenAPI JSON 为字段契约。先运行
 `continue-harness api inspect --task <任务号>` 和 `continue-harness api generate --task <任务号> --dry-run`。

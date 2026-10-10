@@ -1,0 +1,167 @@
+{
+  "pilot": "Workbench-Admin",
+  "pilot_head": "22da4ad755a2682377540f791684bea257c30740",
+  "pilot_worktree_status": [
+    "M .continue-harness/logs/commands.ndjson"
+  ],
+  "harness_head": "18379cbd4a6007c120c9f20c567e3bebd445862a",
+  "harness_worktree": true,
+  "cli": "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+  "commands": [
+    {
+      "name": "intake-inspect",
+      "cwd": "/Users/mova/project/Workbench-Admin",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "intake",
+        "inspect",
+        "--json"
+      ],
+      "exit_code": 0,
+      "signal": null
+    },
+    {
+      "name": "inputs-inspect",
+      "cwd": "/Users/mova/project/Workbench-Admin",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "inputs",
+        "inspect",
+        "--json"
+      ],
+      "exit_code": 0,
+      "signal": null
+    },
+    {
+      "name": "inputs-analyze",
+      "cwd": "/Users/mova/project/Workbench-Admin",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "inputs",
+        "analyze",
+        "--json"
+      ],
+      "exit_code": 0,
+      "signal": null
+    },
+    {
+      "name": "task-inspect",
+      "cwd": "/Users/mova/project/Workbench-Admin",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "task",
+        "inspect",
+        "T001",
+        "--json"
+      ],
+      "exit_code": 0,
+      "signal": null
+    },
+    {
+      "name": "task-history",
+      "cwd": "/Users/mova/project/Workbench-Admin",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "task",
+        "history",
+        "T001",
+        "--json"
+      ],
+      "exit_code": 0,
+      "signal": null
+    },
+    {
+      "name": "resume",
+      "cwd": "/Users/mova/project/Workbench-Admin",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "resume",
+        "--task",
+        "T001",
+        "--json"
+      ],
+      "exit_code": 0,
+      "signal": null
+    },
+    {
+      "name": "doctor",
+      "cwd": "/Users/mova/project/Workbench-Admin",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "doctor",
+        "--json"
+      ],
+      "exit_code": 1,
+      "signal": null
+    },
+    {
+      "name": "verify-audit",
+      "cwd": "/Users/mova/project/Workbench-Admin",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "verify",
+        "audit",
+        "--task",
+        "T001",
+        "--json"
+      ],
+      "exit_code": 1,
+      "signal": null
+    },
+    {
+      "name": "task-snapshot",
+      "cwd": "/Users/mova/project/Workbench-Admin",
+      "argv": [
+        "/Users/mova/.nvm/versions/node/v20.20.2/bin/node",
+        "/Users/mova/project/continue-harness/packages/cli/bin/continue-harness.mjs",
+        "task",
+        "snapshot",
+        "T001",
+        "--title",
+        "建立后台项目可运行基线并确认环境与权限边界",
+        "--request",
+        "复跑 Harness Pilot：验证需求到验收的可追溯闭环并保留失败事实",
+        "--json"
+      ],
+      "exit_code": 1,
+      "signal": null
+    }
+  ],
+  "report_sha256": "1d795fa0e68f12a16b12428c95322e6f19156c6f429599f44280c9cc1ccd4d20",
+  "report_status": "failed",
+  "logs": [
+    {
+      "path": "pilot-logs/acceptance.log",
+      "bytes": 30,
+      "sha256": "9951192774a697641b7f28717f0781f843e2199a7419c460172ac36c72384e48"
+    },
+    {
+      "path": "pilot-logs/build.log",
+      "bytes": 37087,
+      "sha256": "d4aa3a8f4c8e643e7fe16a20b76fb7bad350a9acd8e64dad9ea6249bcabc3817"
+    },
+    {
+      "path": "pilot-logs/lint.log",
+      "bytes": 22047563,
+      "sha256": "690d63e3435e9a376291c6b26afc678e791d2d6771a225874f92081b9962926a"
+    },
+    {
+      "path": "pilot-logs/lint_pilot.log",
+      "bytes": 72,
+      "sha256": "634e3debe83b828dce74a84be5a42f54d3d854df4ac630d34470d0698b4142be"
+    },
+    {
+      "path": "pilot-logs/unit_test.log",
+      "bytes": 582,
+      "sha256": "e7dc8bd0121f361c1f53b4bb8cc0e6fe6accc67efa49eae0a8c45b89565594ac"
+    }
+  ]
+}

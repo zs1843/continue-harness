@@ -1,0 +1,26 @@
+{
+  "snapshots": [
+    {
+      "id": "2026-10-08T034153+0000",
+      "snapshot": "docs/history/tasks/T001/2026-10-08T034153+0000/SNAPSHOT.md",
+      "snapshot_exists": true
+    },
+    {
+      "id": "2026-10-08T034228+0000",
+      "snapshot": "docs/history/tasks/T001/2026-10-08T034228+0000/SNAPSHOT.md",
+      "snapshot_exists": true
+    },
+    {
+      "id": "2026-10-08T035606+0000",
+      "snapshot": "docs/history/tasks/T001/2026-10-08T035606+0000/SNAPSHOT.md",
+      "snapshot_exists": true
+    },
+    {
+      "id": "2026-10-08T055026+0000",
+      "snapshot": "docs/history/tasks/T001/2026-10-08T055026+0000/SNAPSHOT.md",
+      "snapshot_exists": true
+    }
+  ],
+  "status": "passed",
+  "task_id": "T001"
+}

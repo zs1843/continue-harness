@@ -1,68 +1,40 @@
-# continue-harness Project Map
+# Continue Harness Project Map
 
 ## Purpose
 
-`continue-harness` is a business-agnostic project collaboration and quality harness. It is consumed by
-developers, CI pipelines, and coding agents through the same configuration and CLI.
+Continue Harness provides project-neutral collaboration records, verification orchestration, traceability, and context recovery. People, agents, and automation use the same project-owned facts and acceptance evidence.
 
 ## Top-level responsibilities
 
 | Path | Responsibility |
 | --- | --- |
-| `packages/core/` | Configuration loading, verification execution, diagnostics, and reports |
-| `packages/core/src/openapi.mjs` | Task-scoped OpenAPI inspection, TypeScript generation, and managed-file conflict protection |
-| `packages/cli/` | Public command-line interface |
-| `profiles/` | Product-shape verification descriptors |
-| `platforms/` | Runtime and acceptance-platform descriptors |
-| `stacks/` | Framework and toolchain descriptors |
-| `ui-systems/` | 可选 UI System Adapter：组件语义、Token 映射和约束 |
-| `templates/` | Business-neutral files created during initialization |
-| `presets/` | Complete business-neutral projects created by the CLI |
-| `skills/` | 完整 consumer-h5 工作流及每个 CLI 命令对应的可安装 Agent Skills |
-| `templates/CLAUDE.md` | Claude Code 薄适配：导入唯一约束本体 `AGENTS.md` |
-| `templates/CURSOR_RULE.mdc` | Cursor 薄适配：始终指向唯一约束本体 `AGENTS.md` |
-| `schemas/` | Public configuration protocol |
+| `packages/core/` | Configuration, Intake, inputs, tasks, recovery, verification, acceptance, logs, and reports |
+| `packages/cli/` | Command-line interface and structured output |
+| `profiles/`, `platforms/`, `stacks/` | Implementation areas; not a dynamically discovered plugin protocol |
+| `templates/` | Constraint and collaboration records for project adoption |
+| `presets/` | Initial project record containers |
+| `skills/` | Agent-callable collaboration workflows |
+| `schemas/` | Public configuration protocols |
 | `examples/` | Disposable integration fixtures |
-| `tests/` | Harness unit and orchestration tests |
-| `docs/` | Architecture, status, roadmap, and adoption guidance |
-| `docs/GENERIC_HARNESS_DESIGN.md` | 通用 Harness、Intake、上下文和验收闭环目标设计 |
+| `tests/` | Unit, CLI, and workflow regression tests |
+| `docs/` | Architecture, current status, roadmap, and adoption guidance |
 
 ## Dependency direction
 
 ```text
-CLI -> Core
-Core -> configuration only
-Project configuration -> Profile + Platform + Stack selection
-Profiles / Platforms / Stacks -> declarative descriptors
-Examples -> public CLI behavior
-Tests -> Core and CLI
+CLI → Core
+Core → project configuration and evidence
+Specialized paths → implementation-defined support
+Examples → public CLI behavior
+Tests → Core, CLI, and workflow
 ```
 
-Core must not import a Profile, Platform Adapter, Stack Adapter, example, or target project.
+Core must not depend on a particular project’s business rules or evidence.
 
-## Current packages
+## Runtime and package facts
 
-- `@company/continue-harness-core`: private workspace package containing the initial runtime.
-- `@company/continue-harness`: private CLI package exposing the `continue-harness` executable.
-
-两个包均已具备 pack 元数据，但尚未发布；`@company` 仍是待确定的 registry scope。
-
-## Runtime requirements
-
-- Node.js 20
-- pnpm
-- ESM
+The executable package declares its runtime and package-manager requirements in its package metadata. Consult the repository package configuration for the current supported versions. Packages are not published unless a release is explicitly approved.
 
 ## Generated artifacts
 
-Target projects receive reports under:
-
-```text
-tmp/continue-harness/
-```
-
-Generated reports and dependency directories are ignored by Git.
-
-Consumer-H5 API generation writes `src/types/api.generated.ts`,
-`src/services/api.generated.ts`, and `.continue-harness/api/generated.json`. The selection authority is
-`.continue-harness/api/selection.yaml`; source exports remain under `.continue-harness/inputs/api/`.
+Verification reports and command logs are written under `tmp/continue-harness/`. Generated files and dependencies are ignored by Git where configured. Optional generators may have their own project-owned output paths; these are not required by the common workflow.

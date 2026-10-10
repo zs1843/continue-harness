@@ -1,6 +1,6 @@
 # CLI
 
-This page is the authoritative list of CLI commands, subcommands, options, and file writes, for Agents, CI, and troubleshooting. The CLI is an optional entry point: every example below is optional and runs through the matching Skill in the Commands table by default. For routine adoption, start with [Project adoption](/en/guide/ai-first).
+This page is a CLI reference for maintainers who need direct operation, automation, or troubleshooting. For routine use, start with [Get started](/en/guide/getting-started); when a relevant operation Skill is installed, an Agent can invoke the capability through it.
 
 ## Commands
 
@@ -8,24 +8,24 @@ This page is the authoritative list of CLI commands, subcommands, options, and f
 | --- | --- | --- | --- | --- |
 | `version` | Print the CLI version | Check tool availability | No | `continue-harness-version` |
 | `create` | Create a generic or explicitly selected preset project | Start a new project | Yes | `continue-harness-create` |
-| `init` | Adopt an existing project | Add Harness files to an existing project | Yes; no writes on conflict | `continue-harness-init` |
+| `init` | Adopt an existing project | Preserve project changes and add missing Harness files | Yes; creates missing files individually without overwriting existing files | `continue-harness-init` |
 | `migrate` | Move `.fe-harness` to `.continue-harness` | Upgrade an existing state directory | Yes; no writes on conflict | CLI only |
-| `intake` | Confirm project facts and the minimum evidence list in rounds | Project type or evidence scope is not settled | `inspect` read-only; `answer` and `evidence` write `.continue-harness/intake.yaml` | `generic-harness` (`consumer-h5-harness` in a consumer-h5 project) |
+| `intake` | Confirm project facts and candidate evidence items in rounds | Project facts or evidence applicability is not settled | `inspect` read-only; `answer` and `evidence` write `.continue-harness/intake.yaml` | Part of `create` / `init`; no standalone Skill |
 | `plan` | Print a structured create/init plan | Preview before writing | No | `continue-harness-plan` |
 | `inspect` | Read project facts and capability state | Before an Agent starts a task | No | `continue-harness-inspect` |
 | `doctor` | Run read-only diagnostics | Check config, scripts, inputs, Tokens, Agent readiness | No | `continue-harness-doctor` |
 | `inputs` | Inspect, analyze, and diff evidence | After PRD/RP/UI/API/assets arrive | Mostly read-only | `continue-harness-inputs` |
 | `task` | Manage IDs, history, and snapshots | Start and completion of work | Yes | `continue-harness-task` |
-| `resume` | Restore a collaboration handoff state | New Agent, new session, or interrupted task | No | `generic-harness` (`consumer-h5-harness` in a consumer-h5 project) |
+| `resume` | Restore collaboration context | New Agent, new session, or interrupted task | No | `continue-harness-task` |
 | `verify` | Run configured verification modes | After implementation or before delivery | Reports | `continue-harness-verify` |
 | `api` | Inspect and generate from OpenAPI | API tasks | `inspect` read-only, `generate` writes generated files | `continue-harness-api` |
 | `design` | Inspect, discover, and diff Design Tokens | UI tasks or existing-project adoption | Read-only | `continue-harness-design-tokens` |
 | `ui` | Manage UI System and UI Contract evidence | Choosing a component system or inventorying components | `install` and `inventory --write` write adapter or inventory files | CLI only |
-| `skills` | Install Agent Skills | Complete Codex/Claude/Cursor workflows | `install` writes Skill files | `continue-harness-skills` |
+| `skills` | Install Agent operation Skills | Invoke a capability needed at the current stage | `install` writes Skill files | `continue-harness-skills` |
 
 ## Common commands
 
-The CLI is an optional entry point; the matching Skill runs these steps by default.
+The CLI is a direct operation interface. An Agent can also invoke it through a relevant operation Skill when available.
 
 ```bash
 continue-harness create <name> --output <directory>
@@ -40,23 +40,22 @@ continue-harness verify feature
 ```bash
 continue-harness plan create my-project --json
 continue-harness create my-project
-continue-harness create my-project --preset consumer-h5
 continue-harness create my-project --skip-install
 continue-harness init --dry-run
 continue-harness plan init --json
 continue-harness init
 ```
 
-`plan` and `--dry-run` expose file impact before writing. When a real conflict exists in an existing project, `init` writes nothing.
+`plan` and `--dry-run` expose file impact before writing. `init` creates only missing files and does not overwrite existing files, including project-modified files. A project modification therefore does not prevent all missing files from being added. A write error or concurrent change may leave a partial result; the operation does not provide transactional rollback.
 
 ## Intake and inputs
 
-`intake` records project facts in two rounds: basic information first, then a minimum evidence list generated from the project type.
+`intake` records project facts in rounds: confirm project goals, boundaries, and known constraints first, then determine applicable inputs from project facts and task scope. The current CLI offers candidate questions for several common project types; these are question sets, not toolchain restrictions. Unmatched types use the general candidate set, and requirements are the only universally required evidence item in Intake.
 
 ```bash
 continue-harness intake inspect --json
-continue-harness intake answer --type frontend --goal "Member center" --runtime "Mobile WebView" --toolchain "uni-app + Vue 3"
-continue-harness intake evidence --id api --status confirmed --source docs/api.md --version 1.0
+continue-harness intake answer --type <frontend|backend|client|data|infrastructure|mixed> --goal "<confirmed goal>" --runtime "<confirmed runtime>" --toolchain "<confirmed toolchain>"
+continue-harness intake evidence --id <input-id> --status confirmed --source <source-path> --version <version>
 ```
 
 `inputs` checks registration and file drift:
@@ -129,8 +128,8 @@ continue-harness design tokens diff --json
 
 ```bash
 continue-harness ui systems list --json
-continue-harness ui systems install tdesign-uniapp --dry-run --json
-continue-harness ui systems install tdesign-uniapp
+continue-harness ui systems install <extension-id> --dry-run --json
+continue-harness ui systems install <extension-id>
 ```
 
 ```bash
@@ -144,8 +143,6 @@ Adapter installation writes evidence files only. It adds no production UI depend
 
 ```bash
 continue-harness skills list --json
-continue-harness skills install --project --name consumer-h5-harness
-continue-harness skills install --project --provider all --name consumer-h5-harness
 continue-harness skills install --global --provider claude --name continue-harness-init --target ~/.claude/skills
 continue-harness skills install --project --name continue-harness-api --force
 ```
@@ -154,4 +151,4 @@ continue-harness skills install --project --name continue-harness-api --force
 
 ## Boundaries
 
-The adapter installed by `ui systems install tdesign-uniapp` is marked `status: experimental` in `ui-systems/tdesign-uniapp/adapter.yaml`. `skills install --global` and `--force` overwriting an existing Skill are confirmation-required actions.
+Inspect an extension's status and plan before installing it; specialized capabilities are not part of the default project configuration. `skills install --global` and `--force` overwriting an existing Skill are confirmation-required actions.

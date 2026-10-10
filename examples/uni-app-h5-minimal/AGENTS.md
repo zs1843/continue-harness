@@ -1,6 +1,6 @@
 # Example Agent Guide
 
-Read `.continue-harness/project.yaml` and `.agents/skills/consumer-h5-harness/SKILL.md` before changes.
+Read `.continue-harness/project.yaml` and the task-relevant project inputs before changes.
 Use `continue-harness inspect`, `continue-harness doctor`, and the appropriate `continue-harness verify` mode
 automatically. Ask only for missing information or authority that cannot be inferred safely.
 

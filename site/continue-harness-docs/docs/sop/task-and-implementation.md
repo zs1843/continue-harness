@@ -14,7 +14,7 @@
 continue-harness task create --title "任务名称" --json
 ```
 
-任务编号通常形如 `T001`。它把以下内容绑定到同一任务编号：
+任务编号通常形如 `T001`。它按任务需要将以下记录绑定到同一任务编号：
 
 - PRD/RP 片段。
 - API operationId 选择。
@@ -27,7 +27,7 @@ continue-harness task create --title "任务名称" --json
 | 任务类型 | 需要读取 |
 | --- | --- |
 | 业务实现 | manifest、PRODUCT、PRD/RP |
-| UI 调整 | DESIGN、Design Token、UI 输入、视觉调整记录 |
+| UI 调整 | 已确认适用的设计依据、UI 输入和验证记录 |
 | API 接入 | API 输入、OpenAPI snapshot、selection.yaml |
 | 架构决策 | DECISIONS、ARCHITECTURE、相关历史 |
 
@@ -37,17 +37,8 @@ continue-harness task create --title "任务名称" --json
 
 ## 目录职责
 
-Consumer H5 preset 建议的边界：
-
-- 页面放在 `src/pages/`，不同页面拆成不同目录。
-- 组件放在 `src/components/`。
-- 请求封装放在 `src/services/`。
-- 业务数据映射放在 `src/repositories/`。
-- 跨页面纯函数放在 `src/utils/`。
-- 状态管理放在 `src/stores/`。
-
-这些目录让页面、组件、接口、状态和工具函数各有归属。
+沿用项目已有的模块边界。新项目在确认技术栈后决定源码、测试和文档的布局；Harness 不要求固定的页面、组件、服务或状态目录。验收表引用真实实现文件即可。
 
 ## 限制
 
-`docs/ACCEPTANCE.md` 不存在、含表格但缺少状态列，或存在未收口项时，`task snapshot` 都在写入前报错。快照要求验收已收口。
+`docs/ACCEPTANCE.md` 不存在、含表格但缺少状态列，或存在未收口项时，`task snapshot` 会在写入前报错。输入状态、Intake 和当前验证报告也必须满足条件，完整门槛见[验证与快照](./verification-and-snapshot.md)。
