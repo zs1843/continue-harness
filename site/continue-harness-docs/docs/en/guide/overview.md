@@ -26,7 +26,7 @@ The default workflow covers project facts, inputs, tasks, logs, context, and acc
 - Visual acceptance: use confirmed project references. Design Tokens, UI Contract and UI System apply only when needed by the project.
 - Architecture work: `ARCHITECTURE.md`, `DECISIONS.md`, and relevant history.
 
-Specialized Skills load when their task appears, so ordinary tasks do not read API, Design Token, or visual baseline rules.
+Agents should load specialized Skills only when the task requires them. Actual loading depends on the Agent host and installed Skills; Harness CLI does not guarantee that ordinary tasks will never load specialized rules.
 
 The current milestone focuses on acceptance links, evidence validity and project context recovery. Additional specialized adapters and stack templates are deferred.
 

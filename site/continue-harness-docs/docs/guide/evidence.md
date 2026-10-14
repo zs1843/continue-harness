@@ -38,7 +38,7 @@ inputs:
 
 ## 检查变化
 
-使用 `continue-harness-inputs` Skill 检查输入。inspect 检查文件、哈希、冲突和未登记材料；diff 报告输入变化；analyze 提取文本线索。需要语义解释的材料由 Agent 或合适工具审阅。
+使用 `continue-harness-inputs` Skill 检查输入。inspect 检查文件、哈希、冲突和未登记材料；diff 当前复用 inspect，仅在 manifest 已登记 sha256 时报告哈希漂移，不比较历史版本；analyze 提取文本线索。需要语义解释的材料由 Agent 或合适工具审阅。
 
 输入变化后，重新确认受影响的需求和验收项，并运行相关验证。自动检查可以发现登记和关联问题，不能判断业务需求是否完整。
 

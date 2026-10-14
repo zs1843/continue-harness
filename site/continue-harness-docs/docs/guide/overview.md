@@ -26,7 +26,7 @@
 - 涉及视觉验收时：使用项目确认的设计依据；Design Token、UI Contract 和 UI System 仅在项目确有需要时启用。
 - 架构任务：`ARCHITECTURE.md`、`DECISIONS.md` 和相关历史。
 
-专项 Skill 在对应任务出现时才加载，普通任务不会读到 API、Design Token 或视觉基线相关规则。
+建议 Agent 仅在对应任务需要时加载专项 Skill。实际加载行为由 Agent 宿主与已安装的 Skill 决定，Harness CLI 不保证普通任务不会加载专项规则。
 
 当前重点是完善需求到验收的关联、证据有效性和项目上下文恢复。输入与检查由项目事实和任务范围决定。
 

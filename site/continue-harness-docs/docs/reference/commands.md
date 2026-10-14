@@ -10,14 +10,14 @@
 | `create` | 创建通用项目或指定 preset 的项目 | 新项目从零开始 | 是 | `continue-harness-create` |
 | `init` | 接入已有项目 | 保留项目修改并补充缺失的 Harness 文件 | 是，逐文件创建，不覆盖已有文件 | `continue-harness-init` |
 | `migrate` | 迁移旧 `.fe-harness` 目录 | 升级已有项目状态目录 | 是，冲突时不写 | 仅 CLI |
-| `intake` | 按轮次确认项目事实和候选输入项 | 项目事实或输入适用性尚未确认 | `inspect` 在记录不存在时创建 `.continue-harness/intake.yaml`，已有记录时只读；`answer`、`evidence` 写该文件 | 随 `create` / `init` 流程；没有独立 Skill |
+| `intake` | 按轮次确认项目事实和候选输入项 | 项目事实或输入适用性尚未确认 | `inspect` 在记录不存在时创建 `.continue-harness/intake.yaml`，已有记录时只读；`answer`、`evidence` 写该文件并追加 `.continue-harness/logs/commands.ndjson` | 随 `create` / `init` 流程；没有独立 Skill |
 | `plan` | 输出 create/init 结构化计划 | 写文件前预览 | 否 | `continue-harness-plan` |
 | `inspect` | 查看项目事实和能力 | Agent 开始任务前 | 否 | `continue-harness-inspect` |
 | `doctor` | 只读诊断 | 排查配置、脚本、输入、Token、Agent readiness | 否 | `continue-harness-doctor` |
 | `inputs` | 检查、比对、分析输入 | PRD/RP/UI/API/assets 进入后 | 主要只读 | `continue-harness-inputs` |
 | `task` | 管理任务编号、历史、快照 | 功能开始和完成时 | 是 | `continue-harness-task` |
 | `resume` | 恢复协作上下文 | 换 Agent、换会话或继续中断任务 | 否 | `continue-harness-task` |
-| `verify` | 执行验证模式 | 实现后或交付前 | 写报告 | `continue-harness-verify` |
+| `verify` | 执行验证模式 | 实现后或交付前 | 写报告、验证日志，并尝试追加 `.continue-harness/logs/commands.ndjson` | `continue-harness-verify` |
 | `api` | OpenAPI 检查和生成 | API 任务 | `inspect` 只读，`generate` 写 generated | `continue-harness-api` |
 | `design` | Design Token 检查、发现、diff | UI/视觉任务或既有项目接入 | 只读 | `continue-harness-design-tokens` |
 | `ui` | UI System 与 UI Contract 证据管理 | 选择组件系统或盘点组件 | `install`、`inventory --write` 写 Adapter 或清单文件 | 仅 CLI |
@@ -77,7 +77,7 @@ continue-harness task history T001 --json
 continue-harness task snapshot T001 --title "首次需求" --request "完成页面" --json
 ```
 
-任务编号是稳定标识：PRD/RP 片段、operationId、实现文件、验证报告和快照都记录同一个任务编号。
+任务编号是稳定标识。协作者通过输入清单、验收表和可选 API 选择记录建立需求、实现与任务的关联；Harness 不会自动给 PRD/RP 正文、operationId 或实现文件写入编号。验证报告与快照保存所选任务编号。
 
 ## 验证
 
@@ -112,7 +112,7 @@ continue-harness api generate --task T001 --dry-run
 continue-harness api generate --task T001
 ```
 
-生成前必须先 `inspect` 和 `--dry-run`。PRD 选择 operationId，OpenAPI JSON 提供字段契约，业务映射写在 generated 层之外。
+建议生成前先运行 `inspect` 和 `--dry-run` 审阅范围与冲突；CLI 不要求存在这两次先前调用的记录。PRD 选择 operationId，OpenAPI JSON 提供字段契约，业务映射写在 generated 层之外。
 
 ## Design Token
 

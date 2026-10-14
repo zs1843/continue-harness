@@ -38,7 +38,7 @@ Keep unknown inputs pending and record why an input does not apply. Empty placeh
 
 ## Inspect changes
 
-Use the `continue-harness-inputs` Skill. inspect checks files, hashes, conflicts, and unregistered material; diff reports changes; analyze extracts text clues. Materials requiring semantic interpretation need review by an Agent or suitable tool.
+Use the `continue-harness-inputs` Skill. inspect checks files, hashes, conflicts, and unregistered material; diff currently reuses inspect and reports hash drift only when sha256 is registered in the manifest; it does not compare historical versions; analyze extracts text clues. Materials requiring semantic interpretation need review by an Agent or suitable tool.
 
 When an input changes, reconfirm affected requirements and acceptance items and rerun relevant checks. Automation can find registration and traceability issues; it cannot determine whether business requirements are complete.
 

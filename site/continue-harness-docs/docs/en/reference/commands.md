@@ -10,14 +10,14 @@ This page is a CLI reference for maintainers who need direct operation, automati
 | `create` | Create a generic or explicitly selected preset project | Start a new project | Yes | `continue-harness-create` |
 | `init` | Adopt an existing project | Preserve project changes and add missing Harness files | Yes; creates missing files individually without overwriting existing files | `continue-harness-init` |
 | `migrate` | Move `.fe-harness` to `.continue-harness` | Upgrade an existing state directory | Yes; no writes on conflict | CLI only |
-| `intake` | Confirm project facts and candidate evidence items in rounds | Project facts or evidence applicability is not settled | `inspect` creates `.continue-harness/intake.yaml` when absent and otherwise reads it; `answer` and `evidence` write it | Part of `create` / `init`; no standalone Skill |
+| `intake` | Confirm project facts and candidate evidence items in rounds | Project facts or evidence applicability is not settled | `inspect` creates `.continue-harness/intake.yaml` when absent and otherwise reads it; `answer` and `evidence` write it and append `.continue-harness/logs/commands.ndjson` | Part of `create` / `init`; no standalone Skill |
 | `plan` | Print a structured create/init plan | Preview before writing | No | `continue-harness-plan` |
 | `inspect` | Read project facts and capability state | Before an Agent starts a task | No | `continue-harness-inspect` |
 | `doctor` | Run read-only diagnostics | Check config, scripts, inputs, Tokens, Agent readiness | No | `continue-harness-doctor` |
 | `inputs` | Inspect, analyze, and diff evidence | After PRD/RP/UI/API/assets arrive | Mostly read-only | `continue-harness-inputs` |
 | `task` | Manage IDs, history, and snapshots | Start and completion of work | Yes | `continue-harness-task` |
 | `resume` | Restore collaboration context | New Agent, new session, or interrupted task | No | `continue-harness-task` |
-| `verify` | Run configured verification modes | After implementation or before delivery | Reports | `continue-harness-verify` |
+| `verify` | Run configured verification modes | After implementation or before delivery | Reports, verification logs, and an attempted append to `.continue-harness/logs/commands.ndjson` | `continue-harness-verify` |
 | `api` | Inspect and generate from OpenAPI | API tasks | `inspect` read-only, `generate` writes generated files | `continue-harness-api` |
 | `design` | Inspect, discover, and diff Design Tokens | UI tasks or existing-project adoption | Read-only | `continue-harness-design-tokens` |
 | `ui` | Manage UI System and UI Contract evidence | Choosing a component system or inventorying components | `install` and `inventory --write` write adapter or inventory files | CLI only |
@@ -77,7 +77,7 @@ continue-harness task history T001 --json
 continue-harness task snapshot T001 --title "First scoped change" --request "User request" --json
 ```
 
-The task ID is a stable identity that connects PRD/RP excerpts, operationIds, implementation files, verification reports, and snapshots to the same task number.
+The task ID is a stable identity. Collaborators link requirements and implementation through the input manifest, acceptance ledger, and optional API selection record. Harness does not automatically insert IDs into PRD/RP content, operationIds, or implementation files. Verification reports and snapshots retain the selected task ID.
 
 ## Verification
 
@@ -112,7 +112,7 @@ continue-harness api generate --task T001 --dry-run
 continue-harness api generate --task T001
 ```
 
-Generation requires `inspect` and `--dry-run` first. The PRD selects operationIds, the OpenAPI JSON supplies the field contract, and business mapping stays outside the generated layer.
+Run `inspect` and `--dry-run` before generation to review scope and conflicts; the CLI does not require records of these prior invocations. The PRD selects operationIds, the OpenAPI JSON supplies the field contract, and business mapping stays outside the generated layer.
 
 ## Design Tokens
 
