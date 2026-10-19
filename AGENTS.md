@@ -1,49 +1,49 @@
-# continue-harness Agent Guide
+# continue-harness 智能体协作指南
 
-This repository contains a business-agnostic project collaboration and quality harness.
+本仓库提供与具体业务无关的项目协作与质量保障框架。
 
-## Read order
+## 阅读顺序
 
-1. Read this file.
-2. Read `.continue-harness/project.yaml`.
-3. Read `docs/PROJECT_MAP.md` before locating modules or assessing impact.
-4. Read `docs/ARCHITECTURE.md` before changing package boundaries or configuration protocols.
-5. Read `docs/CURRENT_STATUS.md` before continuing implementation.
-6. Read `docs/ROADMAP.md` before expanding supported profiles, platforms, or stacks.
+1. 阅读本文件。
+2. 阅读 `.continue-harness/project.yaml`。
+3. 定位模块或评估影响范围前，阅读 `docs/PROJECT_MAP.md`。
+4. 修改包边界或配置协议前，阅读 `docs/ARCHITECTURE.md`。
+5. 继续实现前，阅读 `docs/CURRENT_STATUS.md`。
+6. 扩展支持的产品类型、平台或技术栈前，阅读 `docs/ROADMAP.md`。
 
-## Scope
+## 职责范围
 
-- Keep Core independent from product type, platform, framework, and business domain.
-- Put product-shape rules in `profiles/`.
-- Put runtime-platform rules in `platforms/`.
-- Put framework and toolchain rules in `stacks/`.
-- Keep project-owned values in `.continue-harness/project.yaml`.
-- Do not introduce business pages, domain statuses, API endpoints, brands, or token values.
+- Core 必须独立于产品类型、平台、框架和业务领域。
+- 产品形态规则放在 `profiles/`。
+- 运行平台规则放在 `platforms/`。
+- 框架和工具链规则放在 `stacks/`。
+- 项目专属配置值保存在 `.continue-harness/project.yaml`。
+- 不得引入具体业务页面、业务领域状态、API 端点、品牌或设计令牌值。
 
-## Change boundaries
+## 变更边界
 
-Obtain confirmation before:
+执行以下操作前，必须获得确认：
 
-- Adding or upgrading production dependencies.
-- Changing the public configuration schema or CLI interface.
-- Replacing the package manager, test runner, or repository structure.
-- Publishing packages, creating remotes, pushing tags, or changing release automation.
-- Adding a new product profile, platform adapter, or stack adapter beyond the active roadmap stage.
+- 新增或升级生产依赖。
+- 修改公开配置 schema 或 CLI 接口。
+- 更换包管理器、测试运行器或仓库结构。
+- 发布软件包、创建远程仓库配置、推送标签或修改发布自动化流程。
+- 新增超出当前路线图阶段的产品类型配置、平台适配器或技术栈适配器。
 
-## Development flow
+## 开发流程
 
-1. Restate the requested outcome.
-2. Identify affected Core, CLI, Profile, Platform, Stack, template, schema, and test files.
-3. Preserve backward compatibility unless a breaking change is explicitly approved.
-4. Add or update focused tests.
-5. Run:
+1. 复述用户期望的结果。
+2. 明确受影响的 Core、CLI、Profile、Platform、Stack、模板、schema 和测试文件。
+3. 保持向后兼容，除非破坏性变更已获得明确批准。
+4. 新增或更新针对性测试。
+5. 执行以下检查：
    - `pnpm test`
    - `node packages/cli/bin/continue-harness.mjs version`
-   - Example Doctor or verification when relevant.
-6. Report actual verification results, remaining limitations, and whether confirmation boundaries were touched.
+   - 涉及示例时，执行相应的 Doctor 或验证命令。
+6. 报告实际验证结果、剩余限制，以及是否涉及需确认的变更边界。
 
-## Conversation handoff
+## 会话交接
 
-Finish each user-facing turn with a short numbered list of concrete next actions that can be started from the current context. Offer only relevant actions, usually two or three. A reply containing only a listed number selects that action from the most recent list; start it directly without another selection round. A new request or a number outside that list is handled as a normal message. Do not turn required approval or missing task facts into an ambiguous numbered choice.
+每轮面向用户的回复结束时，附上一份简短的编号列表，列出可基于当前上下文直接开展的具体后续行动。只提供相关行动，通常为两到三项。用户若仅回复列表中的编号，即表示选择最近一次列表中的对应行动，应直接开始执行，不再让用户重复选择。新的请求或列表之外的编号按普通消息处理。不得将必要的审批或缺失的任务事实包装成含糊的编号选项。
 
-Do not automatically commit, push, publish, or initialize external services unless explicitly requested.
+除非用户明确要求，否则不得自动提交、推送、发布或初始化外部服务。
