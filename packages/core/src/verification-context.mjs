@@ -44,8 +44,12 @@ export async function verificationState(cwd, taskId) {
     project: intake.project || {},
     intake: { status: intake.status, evidence: intake.evidence || [] },
     verify: await readVerificationConfig(cwd),
+    // Registry integrity is project-wide, just like the acceptance input-integrity gate.
+    // Unregistered or invalid entries must invalidate reports even if active bytes stay equal.
+    input_integrity: { status: inputs.status, issues: inputs.issues, discovered: inputs.discovered },
     inputs: inputs.inputs.filter((item) => item.status === 'active' && (!item.task_id || item.task_id === taskId))
-      .map((item) => ({ id: item.id, sha256: item.sha256, changed: item.changed })),
+      .map((item) => ({ id: item.id, path: item.path, type: item.type, task_id: item.task_id || null,
+        sha256: item.sha256, changed: item.changed })),
     acceptance: acceptance.rows.map(({ issues: _issues, ...row }) => row),
     implementations,
     evidence,

@@ -12,7 +12,7 @@ Input files hold source material. `docs/ACCEPTANCE.md` holds acceptance links. L
 
 Resume includes Intake facts, PROJECT, CURRENT_STATUS and DECISIONS documents, the task inventory, active inputs and sources, acceptance records, verification state, snapshots and Git changes. Follow these references to the original material.
 
-`resume --task T001` focuses on a task while retaining project context. A report from another task or an outdated input or implementation version is marked for confirmation. Collaborators maintain project documents; Harness does not determine whether an old decision should be superseded.
+`resume --task T001` focuses on a task while retaining project context. A report from another task or an outdated input or implementation version is marked for confirmation. Changes to input paths, types, task ownership, or project-wide input inspection results also invalidate earlier reports, including new unregistered files. Collaborators maintain project documents; Harness does not determine whether an old decision should be superseded.
 
 <ZoomableImage
   src="/diagrams/context-recovery-en.svg"

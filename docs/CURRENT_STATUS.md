@@ -1,6 +1,6 @@
 # Current Status
 
-Last updated: 2026-10-09
+Last updated: 2026-10-19
 
 ## Current implementation
 
@@ -11,6 +11,16 @@ Default creation provides collaboration and constraint records. Explicitly selec
 ## Current verification
 
 Repository checks were last recorded as passing in the current working context: automated tests, lint, CLI version and syntax checks, and the bilingual Site build. Re-run repository commands before relying on this status for a release.
+
+### 2026-10-19 input binding hardening
+
+- Continued the roadmap's negative-test work on stale evidence and recoverable verification results.
+- Reproduced a false pass: a configured check could change an input's type without changing its bytes, yet verification still passed. Earlier reports also remained applicable after input path or task-ownership changes and after new unregistered files appeared.
+- Core fingerprints now bind active input paths, types, and task ownership alongside IDs and hashes, plus project-wide input inspection status, issues, and discovered files. CLI, Profile, Platform, Stack, templates, public configuration schema, and dependencies were unchanged; bilingual verification and recovery guidance was updated.
+- Regression tests failed before the fix and passed after it. Full `pnpm test`: 97 passed, 0 failed. `pnpm lint`, CLI `version` (`0.1.0`), `pnpm check:syntax` (50 files), and `pnpm docs:build` all passed. A CLI regression checks rejection during mutation, invalidation in resume, snapshot rejection, and successful verification and snapshot creation after stabilization.
+- Example Doctor was rerun with the repository CLI from `examples/uni-app-h5-minimal` and returned `failed`: environment-file ignore rules are missing; Agent workflow guidance is incomplete; input/history and other optional records remain unconfigured. An initial invocation used an incorrect relative CLI path and was corrected to the absolute path. These example gaps were not changed in this task. The two real-project Pilots were not rerun.
+- Reports generated before the additional binding fields must be regenerated before snapshot use. Fingerprint comparisons still cannot detect edits reverted before the final read and do not lock the filesystem.
+- Next: address the minimal example's Doctor gaps; continue negative checks of acceptance evidence and snapshot invalidation. No confirmation boundary was crossed, and no commit, push, or publication was performed.
 
 The two real-project Pilot reruns on 2026-10-09 reached the stricter acceptance gate and both returned **failed**. Intake and input analysis passed; configured project checks ran; acceptance records contained unresolved traceability links. Doctor also reported missing environment-file ignore rules and missing input-registry guidance in the Agent constraints. Reports and fingerprints are summarized in the Site Pilot evidence. These results demonstrate that the gate blocks incomplete records; they do not establish successful delivery.
 

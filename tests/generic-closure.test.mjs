@@ -256,6 +256,74 @@ test('verification reports bind the verify commands, not just the inputs', async
   assert.equal((await buildResumeState(cwd, { taskId: 'T001' })).verification.applicable, false);
 });
 
+test('input registration changes invalidate reports even when content is unchanged', async (t) => {
+  for (const change of ['path', 'type', 'task_id']) {
+    await t.test(change, async () => {
+      const cwd = await projectFixture();
+      const path = resolve(cwd, '.continue-harness/inputs/manifest.yaml');
+      const manifest = YAML.parse(await readFile(path, 'utf8'));
+      if (change === 'path') {
+        // Both paths remain registered so unregistered-file detection cannot mask this gap.
+        await writeFile(resolve(cwd, 'alternate.md'), await readFile(resolve(cwd, manifest.inputs[0].path)));
+        manifest.inputs.push({ id: 'ARCHIVED', type: 'prd', path: manifest.inputs[0].path, status: 'archived' });
+        await writeFile(path, YAML.stringify(manifest));
+        await writeReport(cwd, { mode: 'audit', status: 'passed', task_id: 'T001', results: [] });
+        manifest.inputs[0].path = 'alternate.md';
+      } else if (change === 'type') {
+        manifest.inputs[0].type = 'data_contract';
+      } else {
+        // A task-owned input becomes shared without changing its ID or bytes.
+        delete manifest.inputs[0].task_id;
+      }
+      assert.equal((await buildResumeState(cwd, { taskId: 'T001' })).verification.applicable, true);
+      await writeFile(path, YAML.stringify(manifest));
+      assert.equal((await inspectAcceptance(cwd, { taskId: 'T001' })).status, 'passed');
+      const state = await buildResumeState(cwd, { taskId: 'T001' });
+      assert.equal(state.verification.applicable, false);
+      assert.equal(state.verification.status, 'needs_confirmation');
+      await assert.rejects(createTaskSnapshot(cwd, { taskId: 'T001' }), /不匹配/);
+      await writeReport(cwd, { mode: 'audit', status: 'passed', task_id: 'T001', results: [] });
+      assert.equal((await buildResumeState(cwd, { taskId: 'T001' })).verification.applicable, true);
+    });
+  }
+});
+
+test('new unregistered inputs invalidate earlier verification and recovery prompts a rerun', async () => {
+  const cwd = await projectFixture();
+  await writeFile(resolve(cwd, '.continue-harness/inputs/prd/new.md'), '# Additional scope\n');
+  const state = await buildResumeState(cwd, { taskId: 'T001' });
+  assert.equal(state.inputs.status, 'needs_confirmation');
+  assert.equal(state.verification.applicable, false);
+  assert.equal(state.verification.status, 'needs_confirmation');
+  assert.ok(state.next_actions.some((item) => item.action === 'verify audit'));
+});
+
+test('CLI rejects input registration drift during verification despite passing checks and acceptance', async () => {
+  const cwd = await projectFixture();
+  const config = YAML.parse(await readFile(resolve(import.meta.dirname, '../.continue-harness/project.yaml'), 'utf8'));
+  config.commands = { mutate: `${process.execPath} -e "const fs=require('fs');const p='.continue-harness/inputs/manifest.yaml';fs.writeFileSync(p,fs.readFileSync(p,'utf8').replace('type: prd','type: data_contract'))"` };
+  config.verify = { feature: { commands: ['mutate'] } };
+  await writeFile(resolve(cwd, '.continue-harness/project.yaml'), YAML.stringify(config));
+  await writeFile(resolve(cwd, '.continue-harness/inputs/prd/modules/T001/metadata.yaml'), 'id: T001\ntitle: Delivery\n');
+  const cli = resolve(import.meta.dirname, '../packages/cli/bin/continue-harness.mjs');
+  const result = spawnSync(process.execPath, [cli, 'verify', 'feature', '--task', 'T001', '--json'], { cwd, encoding: 'utf8' });
+  const report = JSON.parse(result.stdout);
+  assert.equal(report.results.find((item) => item.name === 'mutate').status, 'passed');
+  assert.equal(report.acceptance.status, 'passed');
+  assert.equal(result.status, 1, result.stderr + result.stdout);
+  assert.equal(report.status, 'failed');
+  assert.equal(report.context.changed_during_verification, true);
+  assert.ok(report.results.some((item) => item.name === 'evidence_stability' && item.status === 'failed'));
+  assert.equal((await buildResumeState(cwd, { taskId: 'T001' })).verification.applicable, false);
+  await assert.rejects(createTaskSnapshot(cwd, { taskId: 'T001' }), /验证期间/);
+  // The same command is idempotent on a rerun: stable metadata can pass and back a snapshot.
+  const rerun = spawnSync(process.execPath, [cli, 'verify', 'feature', '--task', 'T001', '--json'], { cwd, encoding: 'utf8' });
+  assert.equal(rerun.status, 0, rerun.stderr + rerun.stdout);
+  assert.equal(JSON.parse(rerun.stdout).context.changed_during_verification, false);
+  assert.equal((await buildResumeState(cwd, { taskId: 'T001' })).verification.applicable, true);
+  await createTaskSnapshot(cwd, { taskId: 'T001' });
+});
+
 test('a report whose state changed during verification cannot pass or back a snapshot', async () => {
   const cwd = await projectFixture();
   const repository = resolve(import.meta.dirname, '..');

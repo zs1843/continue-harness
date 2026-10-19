@@ -41,4 +41,6 @@ Feature and audit check acceptance links for the current task and applicable inp
 
 Bound configuration, input, implementation, evidence, and acceptance fingerprints are compared before and after execution. Different states fail the run. The comparison is not a filesystem lock and cannot detect a change reverted during execution.
 
+Input binding includes the ID, path, type, task ownership, and content hash of active inputs for the current task and shared active inputs, plus project-wide input inspection status, issues, and unregistered files. Changing an input's source, type, or task ownership requires verification again even if its content is identical; new unregistered inputs also invalidate earlier reports. Reports written before these binding fields were added must be regenerated before use in snapshots.
+
 Environmental-block recognition covers only some process-start and port-permission errors. Other external conditions may still appear as command failures and require review of the raw logs.
