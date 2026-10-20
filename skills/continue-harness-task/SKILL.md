@@ -1,6 +1,6 @@
 ---
 name: continue-harness-task
-description: Manage Continue Harness tasks, requirement-to-acceptance links and durable handoff snapshots.
+description: 管理 Continue Harness 任务、需求到验收的关联，以及持久保存的交接快照。
 ---
 
 # 任务与交接

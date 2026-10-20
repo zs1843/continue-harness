@@ -1,6 +1,6 @@
 ---
 name: continue-harness-init
-description: Connect Continue Harness to an existing project while preserving its files, toolchain and conventions.
+description: 将 Continue Harness 接入已有项目，同时保留项目文件、工具链和既有约定。
 ---
 
 # 接入已有项目

@@ -1,6 +1,6 @@
 ---
 name: continue-harness-inspect
-description: Inspect continue-harness project facts and machine-readable state. Use when discovering project stack, verification modes, registered inputs, Design Token source, facts, Agent workflow readiness, or deciding the next safe action.
+description: 检查 continue-harness 项目事实与机器可读状态。适用于了解项目技术栈、验证模式、已登记输入、设计令牌来源、事实文档和智能体工作流就绪情况，或确定下一步可安全执行的操作。
 ---
 
 # 检查项目状态

@@ -1,6 +1,6 @@
 ---
 name: continue-harness-inputs
-description: Register and inspect task-specific project evidence, source versions and input changes in Continue Harness.
+description: 在 Continue Harness 中登记并检查当前任务的项目依据、来源版本和输入变化。
 ---
 
 # 管理项目输入

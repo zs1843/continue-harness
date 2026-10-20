@@ -1,6 +1,6 @@
 ---
 name: continue-harness-verify
-description: Run configured project checks and validate requirement-to-evidence links without overstating task completion.
+description: 执行项目已配置的检查并验证需求到证据的关联，如实报告任务完成程度。
 ---
 
 # 验证与验收

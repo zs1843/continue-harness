@@ -1,6 +1,6 @@
 ---
 name: continue-harness-create
-description: Create a project constraint workspace with Continue Harness and confirm project facts and task-specific inputs before implementation.
+description: 使用 Continue Harness 创建项目约束工作区，并在实现前确认项目事实及当前任务所需输入。
 ---
 
 # 创建项目

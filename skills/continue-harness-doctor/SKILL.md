@@ -1,6 +1,6 @@
 ---
 name: continue-harness-doctor
-description: Diagnose a continue-harness project without modifying it. Use when checking Node/pnpm, scripts, uni-app pages, inputs, task history, Design Token integrity, visual baselines, sensitive files, Agent workflow, or distinguishing deterministic failures from warnings and unconfigured capabilities.
+description: 只读诊断 continue-harness 项目。适用于检查 Node/pnpm、脚本、uni-app 页面、输入、任务历史、设计令牌完整性、视觉基线、敏感文件及智能体工作流，或区分确定性失败、警告和未配置能力。
 ---
 
 # 诊断 Harness 项目

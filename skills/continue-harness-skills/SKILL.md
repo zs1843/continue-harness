@@ -1,9 +1,9 @@
 ---
 name: continue-harness-skills
-description: List or install continue-harness command Skills into a project or global Codex skill directory. Use when an Agent lacks a command Skill, when bootstrapping project-local automation, when installing all continue-harness workflows globally, or when checking available Skill names without modifying a project.
+description: 列出 continue-harness 命令技能，或将其安装到项目及全局 Codex 技能目录。适用于智能体缺少命令技能、建立项目本地自动化、全局安装全部 continue-harness 工作流，或只读查询可用技能名称。
 ---
 
-# 安装 Harness Skills
+# 安装 Harness 技能
 
 1. 运行 `continue-harness skills list --json` 查看随当前 CLI 分发的 Skills。
 2. 项目安装使用 `continue-harness skills install --project --provider <codex|claude|cursor|all>`。Codex/Cursor 共用 `.agents/skills`，Claude Code 使用 `.claude/skills`。

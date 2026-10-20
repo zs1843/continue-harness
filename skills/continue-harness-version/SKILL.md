@@ -1,6 +1,6 @@
 ---
 name: continue-harness-version
-description: Check continue-harness CLI availability and version compatibility. Use when a workflow needs the CLI, when project.yaml declares a harness version, when diagnosing PATH/global installation, or before running create/init/verify commands.
+description: 检查 continue-harness CLI 的可用性和版本兼容性。适用于工作流需要 CLI、project.yaml 声明了 Harness 版本、排查 PATH 或全局安装问题，或在执行 create、init、verify 命令前检查环境。
 ---
 
 # 检查 CLI 版本

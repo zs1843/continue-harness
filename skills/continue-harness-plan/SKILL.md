@@ -1,6 +1,6 @@
 ---
 name: continue-harness-plan
-description: Produce and interpret continue-harness create or init plans before filesystem changes. Use when previewing generated files, assessing adoption conflicts, checking target paths, or requiring a non-mutating plan before create/init.
+description: 在修改文件系统前，生成并解读 continue-harness 的 create 或 init 计划。适用于预览生成文件、评估接入冲突、检查目标路径，或在创建和接入前获取不写入文件的变更计划。
 ---
 
 # 规划 Harness 变更

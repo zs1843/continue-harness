@@ -1,9 +1,9 @@
 ---
 name: continue-harness-design-tokens
-description: Inspect and maintain the single machine-readable Design Token source for a continue-harness Consumer H5 project. Use when extracting tokens from UI/RP, confirming visual authority, detecting multiple token sources, reviewing token readiness, or recording token changes and affected pages/components.
+description: 检查并维护 continue-harness 消费端 H5 项目的唯一机器可读设计令牌（Design Token）真值来源。适用于从 UI/RP 提炼令牌、确认视觉权威、检测多套令牌来源、检查令牌就绪状态，或记录令牌变更及受影响的页面和组件。
 ---
 
-# 管理 Design Token
+# 管理设计令牌（Design Token）
 
 1. 运行 `continue-harness design tokens inspect --json`，确认唯一真值文件和提炼状态。
    接入已有项目时先运行 `continue-harness design tokens discover --json`，主动扫描存量 CSS/SCSS/Less/Vue 样式与 CSS Variables，再结合 UI 框架主题和公共组件归纳候选；没有新 UI/RP 不等于没有视觉依据。
