@@ -3,15 +3,15 @@ export { diffDesignTokens, discoverDesignTokenCandidates, inspectDesignTokens } 
 export { runDoctor } from './doctor.mjs';
 export { createTaskSnapshot, inspectTaskHistory } from './history.mjs';
 export { applyInitialization, planInitialization } from './init.mjs';
-export { analyzeInputs, inspectInputs, inspectTaskMetadata, readInputManifest } from './inputs.mjs';
+export { analyzeInputs, inspectInputs, inspectTaskMetadata, readInputManifest, selectLatestTask } from './inputs.mjs';
 export { applyOpenApiGeneration, generateOpenApiArtifacts, listOpenApiOperations, planOpenApiGeneration } from './openapi.mjs';
 export { applyProjectCreation, planProjectCreation, publicPlan } from './project.mjs';
 export { writeReport } from './report.mjs';
 export { fingerprintState, readProjectDocuments, verificationContext, verificationState } from './verification-context.mjs';
 export { runShellCommand, runVerification } from './runner.mjs';
-export { createInitialIntake, inspectIntake, appendCommandLog, BASIC_INFO_FIELDS, INTAKE_QUESTIONS, basicInfoStatus, evidenceDefinition, intakeEvidenceStatus, pendingIntakeQuestions } from './intake.mjs';
+export { createInitialIntake, initialIntakeState, inspectIntake, appendCommandLog, BASIC_INFO_FIELDS, INTAKE_QUESTIONS, basicInfoStatus, evidenceDefinition, intakeEvidenceStatus, pendingIntakeQuestions } from './intake.mjs';
 export { buildResumeState } from './resume.mjs';
-export { inspectAcceptance, ACCEPTANCE_TERMINAL_STATUSES } from './acceptance.mjs';
+export { inspectAcceptance, resolveProjectFile, ACCEPTANCE_TERMINAL_STATUSES } from './acceptance.mjs';
 export { displayStatus, localizeResult, STATUS_DISPLAY } from './status.mjs';
 export { inspectUiGovernance, validateAdjustmentLog, validateLayoutSpecCollection, validatePageFlowModel, validateUiSystemConfig } from './ui-system.mjs';
 export { inspectUiContract, renderUiComponentInventory, scanUiComponentInventory } from './ui-contract.mjs';

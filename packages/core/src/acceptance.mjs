@@ -1,5 +1,5 @@
-import { readFile, stat } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { readFile, realpath, stat } from 'node:fs/promises';
+import { isAbsolute, relative, resolve, sep } from 'node:path';
 import { inspectInputs } from './inputs.mjs';
 
 const ACCEPTANCE_PATH = 'docs/ACCEPTANCE.md';
@@ -14,10 +14,25 @@ export function localReference(reference) {
   return (markdown ? markdown[1] : reference).replaceAll('`', '').split('#')[0].trim();
 }
 
-async function isFile(cwd, reference) {
-  const path = localReference(reference);
-  if (!path || /^[a-z]+:\/\//i.test(path)) return false;
-  try { return (await stat(resolve(cwd, path))).isFile(); } catch { return false; }
+function within(root, path) {
+  const rel = relative(root, path);
+  return Boolean(rel) && rel !== '..' && !rel.startsWith(`..${sep}`) && !isAbsolute(rel);
+}
+
+// Implementation and evidence must be project files: a reference that resolves outside the
+// project, directly or through a symlink, cannot serve as acceptance evidence for it.
+export async function resolveProjectFile(cwd, reference) {
+  const path = localReference(reference || '');
+  if (!path || /^[a-z]+:\/\//i.test(path)) return { status: 'missing' };
+  const absolute = resolve(cwd, path);
+  if (!within(resolve(cwd), absolute)) return { status: 'outside' };
+  try {
+    if (!(await stat(absolute)).isFile()) return { status: 'missing' };
+    if (!within(await realpath(cwd), await realpath(absolute))) return { status: 'outside' };
+    return { status: 'file', absolute };
+  } catch {
+    return { status: 'missing' };
+  }
 }
 
 export async function inspectAcceptance(cwd, { taskId } = {}) {
@@ -60,8 +75,11 @@ export async function inspectAcceptance(cwd, { taskId } = {}) {
     if (!input || !input.exists || input.changed || input.status !== 'active'
       || (input.task_id && input.task_id !== row.task)) issues.push('invalid_requirement');
     if (['verified', '已验证'].includes(row.status)) {
-      if (!await isFile(cwd, row.implementation)) issues.push('missing_implementation');
-      if (!await isFile(cwd, row.evidence)) issues.push('missing_evidence');
+      for (const key of ['implementation', 'evidence']) {
+        const file = await resolveProjectFile(cwd, row[key]);
+        if (file.status === 'outside') issues.push(`outside_project_${key}`);
+        else if (file.status !== 'file') issues.push(`missing_${key}`);
+      }
       if (/tmp\/continue-harness\/report\.(json|md)/.test(row.evidence)) issues.push('self_referencing_report');
     } else if (TERMINAL_STATUSES.has(row.status) && (!row.reason || !row.owner || !row.next)) {
       issues.push('missing_resolution');

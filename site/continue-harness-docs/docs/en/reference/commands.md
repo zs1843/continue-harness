@@ -10,7 +10,7 @@ This page is a CLI reference for maintainers who need direct operation, automati
 | `create` | Create a generic or explicitly selected preset project | Start a new project | Yes | `continue-harness-create` |
 | `init` | Adopt an existing project | Preserve project changes and add missing Harness files | Yes; creates missing files individually without overwriting existing files | `continue-harness-init` |
 | `migrate` | Move `.fe-harness` to `.continue-harness` | Upgrade an existing state directory | Yes; no writes on conflict | CLI only |
-| `intake` | Confirm project facts and candidate evidence items in rounds | Project facts or evidence applicability is not settled | `inspect` creates `.continue-harness/intake.yaml` when absent and otherwise reads it; `answer` and `evidence` write it and append `.continue-harness/logs/commands.ndjson` | Part of `create` / `init`; no standalone Skill |
+| `intake` | Confirm project facts and candidate evidence items in rounds | Project facts or evidence applicability is not settled | `inspect` is read-only and only prints the first-round questions when no record exists; `answer` and `evidence` write it and append `.continue-harness/logs/commands.ndjson` | Part of `create` / `init`; no standalone Skill |
 | `plan` | Print a structured create/init plan | Preview before writing | No | `continue-harness-plan` |
 | `inspect` | Read project facts and capability state | Before an Agent starts a task | No | `continue-harness-inspect` |
 | `doctor` | Run read-only diagnostics | Check config, scripts, inputs, Tokens, Agent readiness | No | `continue-harness-doctor` |

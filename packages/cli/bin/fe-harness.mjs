@@ -19,6 +19,7 @@ import {
   inspectUiGovernance,
   inspectUiContract,
   createInitialIntake,
+  initialIntakeState,
   inspectIntake,
   evidenceDefinition,
   intakeEvidenceStatus,
@@ -42,6 +43,7 @@ import {
   verificationContext,
   verificationState,
   readInputManifest,
+  selectLatestTask,
   writeReport,
   HARNESS_DIRECTORY,
   LEGACY_HARNESS_DIRECTORY,
@@ -102,7 +104,14 @@ const initFiles = [
 ];
 
 function has(flag) { return process.argv.includes(flag); }
-function option(flag) { const index = process.argv.indexOf(flag); return index < 0 ? undefined : process.argv[index + 1]; }
+// A value flag must be followed by a value; another long flag is never taken as one.
+function option(flag) {
+  const index = process.argv.indexOf(flag);
+  if (index < 0) return undefined;
+  const value = process.argv[index + 1];
+  if (value === undefined || value.startsWith('--')) throw new Error(`${flag} 需要提供值`);
+  return value;
+}
 async function exists(path) { try { await access(path); return true; } catch { return false; } }
 
 const HELP = {
@@ -232,9 +241,10 @@ const HELP = {
   runtime      页面启动和运行时错误验证
   interaction  关键交互流程验证
   visual       截图基线和像素差异验证
-  audit        汇总审计，尽量运行所有已配置检查
+  audit        汇总审计；未指定 --task 时检查全部任务的验收闭环
 
 说明：
+  未指定 --task 时，audit 覆盖全项目；其他模式绑定最近更新的任务，同日更新时取编号较大的任务。
   visual 没有截图基线时返回“未配置”，不能视为通过。
   端口监听或工具链权限失败会被归类为环境阻塞，不当作业务失败。
 `,
@@ -476,14 +486,20 @@ async function create(name) {
 }
 
 async function intake(command = 'inspect') {
+  if (wantsHelp(command)) return printHelp('intake');
+  if (!['inspect', 'answer', 'evidence'].includes(command)) throw new Error('intake 仅支持 inspect、answer 或 evidence');
   let state = await inspectIntake(cwd);
   if (!state.exists) {
     let name = 'project';
     try { name = (await loadProjectConfig(cwd)).config.project.name; } catch {}
-    await createInitialIntake(cwd, name);
-    state = await inspectIntake(cwd);
+    if (command === 'inspect') {
+      // Inspection is read-only: show the first-round questions without creating the Intake file.
+      state = { ...initialIntakeState(name), path: '.continue-harness/intake.yaml', exists: false };
+    } else {
+      await createInitialIntake(cwd, name);
+      state = await inspectIntake(cwd);
+    }
   }
-  if (wantsHelp(command)) return printHelp('intake');
   if (command === 'answer') {
     const project = { ...(state.project || {}) };
     for (const key of ['type', 'goal', 'runtime', 'toolchain']) {
@@ -776,8 +792,9 @@ async function verify(mode) {
   const { config } = await loadProjectConfig(cwd);
   const definition = resolveVerifySteps(config, mode);
   const tasks = await inspectTaskMetadata(cwd);
-  const taskId = option('--task') || [...tasks.modules].sort((a, b) =>
-    String(b.metadata?.updated_at || '').localeCompare(String(a.metadata?.updated_at || '')))[0]?.id;
+  // Audit without --task covers the whole project; other modes default to the latest task.
+  const projectWide = mode === 'audit' && !option('--task');
+  const taskId = option('--task') || (projectWide ? undefined : selectLatestTask(tasks.modules)?.id);
   if (option('--task') && !tasks.modules.some((task) => task.id === taskId)) throw new Error(`任务不存在：${taskId}`);
   // Capture the pre-verification state so a mid-run edit cannot pass as a valid binding.
   const before = await verificationState(cwd, taskId);
@@ -804,7 +821,8 @@ async function verify(mode) {
     }
     const acceptance = await inspectAcceptance(cwd, { taskId });
     verification = { ...verification, acceptance };
-    if (acceptance.status === 'needs_confirmation' || (taskId && acceptance.status === 'not_configured')) {
+    const hasTasks = Boolean(taskId) || (projectWide && tasks.modules.length > 0);
+    if (acceptance.status === 'needs_confirmation' || (hasTasks && acceptance.status === 'not_configured')) {
       verification.results.push({
         name: 'acceptance',
         command: 'docs/ACCEPTANCE.md',
@@ -827,7 +845,8 @@ async function verify(mode) {
     }
   }
   const report = await writeReport(cwd, verification);
-  console.log(has('--json') ? JSON.stringify(report, null, 2) : `continue-harness ${mode}: ${report.status}`);
+  const scope = report.task_id ? ` [${report.task_id}]` : projectWide ? ' [全项目]' : '';
+  console.log(has('--json') ? JSON.stringify(report, null, 2) : `continue-harness ${mode}${scope}: ${report.status}`);
   process.exitCode = report.status === 'passed' ? 0 : 1;
 }
 

@@ -24,7 +24,7 @@ Runs project-configured visual checks. Harness has no general baseline preflight
 
 ## audit
 
-Runs commands configured for this mode and applies the acceptance-closure gate; it does not automatically collect other modes. Set `fail_fast: false` explicitly to collect results after a failure. Without it, execution still stops at the first non-passing result by default.
+Runs commands configured for this mode and applies the acceptance-closure gate; it does not automatically collect other modes. Without `--task`, audit is project-wide: it checks acceptance rows for every task and all active inputs, so any open task prevents a pass, and tasks without an acceptance ledger also fail. With `--task`, it checks only that task and shared inputs. Set `fail_fast: false` explicitly to collect results after a failure. Without it, execution still stops at the first non-passing result by default.
 
 ## Configuration and status
 
@@ -36,6 +36,8 @@ A mode maps to project commands through `verify` in `.continue-harness/project.y
 - `not_configured`: the mode is explicitly marked unconfigured, or visual output matches the missing-baseline recognition rules; this is not a pass.
 
 Feature and audit check acceptance links for the current task and applicable inputs. Missing acceptance for a bound task, invalid statuses, missing links, or unresolved items prevent a pass. Confirmed deferrals and external blocks remain visible and do not count as verified. Legacy projects without Intake remain compatible; this does not establish confirmed project facts.
+
+Without `--task`, modes other than audit bind the most recently updated task; same-day ties go to the higher task number. For rows marked verified, implementation and evidence must be files inside the project. Paths outside the project, including symlinks that resolve outside it, cannot serve as evidence and are not read for fingerprints.
 
 ## Execution stability
 

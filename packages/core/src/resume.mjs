@@ -3,7 +3,7 @@ import { promisify } from 'node:util';
 import { execFile } from 'node:child_process';
 import { resolve } from 'node:path';
 
-import { inspectInputs, inspectTaskMetadata } from './inputs.mjs';
+import { inspectInputs, inspectTaskMetadata, selectLatestTask } from './inputs.mjs';
 import { inspectTaskHistory } from './history.mjs';
 import { inspectAcceptance } from './acceptance.mjs';
 import { inspectIntake } from './intake.mjs';
@@ -104,7 +104,7 @@ export async function buildResumeState(cwd, { taskId } = {}) {
   const metadata = await inspectTaskMetadata(cwd);
   const task = taskId
     ? metadata.modules.find((item) => item.id === taskId)
-    : [...metadata.modules].sort((a, b) => String(b.metadata?.updated_at || '').localeCompare(String(a.metadata?.updated_at || '')))[0];
+    : selectLatestTask(metadata.modules);
   const selectedTaskId = task?.id || taskId || null;
   const [inputs, coverage, branch, status, decisions, history, intake, acceptance, verification] = await Promise.all([
     inspectInputs(cwd),

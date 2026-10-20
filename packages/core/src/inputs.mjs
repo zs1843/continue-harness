@@ -334,6 +334,15 @@ export async function inspectTaskMetadata(cwd) {
   };
 }
 
+// Task metadata stores dates only, so tasks updated on the same day fall back to the higher
+// task number, which is the one created later.
+export function selectLatestTask(modules) {
+  const number = (id) => Number(String(id).match(/^T(\d+)$/)?.[1] ?? -1);
+  return [...modules].sort((a, b) =>
+    String(b.metadata?.updated_at || '').localeCompare(String(a.metadata?.updated_at || ''))
+    || number(b.id) - number(a.id))[0];
+}
+
 export async function readFileSummary(path) {
   const info = await stat(path);
   return {

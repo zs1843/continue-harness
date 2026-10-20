@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { loadProjectConfig } from './config.mjs';
 import { inspectInputs } from './inputs.mjs';
-import { inspectAcceptance, localReference } from './acceptance.mjs';
+import { inspectAcceptance, localReference, resolveProjectFile } from './acceptance.mjs';
 import { inspectIntake } from './intake.mjs';
 
 export async function readProjectDocuments(cwd) {
@@ -31,13 +31,15 @@ export async function verificationState(cwd, taskId) {
   const intake = await inspectIntake(cwd);
   const implementations = {};
   const evidence = {};
+  // Only project files are hashed; references outside the project are recorded as null.
+  const hash = async (reference) => {
+    const file = await resolveProjectFile(cwd, reference);
+    if (file.status !== 'file') return null;
+    try { return createHash('sha256').update(await readFile(file.absolute)).digest('hex'); } catch { return null; }
+  };
   for (const row of acceptance.rows) {
-    const path = localReference(row.implementation);
-    try { implementations[path] = createHash('sha256').update(await readFile(resolve(cwd, path))).digest('hex'); }
-    catch { implementations[path] = null; }
-    const evidencePath = localReference(row.evidence || '');
-    try { evidence[evidencePath] = createHash('sha256').update(await readFile(resolve(cwd, evidencePath))).digest('hex'); }
-    catch { evidence[evidencePath] = null; }
+    implementations[localReference(row.implementation || '')] = await hash(row.implementation);
+    evidence[localReference(row.evidence || '')] = await hash(row.evidence);
   }
   return {
     task_id: taskId || null,
@@ -47,7 +49,8 @@ export async function verificationState(cwd, taskId) {
     // Registry integrity is project-wide, just like the acceptance input-integrity gate.
     // Unregistered or invalid entries must invalidate reports even if active bytes stay equal.
     input_integrity: { status: inputs.status, issues: inputs.issues, discovered: inputs.discovered },
-    inputs: inputs.inputs.filter((item) => item.status === 'active' && (!item.task_id || item.task_id === taskId))
+    // Without a task the scope is project-wide, so every active input is bound.
+    inputs: inputs.inputs.filter((item) => item.status === 'active' && (!taskId || !item.task_id || item.task_id === taskId))
       .map((item) => ({ id: item.id, path: item.path, type: item.type, task_id: item.task_id || null,
         sha256: item.sha256, changed: item.changed })),
     acceptance: acceptance.rows.map(({ issues: _issues, ...row }) => row),

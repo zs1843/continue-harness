@@ -10,7 +10,7 @@
 | `create` | 创建通用项目或指定 preset 的项目 | 新项目从零开始 | 是 | `continue-harness-create` |
 | `init` | 接入已有项目 | 保留项目修改并补充缺失的 Harness 文件 | 是，逐文件创建，不覆盖已有文件 | `continue-harness-init` |
 | `migrate` | 迁移旧 `.fe-harness` 目录 | 升级已有项目状态目录 | 是，冲突时不写 | 仅 CLI |
-| `intake` | 按轮次确认项目事实和候选输入项 | 项目事实或输入适用性尚未确认 | `inspect` 在记录不存在时创建 `.continue-harness/intake.yaml`，已有记录时只读；`answer`、`evidence` 写该文件并追加 `.continue-harness/logs/commands.ndjson` | 随 `create` / `init` 流程；没有独立 Skill |
+| `intake` | 按轮次确认项目事实和候选输入项 | 项目事实或输入适用性尚未确认 | `inspect` 只读，记录不存在时只输出首轮问题；`answer`、`evidence` 写该文件并追加 `.continue-harness/logs/commands.ndjson` | 随 `create` / `init` 流程；没有独立 Skill |
 | `plan` | 输出 create/init 结构化计划 | 写文件前预览 | 否 | `continue-harness-plan` |
 | `inspect` | 查看项目事实和能力 | Agent 开始任务前 | 否 | `continue-harness-inspect` |
 | `doctor` | 只读诊断 | 排查配置、脚本、输入、Token、Agent readiness | 否 | `continue-harness-doctor` |

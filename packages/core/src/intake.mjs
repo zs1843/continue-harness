@@ -116,7 +116,8 @@ export function pendingIntakeQuestions(state) {
   return questions;
 }
 
-function initialState(name) {
+// Pure initial state, used by read-only inspection before any Intake file exists.
+export function initialIntakeState(name) {
   return {
     version: 1,
     phase: 'basic_info',
@@ -131,7 +132,7 @@ function initialState(name) {
 export async function createInitialIntake(cwd, name) {
   const path = resolve(cwd, INTAKE_PATH);
   try { return YAML.parse(await readFile(path, 'utf8')); } catch (error) { if (error?.code !== 'ENOENT') throw error; }
-  const state = initialState(name);
+  const state = initialIntakeState(name);
   await mkdir(resolve(cwd, '.continue-harness'), { recursive: true });
   await writeFile(path, YAML.stringify(state), 'utf8');
   return state;
